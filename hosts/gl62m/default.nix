@@ -1,0 +1,53 @@
+{ pkgs, var, config, ... }:
+{
+  imports = [
+    ./hardware-configuration.nix
+  ];
+
+  boot = {
+    kernelPackages = pkgs.linuxPackages_latest;
+    loader = {
+      grub = {
+        enable = true;
+        devices = [ "/dev/sda" ];
+        useOSProber = true;
+        configurationLimit = 2;
+        theme = pkgs.stdenv.mkDerivation {
+          pname = "distro-grub-themes";
+          version = "3.1";
+          src = pkgs.fetchFromGitHub {
+            owner = "AdisonCavani";
+            repo = "distro-grub-themes";
+            rev = "v3.1";
+            hash = "sha256-ZcoGbbOMDDwjLhsvs77C7G7vINQnprdfI37a9ccrmPs=";
+          };
+          installPhase = "cp -r customize/nixos $out";
+        };
+      };
+      timeout = 3;
+    };
+  };
+
+  services.xserver.videoDrivers = [ "nvidia" ];
+
+  programs.light.enable = true;
+
+  hardware.nvidia = {
+    modesetting.enable = true;
+    open = false;
+
+    nvidiaSettings = true;
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    prime = {
+      intelBusId = "PCI:0:2:0";
+      nvidiaBusId = "PCI:0:1:0";
+    };
+  };
+  #sway.enable = true;
+
+  environment = {
+    systemPackages = with pkgs; [
+    ];
+  };
+
+}
