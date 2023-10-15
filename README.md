@@ -2,11 +2,13 @@
 
 ## Building
 ```shell
-# git clone git@github:slavjuan/nixos-config.git ~/.flake
-# cd ~/.flake
-# sudo nixos-rebuild switch --flake .#<host>
+```bash
+git clone git@github:lluz55/nixos-config.git ~/.nixos-config
+cd ~/.nixos-config
+sudo cp /etc/nixos/hardware-configuration.nix .
+sudo nixos-rebuild switch --flake .#<host>
 ```
 
 ## Inspiration
-* [Matthias' NixOs & Nix-Darwin System Configuration Flake](https://github.com/MatthiasBenaets/nixos-config)
+* [LLuz' NixOs System Configuration Flake](https://github.com/lluz55/nixos-config)
 
