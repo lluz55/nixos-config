@@ -26,7 +26,7 @@
         table ip filter {
           flowtable f {
             hook ingress priority 0; 
-            devices = { "enp1s0", "enp2s0", "enp3s0", "enp4s0" };
+            devices = { "enp1s0", "enp2s0", "enp3s0", "enp4s0", "iot-10" };
           }
           chain output {
             type filter hook output priority 100; policy accept;
@@ -34,7 +34,7 @@
           chain input {
             type filter hook input priority 0; policy drop;
 
-            iifname { "br-lan" } accept comment "Allow local network to access the router"
+            iifname { "br-lan", "iot-10" } accept comment "Allow local network to access the router"
             iifname "enp1s0" ct state { established, related } accept comment "Allow established traffic"
             iifname "enp1s0" icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"
             iifname "enp1s0" counter drop comment "Drop all other unsolicited traffic from enp1s0"
@@ -44,8 +44,8 @@
             type filter hook forward priority 0; policy drop;
             ip protocol tcp flow add @f comment "Offload tcp/udp established traffic"
 
-            iifname { "br-lan" } oifname { "enp1s0" } accept comment "Allow trusted LAN to enp1s0"
-            iifname { "enp1s0" } oifname { "br-lan" } ct state { established, related } accept comment "Allow established back to LANs"
+            iifname { "br-lan", "iot-10" } oifname { "enp1s0" } accept comment "Allow trusted LAN to enp1s0"
+            iifname { "enp1s0" } oifname { "br-lan", "iot-10" } ct state { established, related } accept comment "Allow established back to LANs"
           }
         }
         
@@ -69,6 +69,13 @@
           Name = "br-lan";
         };
       };
+      "50-iot-10" = {
+        netdevConfig = {
+          Kind = "vlan";
+          Name = "iot-10";
+        };
+        vlanConfig.Id = 10;
+      };
     };
     networks = {
       # Connect the bridge ports to the bridge
@@ -90,10 +97,11 @@
       };
       "30-enp4s0" = {
         matchConfig.Name = "enp4s0";
-        networkConfig = {
-          Bridge = "br-lan";
-          ConfigureWithoutCarrier = true;
-        };
+        vlan = [ "iot-10" ];
+        #networkConfig = {
+        #  Bridge = "br-lan";
+        #  ConfigureWithoutCarrier = true;
+        #};
         linkConfig.RequiredForOnline = "enslaved";
       };
       # Configure the bridge for its desired function
@@ -102,6 +110,18 @@
         bridgeConfig = { };
         address = [
           "10.0.0.1/24"
+        ];
+        networkConfig = {
+          ConfigureWithoutCarrier = true;
+        };
+        # Don't wait for it as it also would wait for wlan and DFS which takes around 5 min 
+        linkConfig.RequiredForOnline = "no";
+      };
+      "50-iot-10" = {
+        matchConfig.Name = "iot-10";
+        bridgeConfig = { };
+        address = [
+          "10.0.10.1/24"
         ];
         networkConfig = {
           ConfigureWithoutCarrier = true;
@@ -141,9 +161,15 @@
       # Cache dns queries.
       cache-size = 1000;
 
-      dhcp-range = [ "br-lan,10.0.0.100,10.0.0.150,24h" ];
-      interface = "br-lan";
-      dhcp-host = "10.0.0.1";
+      dhcp-range = [
+        "br-lan,10.0.0.100,10.0.0.150,24h"
+        "iot-10,10.0.10.100,10.0.10.150,24h"
+      ];
+      interface = [ "br-lan" "iot-10" ];
+      dhcp-host = [
+        "10.0.0.1"
+        "10.0.10.1"
+      ];
 
       # local domains
       local = "/lan/";
@@ -152,7 +178,7 @@
 
       # don't use /etc/hosts as this would advertise surfer as localhost
       no-hosts = true;
-      address = "/surfer.lan/10.0.0.1";
+      address = "/n100.lan/10.0.0.1";
     };
   };
 
