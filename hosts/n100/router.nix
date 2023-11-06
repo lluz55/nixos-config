@@ -26,7 +26,7 @@
         table ip filter {
           flowtable f {
             hook ingress priority 0; 
-            devices = { "enp1s0", "enp2s0", "enp3s0", "enp4s0", "iot-10" };
+            devices = { "enp1s0", "enp2s0", "enp3s0", "enp4s0"};
           }
           chain output {
             type filter hook output priority 100; policy accept;
