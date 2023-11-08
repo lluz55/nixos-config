@@ -1,4 +1,4 @@
-{ inputs, home-manager, nixpkgs, nixpkgs-unstable, var, ... }:
+{ inputs, home-manager, nixpkgs, nixpkgs-unstable, master_user, karolayne, ... }:
 let
   system = "x86_64-linux";
 
@@ -11,43 +11,22 @@ let
     inherit system;
     config.allowUnfree = true;
   };
-
   lib = nixpkgs.lib;
+
 in
 with lib;
 {
-  options = {
-    wayland = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = mdDoc ''
-          Enables the wayland configuration
-            > Gets enabled when using a wayland wm
-        '';
-      };
-    };
-    x11 = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = mdDoc ''
-          Enables the x11 configuration
-            > Gets enabled when using a x11 wm
-        '';
-      };
-    };
-  };
 
   n100 = nixosSystem {
     inherit system;
     specialArgs = {
-      inherit inputs unstable var;
+      inherit inputs unstable master_user;
     };
     modules = [
       ./n100
+      ./options.nix
       ./configuration.nix
-
+      master_user.user
       home-manager.nixosModules.home-manager
       {
         home-manager = {
@@ -64,12 +43,15 @@ with lib;
   gl62m = nixosSystem {
     inherit system;
     specialArgs = {
-      inherit inputs unstable var;
+      inherit inputs unstable master_user karolayne;
     };
+
     modules = [
       ./gl62m
       ./configuration.nix
 
+      master_user.user
+      karolayne.user
       home-manager.nixosModules.home-manager
       {
         home-manager = {

@@ -1,8 +1,6 @@
-{ config, unstable, lib, pkgs, inputs, var, ... }:
+{ unstable, lib, pkgs, inputs, master_user, ... }:
+
 {
-  lib.config = {
-    config = lib.mkIf (config.wayland.enable) { };
-  };
   #imports = ( 
   #   import ../modules/desktops 
   #   ++ import ../modules/editors
@@ -10,6 +8,7 @@
   #   ++ import ../modules/programs
   #   ++ import ../modules/shell 
   # );
+  #
 
   virtualisation.docker = {
     enable = true;
@@ -17,15 +16,6 @@
       enable = true;
       setSocketVariable = true;
     };
-  };
-  users.users.${var.user} = {
-    isNormalUser = true;
-    extraGroups = [ "audio" "camera" "networkmanager" "video" "wheel" "docker" ];
-  };
-
-  users.users.karolayne = {
-    isNormalUser = true;
-    extraGroups = [ "audio" "camera" "video" ];
   };
 
   time.timeZone = "America/Recife";
@@ -41,6 +31,8 @@
     font = "Lat2-Terminus16";
     keyMap = "us";
   };
+
+  lib.useDE = true;
 
   security = {
     polkit.enable = true;
@@ -58,26 +50,15 @@
 
   environment = {
     variables = {
-      TERMINAL = "${var.terminal}";
-      EDITOR = "${var.editor}";
-      VISUAL = "${var.editor}";
+      TERMINAL = "${master_user.terminal}";
+      EDITOR = "${master_user.editor}";
+      VISUAL = "${master_user.editor}";
     };
-    systemPackages = with pkgs; [
-
-    ];
+    systemPackages = with pkgs; [ ];
   };
 
-  programs.dconf.enable = true;
   programs.fish.enable = true;
   users.defaultUserShell = pkgs.fish;
-
-  services = {
-    xserver = {
-      enable = true;
-      displayManager.gdm.enable = true;
-      desktopManager.gnome.enable = true;
-    };
-  };
 
   nix = {
     settings = {
@@ -96,7 +77,7 @@
 
   system.stateVersion = "23.05";
 
-  home-manager.users.${var.user} = {
+  home-manager.users.${master_user.name} = {
     home.stateVersion = "23.05";
     programs.home-manager.enable = true;
   };

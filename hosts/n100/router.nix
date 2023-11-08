@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ ... }:
 {
   boot = {
     kernel = {
@@ -11,7 +11,7 @@
     };
   };
   networking = {
-    hostName = "surfer";
+    hostName = "n100";
     useNetworkd = true;
     useDHCP = false;
 
@@ -176,7 +176,7 @@
       domain = "lan";
       expand-hosts = true;
 
-      # don't use /etc/hosts as this would advertise surfer as localhost
+      # don't use /etc/hosts as this would advertise n100 as localhost
       no-hosts = true;
       address = "/n100.lan/10.0.0.1";
     };
