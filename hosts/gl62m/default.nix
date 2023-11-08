@@ -1,8 +1,14 @@
-{ pkgs, var, config, ... }:
-{
+{ pkgs, lib, var, config, ... }:
+with lib; {
   imports = [
+    ../../modules
     ./hardware-configuration.nix
   ];
+
+  # Enable nvidia drivers
+  nvidia.enable = true;
+
+  gnome.enable = true;
 
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
@@ -28,26 +34,11 @@
     };
   };
 
-  services.xserver.videoDrivers = [ "nvidia" ];
-
   programs.light.enable = true;
 
-  hardware.nvidia = {
-    modesetting.enable = true;
-    open = false;
-
-    nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
-    prime = {
-      intelBusId = "PCI:0:2:0";
-      nvidiaBusId = "PCI:0:1:0";
-    };
-  };
   #sway.enable = true;
 
   environment = {
-    systemPackages = with pkgs; [
-    ];
+    systemPackages = with pkgs; [ ];
   };
-
 }

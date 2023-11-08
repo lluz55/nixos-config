@@ -10,13 +10,13 @@
   # );
   #
 
-  virtualisation.docker = {
-    enable = true;
-    rootless = {
-      enable = true;
-      setSocketVariable = true;
-    };
-  };
+  #virtualisation.docker = {
+  #  enable = true;
+  #  rootless = {
+  #    enable = true;
+  #    setSocketVariable = true;
+  #  };
+  #};
 
   time.timeZone = "America/Recife";
   i18n = {
@@ -31,8 +31,6 @@
     font = "Lat2-Terminus16";
     keyMap = "us";
   };
-
-  lib.useDE = true;
 
   security = {
     polkit.enable = true;
@@ -54,7 +52,7 @@
       EDITOR = "${master_user.editor}";
       VISUAL = "${master_user.editor}";
     };
-    systemPackages = with pkgs; [ ];
+    #systemPackages = with pkgs; [ ];
   };
 
   programs.fish.enable = true;

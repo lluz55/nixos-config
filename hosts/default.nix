@@ -6,7 +6,7 @@ let
     inherit system;
     config.allowUnfree = true;
   };
-
+  #
   unstable = import nixpkgs-unstable {
     inherit system;
     config.allowUnfree = true;
@@ -16,7 +16,6 @@ let
 in
 with lib;
 {
-
   n100 = nixosSystem {
     inherit system;
     specialArgs = {
@@ -24,8 +23,6 @@ with lib;
     };
     modules = [
       ./n100
-      ./options.nix
-      ./configuration.nix
       master_user.user
       home-manager.nixosModules.home-manager
       {
@@ -48,8 +45,6 @@ with lib;
 
     modules = [
       ./gl62m
-      ./configuration.nix
-
       master_user.user
       karolayne.user
       home-manager.nixosModules.home-manager
