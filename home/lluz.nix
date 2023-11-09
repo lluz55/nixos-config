@@ -1,5 +1,4 @@
-{ pkgs, unstable, config, ... }:
-
+{ pkgs, unstable, lib, config, ... }:
 
 let
   unstable_pkgs = with unstable; [
@@ -12,17 +11,22 @@ let
     zellij
   ];
 in
-{
-
+with lib;{
   programs.home-manager.enable = true;
   dconf.settings = {
     "org/gnome/desktop/peripherals/keyboard" = {
-      numlock-state = true;
-      remember-numlock-state = true;
+      numlock-state = false;
+    };
+
+    "org/gnome/shell" = {
+      favorite-apps = [
+        "firefox.desktop"
+        "kitty.desktop"
+        "org.gnome.Nautilus.desktop"
+      ];
     };
   };
   home.packages = with pkgs; [
-
     # Terminal
     eza
     fd

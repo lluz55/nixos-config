@@ -1,8 +1,8 @@
 #
 # Shell
 #
-
-[
-  ./zsh.nix
-  ./git.nix
-]
+{ ... }:
+{
+  #./zsh.nix
+  imports = [ ./git.nix ];
+}

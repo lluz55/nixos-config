@@ -26,6 +26,7 @@ with lib;
         gnome.adwaita-icon-theme
         gnome.dconf-editor
         gnome.gnome-tweaks
+        wl-clipboard
       ];
       gnome.excludePackages = (with pkgs; [
         gnome-tour
@@ -50,10 +51,25 @@ with lib;
           enabled-extension = [
           ];
         };
+        "org/gnome/shell" = {
+          favorite-apps = [
+            "firefox.desktop"
+            "kitty.desktop"
+            "org.gnome.Nautilus.desktop"
+          ];
+        };
         "org/gnome/desktop/interface" = {
           color-scheme = "prefer-dark";
           enable-hot-corners = false;
           clock-show-weekday = true;
+        };
+        "org/gnome/desktop/peripherals/touchpad" = {
+          tap-to-click = true;
+          two-finger-scrolling-enable = true;
+        };
+        "org/gnome/desktop/wm/keybindings" = {
+          switch-windows = [ "<Alt>Tab" ];
+          switch-windows-backward = [ "<Shift><Alt>Tab" ];
         };
         #"org/gnome/desktop/background" = {
         #  picture-uri = "${var.wallpaper}";
