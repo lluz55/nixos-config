@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, unstable, ... }:
 
 with lib;{
   imports = [
@@ -6,11 +6,21 @@ with lib;{
     ./hardware-configuration.nix
     #./virt.nix
     ./router.nix
+    ./frigate.nix
   ];
 
   gnome.enable = true;
 
-  users.users.lluz.isNormalUser = false;
+  services.tailscale.enable = true;
+
+  services.openssh = {
+    enable = true;
+    passwordAuthentication = true;
+  };
+  environment.systemPackages = with unstable; [
+    tailscale
+  ];
+
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
     loader = {

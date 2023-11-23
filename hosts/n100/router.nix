@@ -34,7 +34,7 @@
           chain input {
             type filter hook input priority 0; policy drop;
 
-            iifname { "br-lan", "iot-10" } accept comment "Allow local network to access the router"
+            iifname { "br-lan", "iot-10", "br-cams" } accept comment "Allow local network to access the router"
             iifname "enp1s0" ct state { established, related } accept comment "Allow established traffic"
             iifname "enp1s0" icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"
             iifname "enp1s0" counter drop comment "Drop all other unsolicited traffic from enp1s0"
@@ -44,14 +44,19 @@
             type filter hook forward priority 0; policy drop;
             ip protocol tcp flow add @f comment "Offload tcp/udp established traffic"
 
-            iifname { "br-lan", "iot-10" } oifname { "enp1s0" } accept comment "Allow trusted LAN to enp1s0"
-            iifname { "enp1s0" } oifname { "br-lan", "iot-10" } ct state { established, related } accept comment "Allow established back to LANs"
+            iifname { "br-lan", "iot-10"} oifname { "enp1s0" } accept comment "Allow trusted LAN to enp1s0"
+            iifname { "enp1s0" } oifname { "br-lan", "iot-10", "br-cams" } ct state { established, related } accept comment "Allow established back to LANs"
           }
         }
         
         table ip nat {
+          chain prerouting {                
+            type nat hook prerouting priority 0; policy accept;
+            tcp dport { 5000 } log prefix "nat-pre " dnat 127.0.0.1:5000;
+          }
           chain postrouting {
             type nat hook postrouting priority 100; policy accept;
+            tcp dport { 5000 } log prefix "nat-post ";
             oifname "enp1s0" masquerade
           } 
         }
@@ -67,6 +72,12 @@
         netdevConfig = {
           Kind = "bridge";
           Name = "br-lan";
+        };
+      };
+      "30-br-cams" = {
+        netdevConfig = {
+          Kind = "bridge";
+          Name = "br-cams";
         };
       };
       "50-iot-10" = {
@@ -90,7 +101,7 @@
       "30-enp3s0" = {
         matchConfig.Name = "enp3s0";
         networkConfig = {
-          Bridge = "br-lan";
+          Bridge = "br-cams";
           ConfigureWithoutCarrier = true;
         };
         linkConfig.RequiredForOnline = "enslaved";
@@ -109,7 +120,19 @@
         matchConfig.Name = "br-lan";
         bridgeConfig = { };
         address = [
-          "10.0.0.1/24"
+          "192.168.1.1/24"
+        ];
+        networkConfig = {
+          ConfigureWithoutCarrier = true;
+        };
+        # Don't wait for it as it also would wait for wlan and DFS which takes around 5 min 
+        linkConfig.RequiredForOnline = "no";
+      };
+      "60-br-cams" = {
+        matchConfig.Name = "br-cams";
+        bridgeConfig = { };
+        address = [
+          "10.1.1.1/24"
         ];
         networkConfig = {
           ConfigureWithoutCarrier = true;
@@ -162,13 +185,15 @@
       cache-size = 1000;
 
       dhcp-range = [
-        "br-lan,10.0.0.100,10.0.0.150,24h"
+        "br-lan,192.168.1.100,192.168.1.150,24h"
+        "br-cams,10.1.1.100,10.1.1.150,24h"
         "iot-10,10.0.10.100,10.0.10.150,24h"
       ];
-      interface = [ "br-lan" "iot-10" ];
+      interface = [ "br-lan" "iot-10" "br-cams" ];
       dhcp-host = [
-        "10.0.0.1"
+        "192.168.1.1"
         "10.0.10.1"
+        "10.1.1.1"
       ];
 
       # local domains
@@ -178,7 +203,7 @@
 
       # don't use /etc/hosts as this would advertise n100 as localhost
       no-hosts = true;
-      address = "/n100.lan/10.0.0.1";
+      address = "/n100.lan/192.168.1.1";
     };
   };
 
