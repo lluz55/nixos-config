@@ -4,7 +4,7 @@ with lib;{
   imports = [
     ./../../modules
     ./hardware-configuration.nix
-    #./virt.nix
+    ./virt.nix
     ./router.nix
     ./frigate.nix
   ];

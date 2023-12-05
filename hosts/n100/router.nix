@@ -7,6 +7,7 @@
         "net.ipv6.conf.all.forwarding" = true;
         "net.ipv4.conf.br-lan.rp_filter" = 1;
         "net.ipv4.conf.enp1s0.rp_filter" = 1;
+        "net.ipv4.ip_forward" = 1;
       };
     };
   };
@@ -41,22 +42,21 @@
             iifname "lo" accept comment "Accept everything from loopback interface"
           }
           chain forward {
-            type filter hook forward priority 0; policy drop;
+            type filter hook forward priority 0; policy accept;
             ip protocol tcp flow add @f comment "Offload tcp/udp established traffic"
 
-            iifname { "br-lan", "iot-10"} oifname { "enp1s0" } accept comment "Allow trusted LAN to enp1s0"
+            iifname { "br-lan", "iot-10" } oifname { "enp1s0" } accept comment "Allow trusted LAN to enp1s0"
             iifname { "enp1s0" } oifname { "br-lan", "iot-10", "br-cams" } ct state { established, related } accept comment "Allow established back to LANs"
           }
         }
         
         table ip nat {
           chain prerouting {                
-            type nat hook prerouting priority 0; policy accept;
-            tcp dport { 5000 } log prefix "nat-pre " dnat 127.0.0.1:5000;
+            type nat hook prerouting priority -100; policy accept;
+            tcp dport 9000 dnat to 127.0.0.1:9000
           }
           chain postrouting {
             type nat hook postrouting priority 100; policy accept;
-            tcp dport { 5000 } log prefix "nat-post ";
             oifname "enp1s0" masquerade
           } 
         }
