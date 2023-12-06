@@ -1,4 +1,4 @@
-{ pkgs, lib, unstable, ... }:
+{ pkgs, config, lib, unstable, ... }:
 
 with lib;{
   imports = [
@@ -31,5 +31,4 @@ with lib;{
   };
 
   programs.light.enable = true;
-
 }

@@ -1,12 +1,13 @@
-{ ... }:
+{ config, ... }:
+let
+  tailscale_port = toString config.services.tailscale.port;
+in
 {
   boot = {
     kernel = {
       sysctl = {
         "net.ipv4.conf.all.forwarding" = true;
         "net.ipv6.conf.all.forwarding" = true;
-        "net.ipv4.conf.br-lan.rp_filter" = 1;
-        "net.ipv4.conf.enp1s0.rp_filter" = 1;
         "net.ipv4.ip_forward" = 1;
       };
     };
@@ -33,12 +34,15 @@
             type filter hook output priority 100; policy accept;
           }
           chain input {
-            type filter hook input priority 0; policy drop;
+            type filter hook input priority 0; policy accept;
 
             iifname { "br-lan", "iot-10", "br-cams" } accept comment "Allow local network to access the router"
             iifname "enp1s0" ct state { established, related } accept comment "Allow established traffic"
             iifname "enp1s0" icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"
-            iifname "enp1s0" counter drop comment "Drop all other unsolicited traffic from enp1s0"
+            tcp dport 5000 meta nftrace set 1 accept comment "Allow Frigate"
+            tcp dport { ssh } ct state new limit rate 2/minute accept comment "Accept SSH and avoid brute force"
+            udp dport ${tailscale_port} accept comment "Allow Tailscale "
+            #iifname "enp1s0" counter drop comment "Drop all other unsolicited traffic from enp1s0"
             iifname "lo" accept comment "Accept everything from loopback interface"
           }
           chain forward {
@@ -47,16 +51,18 @@
 
             iifname { "br-lan", "iot-10" } oifname { "enp1s0" } accept comment "Allow trusted LAN to enp1s0"
             iifname { "enp1s0" } oifname { "br-lan", "iot-10", "br-cams" } ct state { established, related } accept comment "Allow established back to LANs"
+
           }
         }
-        
+
         table ip nat {
-          chain prerouting {                
-            type nat hook prerouting priority -100; policy accept;
-            tcp dport 9000 dnat to 127.0.0.1:9000
+          chain prerouting {
+            type nat hook prerouting priority dstnat; policy accept;
+            tcp dport 9000 meta nftrace set 1 mark set 1 dnat ip to 10.1.1.9:80
+            tcp dport 5000 meta nftrace set 1 accept
           }
           chain postrouting {
-            type nat hook postrouting priority 100; policy accept;
+            type nat hook postrouting priority srcnat; policy accept;
             oifname "enp1s0" masquerade
           } 
         }

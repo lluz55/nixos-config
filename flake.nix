@@ -28,6 +28,7 @@
         terminal = "kitty";
         editor = "nvim";
         wallpaper = "./wallpapers/landscape.png";
+        is_router = true;
         user = {
           users.users.lluz = {
             isNormalUser = true;

@@ -29,7 +29,7 @@ with lib;
         home-manager = {
           useGlobalPkgs = true;
           useUserPackages = true;
-          extraSpecialArgs = { inherit nixpkgs unstable; };
+          extraSpecialArgs = { inherit nixpkgs unstable master_user; };
           users = {
             lluz.imports = [ ../home/lluz.nix ];
           };
