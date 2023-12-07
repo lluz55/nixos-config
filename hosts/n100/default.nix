@@ -19,6 +19,7 @@ with lib;{
   };
   environment.systemPackages = with unstable; [
     tailscale
+    lm_sensors
   ];
 
   boot = {
@@ -26,7 +27,7 @@ with lib;{
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
-      timeout = 3;
+      timeout = 2;
     };
   };
 

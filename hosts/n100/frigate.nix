@@ -24,6 +24,7 @@
   #  privateNetwork = true;
   #  hostBridge = "br-cams";
   #  localAddress = "10.1.1.9/24";
+  #  system.stateVersion = "23.11";
   #  config = {
   #    networking.firewall.allowedTCPPorts = [ 80 5000 8554 8555 ];
   #    services.frigate = {

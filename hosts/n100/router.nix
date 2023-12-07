@@ -1,6 +1,8 @@
 { config, ... }:
 let
   tailscale_port = toString config.services.tailscale.port;
+  ssh_port = "22";
+  frigate_port = "5000";
 in
 {
   boot = {
@@ -39,30 +41,29 @@ in
             iifname { "br-lan", "iot-10", "br-cams" } accept comment "Allow local network to access the router"
             iifname "enp1s0" ct state { established, related } accept comment "Allow established traffic"
             iifname "enp1s0" icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"
-            tcp dport 5000 meta nftrace set 1 accept comment "Allow Frigate"
-            tcp dport { ssh } ct state new limit rate 2/minute accept comment "Accept SSH and avoid brute force"
-            udp dport ${tailscale_port} accept comment "Allow Tailscale "
+            tcp dport ${ssh_port} ct state new limit rate 2/minute accept comment "Accept SSH and avoid brute force"
+            tcp dport ${frigate_port} accept comment "Allow Frigate"
+            udp dport ${tailscale_port} accept comment "Allow Tailscale"
             #iifname "enp1s0" counter drop comment "Drop all other unsolicited traffic from enp1s0"
             iifname "lo" accept comment "Accept everything from loopback interface"
           }
           chain forward {
-            type filter hook forward priority 0; policy accept;
+            type filter hook forward priority 0; policy drop;
             ip protocol tcp flow add @f comment "Offload tcp/udp established traffic"
 
             iifname { "br-lan", "iot-10" } oifname { "enp1s0" } accept comment "Allow trusted LAN to enp1s0"
             iifname { "enp1s0" } oifname { "br-lan", "iot-10", "br-cams" } ct state { established, related } accept comment "Allow established back to LANs"
-
           }
         }
 
         table ip nat {
           chain prerouting {
             type nat hook prerouting priority dstnat; policy accept;
-            tcp dport 9000 meta nftrace set 1 mark set 1 dnat ip to 10.1.1.9:80
-            tcp dport 5000 meta nftrace set 1 accept
+            ip daddr 192.168.100.0/24 tcp dport {http, https} meta nftrace set 1 dnat 192.168.1.9
           }
           chain postrouting {
             type nat hook postrouting priority srcnat; policy accept;
+            ip saddr 192.168.100.0/24 ip daddr 192.168.1.9 tcp dport {http, https} counter snat 192.168.100.0/24
             oifname "enp1s0" masquerade
           } 
         }
