@@ -33,7 +33,9 @@ with lib;{
 
   services.openssh = {
     enable = true;
-    passwordAuthentication = true;
+    settings = {
+      PasswordAuthentication = true;
+    };
   };
   environment.systemPackages = with unstable; [
     tailscale
