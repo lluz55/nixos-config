@@ -1,5 +1,5 @@
 result
-./hosts/gl62m/hardware-configuration.nix
-./hosts/n100/hardware-configuration.nix
-./modules/homeassistant/config/home-assistant.*
-./modules/homeassistant/zigbee2mqtt/log/*
+hosts/gl62m/hardware-configuration.nix
+hosts/n100/hardware-configuration.nix
+modules/homeassistant/config/home-assistant.*
+modules/homeassistant/zigbee2mqtt/log/*

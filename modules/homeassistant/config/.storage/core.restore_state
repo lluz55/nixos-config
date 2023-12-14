@@ -25,7 +25,7 @@
         }
       },
       "extra_data": null,
-      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+      "last_seen": "2023-12-14T15:22:11.583735+00:00"
     },
     {
       "state": {
@@ -49,7 +49,7 @@
         }
       },
       "extra_data": null,
-      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+      "last_seen": "2023-12-14T15:22:11.583735+00:00"
     },
     {
       "state": {
@@ -67,7 +67,7 @@
         }
       },
       "extra_data": null,
-      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+      "last_seen": "2023-12-14T15:22:11.583735+00:00"
     },
     {
       "state": {
@@ -94,7 +94,7 @@
         }
       },
       "extra_data": null,
-      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+      "last_seen": "2023-12-14T15:22:11.583735+00:00"
     },
     {
       "state": {
@@ -122,7 +122,7 @@
         }
       },
       "extra_data": null,
-      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+      "last_seen": "2023-12-14T15:22:11.583735+00:00"
     },
     {
       "state": {
@@ -150,7 +150,7 @@
         }
       },
       "extra_data": null,
-      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+      "last_seen": "2023-12-14T15:22:11.583735+00:00"
     },
     {
       "state": {
@@ -182,7 +182,7 @@
         "native_value": "100",
         "native_unit_of_measurement": "%"
       },
-      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+      "last_seen": "2023-12-14T15:22:11.583735+00:00"
     },
     {
       "state": {
@@ -214,7 +214,7 @@
         "native_value": "36",
         "native_unit_of_measurement": "°C"
       },
-      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+      "last_seen": "2023-12-14T15:22:11.583735+00:00"
     },
     {
       "state": {
@@ -246,7 +246,7 @@
         "native_value": "909",
         "native_unit_of_measurement": "lx"
       },
-      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+      "last_seen": "2023-12-14T15:22:11.583735+00:00"
     },
     {
       "state": {
@@ -275,7 +275,7 @@
         "native_value": "29",
         "native_unit_of_measurement": null
       },
-      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+      "last_seen": "2023-12-14T15:22:11.583735+00:00"
     },
     {
       "state": {
@@ -302,7 +302,7 @@
         }
       },
       "extra_data": null,
-      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+      "last_seen": "2023-12-14T15:22:11.583735+00:00"
     },
     {
       "state": {
@@ -330,7 +330,7 @@
         }
       },
       "extra_data": null,
-      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+      "last_seen": "2023-12-14T15:22:11.583735+00:00"
     },
     {
       "state": {
@@ -349,32 +349,32 @@
         }
       },
       "extra_data": null,
-      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+      "last_seen": "2023-12-14T15:22:11.583735+00:00"
     },
     {
       "state": {
         "entity_id": "sensor.karolyne_battery_level",
-        "state": "37",
+        "state": "46",
         "attributes": {
           "state_class": "measurement",
           "unit_of_measurement": "%",
           "device_class": "battery",
-          "icon": "mdi:battery-charging-30",
+          "icon": "mdi:battery-charging-40",
           "friendly_name": "Karolyne Battery level"
         },
-        "last_changed": "2023-12-14T14:50:43.413941+00:00",
-        "last_updated": "2023-12-14T14:50:43.413941+00:00",
+        "last_changed": "2023-12-14T15:12:39.938691+00:00",
+        "last_updated": "2023-12-14T15:12:39.938691+00:00",
         "context": {
-          "id": "01HHMCXXTNMVT2MWNHSTJTVFC0",
+          "id": "01HHME63G2DKAW77J2JMPVQ65N",
           "parent_id": null,
           "user_id": null
         }
       },
       "extra_data": {
-        "native_value": 37,
+        "native_value": 46,
         "native_unit_of_measurement": "%"
       },
-      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+      "last_seen": "2023-12-14T15:22:11.583735+00:00"
     },
     {
       "state": {
@@ -396,7 +396,7 @@
         "native_value": "charging",
         "native_unit_of_measurement": null
       },
-      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+      "last_seen": "2023-12-14T15:22:11.583735+00:00"
     },
     {
       "state": {
@@ -418,7 +418,7 @@
         "native_value": "ac",
         "native_unit_of_measurement": null
       },
-      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+      "last_seen": "2023-12-14T15:22:11.583735+00:00"
     },
     {
       "state": {
@@ -437,7 +437,7 @@
         }
       },
       "extra_data": null,
-      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+      "last_seen": "2023-12-14T15:22:11.583735+00:00"
     },
     {
       "state": {
@@ -462,7 +462,7 @@
         "native_value": 64,
         "native_unit_of_measurement": "%"
       },
-      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+      "last_seen": "2023-12-14T15:22:11.583735+00:00"
     },
     {
       "state": {
@@ -484,7 +484,7 @@
         "native_value": "discharging",
         "native_unit_of_measurement": null
       },
-      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+      "last_seen": "2023-12-14T15:22:11.583735+00:00"
     },
     {
       "state": {
@@ -506,7 +506,7 @@
         "native_value": "none",
         "native_unit_of_measurement": null
       },
-      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+      "last_seen": "2023-12-14T15:22:11.583735+00:00"
     },
     {
       "state": {
