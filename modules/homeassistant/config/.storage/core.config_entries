@@ -1,0 +1,192 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "core.config_entries",
+  "data": {
+    "entries": [
+      {
+        "entry_id": "ca719967c844e72384db0c18a90baac2",
+        "version": 1,
+        "domain": "sun",
+        "title": "Sun",
+        "data": {},
+        "options": {},
+        "pref_disable_new_entities": false,
+        "pref_disable_polling": false,
+        "source": "import",
+        "unique_id": null,
+        "disabled_by": null
+      },
+      {
+        "entry_id": "50a9f37492a90baa3199af7568a60477",
+        "version": 1,
+        "domain": "shopping_list",
+        "title": "Shopping list",
+        "data": {},
+        "options": {},
+        "pref_disable_new_entities": false,
+        "pref_disable_polling": false,
+        "source": "onboarding",
+        "unique_id": "shopping_list",
+        "disabled_by": null
+      },
+      {
+        "entry_id": "b883bec39ea0527415527a944fc2788e",
+        "version": 1,
+        "domain": "google_translate",
+        "title": "Google Translate text-to-speech",
+        "data": {
+          "language": "en",
+          "tld": "com"
+        },
+        "options": {},
+        "pref_disable_new_entities": false,
+        "pref_disable_polling": false,
+        "source": "onboarding",
+        "unique_id": null,
+        "disabled_by": null
+      },
+      {
+        "entry_id": "b39e0b5523b4aafae7653e5cc6b97ef9",
+        "version": 1,
+        "domain": "radio_browser",
+        "title": "Radio Browser",
+        "data": {},
+        "options": {},
+        "pref_disable_new_entities": false,
+        "pref_disable_polling": false,
+        "source": "onboarding",
+        "unique_id": null,
+        "disabled_by": null
+      },
+      {
+        "entry_id": "8d6314e96f6124da30ff0032d800b204",
+        "version": 1,
+        "domain": "met",
+        "title": "Home",
+        "data": {
+          "track_home": true
+        },
+        "options": {},
+        "pref_disable_new_entities": false,
+        "pref_disable_polling": false,
+        "source": "onboarding",
+        "unique_id": null,
+        "disabled_by": null
+      },
+      {
+        "entry_id": "2f5d886a4a4a7cc7de22239afdf3436c",
+        "version": 1,
+        "domain": "mqtt",
+        "title": "127.0.0.1",
+        "data": {
+          "broker": "127.0.0.1",
+          "port": 1883,
+          "username": "lluz",
+          "password": "130213",
+          "discovery": true
+        },
+        "options": {},
+        "pref_disable_new_entities": false,
+        "pref_disable_polling": false,
+        "source": "user",
+        "unique_id": null,
+        "disabled_by": null
+      },
+      {
+        "entry_id": "3ecbb08534cada0b1fbda6eadfc6b175",
+        "version": 1,
+        "domain": "hacs",
+        "title": "",
+        "data": {
+          "token": "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"
+        },
+        "options": {
+          "experimental": true
+        },
+        "pref_disable_new_entities": false,
+        "pref_disable_polling": false,
+        "source": "user",
+        "unique_id": null,
+        "disabled_by": null
+      },
+      {
+        "entry_id": "cfc2abf3db8f1400e6dd196279b50837",
+        "version": 2,
+        "domain": "frigate",
+        "title": "192.168.100.164:5000",
+        "data": {
+          "url": "http://192.168.100.164:5000"
+        },
+        "options": {},
+        "pref_disable_new_entities": false,
+        "pref_disable_polling": false,
+        "source": "user",
+        "unique_id": null,
+        "disabled_by": null
+      },
+      {
+        "entry_id": "d3248f6de31914cf99baa8c2366d6356",
+        "version": 1,
+        "domain": "mobile_app",
+        "title": "Karolyne",
+        "data": {
+          "app_id": "io.homeassistant.companion.android",
+          "app_name": "Home Assistant",
+          "app_version": "2023.10.2-full (11484)",
+          "device_name": "Karolyne",
+          "manufacturer": "Xiaomi",
+          "model": "220333QNY",
+          "os_name": "Android",
+          "os_version": "33",
+          "supports_encryption": false,
+          "app_data": {
+            "push_websocket_channel": true,
+            "push_url": "https://mobile-apps.home-assistant.io/api/sendPush/android/v1",
+            "push_token": "cSoBt9M6T5WIY_ueBTPzB9:APA91bHl2vkoHFfCcUziEkrIK_RICFD7nh1xNEEg4lprezqzE1TUw9tlgeZxw2YHUbmC2hFHe84XJ2MPhBQgvtfLAklaZbM1nHAAvu47UGN38zBCqr6xi_TLgrNN6o8BlN0_x7s5oXqu"
+          },
+          "device_id": "a8540ec0a40a2d72",
+          "webhook_id": "4ec8ecc26ab488be06e6bf5092b262740f9066ee5645c6c1b83c86429eea07b4",
+          "user_id": "550226cc26a742c0b1a3edc4e1cca3ad"
+        },
+        "options": {},
+        "pref_disable_new_entities": false,
+        "pref_disable_polling": false,
+        "source": "registration",
+        "unique_id": "io.homeassistant.companion.android-a8540ec0a40a2d72",
+        "disabled_by": null
+      },
+      {
+        "entry_id": "fa50cbf96321d7ad2568dec5c2b771fe",
+        "version": 1,
+        "domain": "mobile_app",
+        "title": "LLuz",
+        "data": {
+          "app_id": "io.homeassistant.companion.android",
+          "app_name": "Home Assistant",
+          "app_version": "2023.10.2-full (11484)",
+          "device_name": "LLuz",
+          "manufacturer": "Xiaomi",
+          "model": "M2007J20CG",
+          "os_name": "Android",
+          "os_version": "33",
+          "supports_encryption": false,
+          "app_data": {
+            "push_websocket_channel": true,
+            "push_url": "https://mobile-apps.home-assistant.io/api/sendPush/android/v1",
+            "push_token": "dEhZ0Of4RQ-fE46eFpGjnl:APA91bGN6X7SSpQy-XdWYh7ktcieriryJ4c9LNA7_Th7Hqe9z6CVgaoBPaaxa2HlB7_ceGCE8W-muUduCODG2vlicij2wGXtEqAaaoClRqn2aCqAeJRVp7h41geBeCD1JNdtVtFDs3wn"
+          },
+          "device_id": "1ba19e7bc9f4c7e8",
+          "webhook_id": "1feafeaf25742521aac7e6f23f8c4d1528bf0970470d5b8388ee560aa7ae2185",
+          "user_id": "2a0a183eb8b6476592cc5500f1724cd8"
+        },
+        "options": {},
+        "pref_disable_new_entities": false,
+        "pref_disable_polling": false,
+        "source": "registration",
+        "unique_id": "io.homeassistant.companion.android-1ba19e7bc9f4c7e8",
+        "disabled_by": null
+      }
+    ]
+  }
+}

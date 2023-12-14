@@ -1,0 +1,664 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "core.restore_state",
+  "data": [
+    {
+      "state": {
+        "entity_id": "person.home_delluz",
+        "state": "unknown",
+        "attributes": {
+          "editable": true,
+          "id": "home_delluz",
+          "user_id": "2a0a183eb8b6476592cc5500f1724cd8",
+          "device_trackers": [
+            "device_tracker.lluz"
+          ],
+          "friendly_name": "lluz"
+        },
+        "last_changed": "2023-12-13T20:37:04.549414+00:00",
+        "last_updated": "2023-12-13T22:14:50.883471+00:00",
+        "context": {
+          "id": "01HHJKYDR3KK6DRAFJT9QG6VST",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": null,
+      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "person.karolyane",
+        "state": "unknown",
+        "attributes": {
+          "editable": true,
+          "id": "karolyane",
+          "user_id": "550226cc26a742c0b1a3edc4e1cca3ad",
+          "device_trackers": [
+            "device_tracker.karolyne"
+          ],
+          "friendly_name": "karolyane"
+        },
+        "last_changed": "2023-12-13T20:37:04.549551+00:00",
+        "last_updated": "2023-12-13T21:39:38.991848+00:00",
+        "context": {
+          "id": "01HHJHXZBFRNAAN2RR975J2G5A",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": null,
+      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "tts.google_en_com",
+        "state": "unknown",
+        "attributes": {
+          "friendly_name": "Google en com"
+        },
+        "last_changed": "2023-12-13T20:37:08.073337+00:00",
+        "last_updated": "2023-12-13T20:37:08.073337+00:00",
+        "context": {
+          "id": "01HHJEBGB9JKG1JDR5PN18C143",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": null,
+      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "update.frigate_card_update",
+        "state": "off",
+        "attributes": {
+          "auto_update": false,
+          "installed_version": "v5.2.0",
+          "in_progress": false,
+          "latest_version": "v5.2.0",
+          "release_summary": null,
+          "release_url": "https://github.com/dermotduffy/frigate-hass-card",
+          "skipped_version": null,
+          "title": null,
+          "friendly_name": "Frigate Card update",
+          "supported_features": 21
+        },
+        "last_changed": "2023-12-13T20:37:08.234080+00:00",
+        "last_updated": "2023-12-13T21:22:29.732613+00:00",
+        "context": {
+          "id": "01HHJGYJ74M6VSQGAK4HW1DHE5",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": null,
+      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "update.frigate_update",
+        "state": "off",
+        "attributes": {
+          "auto_update": false,
+          "installed_version": "v4.0.0",
+          "in_progress": false,
+          "latest_version": "v4.0.0",
+          "release_summary": null,
+          "release_url": "https://github.com/blakeblackshear/frigate-hass-integration/releases/v4.0.0",
+          "skipped_version": null,
+          "title": null,
+          "entity_picture": "https://brands.home-assistant.io/_/frigate/icon.png",
+          "friendly_name": "Frigate update",
+          "supported_features": 21
+        },
+        "last_changed": "2023-12-13T20:37:08.234761+00:00",
+        "last_updated": "2023-12-13T20:37:08.234761+00:00",
+        "context": {
+          "id": "01HHJEBGGAGG46EC80FM5GVAZJ",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": null,
+      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "update.hacs_update",
+        "state": "off",
+        "attributes": {
+          "auto_update": false,
+          "installed_version": "1.33.0",
+          "in_progress": false,
+          "latest_version": "1.33.0",
+          "release_summary": null,
+          "release_url": "https://github.com/hacs/integration/releases/1.33.0",
+          "skipped_version": null,
+          "title": null,
+          "entity_picture": "https://brands.home-assistant.io/_/hacs/icon.png",
+          "friendly_name": "HACS update",
+          "supported_features": 21
+        },
+        "last_changed": "2023-12-13T20:37:08.234946+00:00",
+        "last_updated": "2023-12-13T20:37:08.234946+00:00",
+        "context": {
+          "id": "01HHJEBGGA4H2GT1T1PERTZB8P",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": null,
+      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "sensor.server_entry_battery",
+        "state": "100",
+        "attributes": {
+          "state_class": "measurement",
+          "battery": 100,
+          "device_temperature": 36,
+          "illuminance": 909,
+          "illuminance_lux": 909,
+          "linkquality": 39,
+          "occupancy": false,
+          "power_outage_count": 29,
+          "voltage": 3035,
+          "unit_of_measurement": "%",
+          "device_class": "battery",
+          "friendly_name": "Server Entry Bateria"
+        },
+        "last_changed": "2023-12-13T21:39:52.996723+00:00",
+        "last_updated": "2023-12-14T14:52:53.934814+00:00",
+        "context": {
+          "id": "01HHMD1X9E3HB55N8DBQN7WE1A",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": {
+        "native_value": "100",
+        "native_unit_of_measurement": "%"
+      },
+      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "sensor.server_entry_device_temperature",
+        "state": "36",
+        "attributes": {
+          "state_class": "measurement",
+          "battery": 100,
+          "device_temperature": 36,
+          "illuminance": 909,
+          "illuminance_lux": 909,
+          "linkquality": 39,
+          "occupancy": false,
+          "power_outage_count": 29,
+          "voltage": 3035,
+          "unit_of_measurement": "°C",
+          "device_class": "temperature",
+          "friendly_name": "Server Entry Temperatura"
+        },
+        "last_changed": "2023-12-14T14:40:27.596939+00:00",
+        "last_updated": "2023-12-14T14:52:53.934739+00:00",
+        "context": {
+          "id": "01HHMD1X9EBTQDK9TASAN3WDYQ",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": {
+        "native_value": "36",
+        "native_unit_of_measurement": "°C"
+      },
+      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "sensor.server_entry_illuminance_lux",
+        "state": "909",
+        "attributes": {
+          "state_class": "measurement",
+          "battery": 100,
+          "device_temperature": 36,
+          "illuminance": 909,
+          "illuminance_lux": 909,
+          "linkquality": 39,
+          "occupancy": false,
+          "power_outage_count": 29,
+          "voltage": 3035,
+          "unit_of_measurement": "lx",
+          "device_class": "illuminance",
+          "friendly_name": "Server Entry Iluminância"
+        },
+        "last_changed": "2023-12-14T11:31:37.129386+00:00",
+        "last_updated": "2023-12-14T14:52:53.934658+00:00",
+        "context": {
+          "id": "01HHMD1X9ESNJHFN2G9K9PDZBC",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": {
+        "native_value": "909",
+        "native_unit_of_measurement": "lx"
+      },
+      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "sensor.server_entry_power_outage_count",
+        "state": "29",
+        "attributes": {
+          "battery": 100,
+          "device_temperature": 36,
+          "illuminance": 909,
+          "illuminance_lux": 909,
+          "linkquality": 39,
+          "occupancy": false,
+          "power_outage_count": 29,
+          "voltage": 3035,
+          "friendly_name": "Server Entry Power outage count"
+        },
+        "last_changed": "2023-12-13T21:39:52.996305+00:00",
+        "last_updated": "2023-12-14T14:52:53.934564+00:00",
+        "context": {
+          "id": "01HHMD1X9EQ6QJTQG3FGN5TWK2",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": {
+        "native_value": "29",
+        "native_unit_of_measurement": null
+      },
+      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "binary_sensor.server_entry_occupancy",
+        "state": "off",
+        "attributes": {
+          "battery": 100,
+          "device_temperature": 36,
+          "illuminance": 909,
+          "illuminance_lux": 909,
+          "linkquality": 39,
+          "occupancy": false,
+          "power_outage_count": 29,
+          "voltage": 3035,
+          "device_class": "motion",
+          "friendly_name": "Server Entry Movimento"
+        },
+        "last_changed": "2023-12-14T14:52:53.934428+00:00",
+        "last_updated": "2023-12-14T14:52:53.934428+00:00",
+        "context": {
+          "id": "01HHMD1X9E5W2D2G98BCDYHWJN",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": null,
+      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "update.frigate_server",
+        "state": "off",
+        "attributes": {
+          "auto_update": false,
+          "installed_version": "0.12.1",
+          "in_progress": false,
+          "latest_version": "0.12.1",
+          "release_summary": null,
+          "release_url": "https://github.com/blakeblackshear/frigate/releases/tag/v0.12.1",
+          "skipped_version": null,
+          "title": null,
+          "entity_picture": "https://brands.home-assistant.io/_/frigate/icon.png",
+          "friendly_name": "Frigate Server",
+          "supported_features": 0
+        },
+        "last_changed": "2023-12-13T20:58:28.736965+00:00",
+        "last_updated": "2023-12-13T20:58:28.736965+00:00",
+        "context": {
+          "id": "01HHJFJK00ZJW6MP067C460BBN",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": null,
+      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "device_tracker.karolyne",
+        "state": "unknown",
+        "attributes": {
+          "source_type": "gps",
+          "friendly_name": "Karolyne"
+        },
+        "last_changed": "2023-12-13T21:39:39.002409+00:00",
+        "last_updated": "2023-12-13T21:39:39.002409+00:00",
+        "context": {
+          "id": "01HHJHXZBTWRJCZSDFH31G69XA",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": null,
+      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "sensor.karolyne_battery_level",
+        "state": "37",
+        "attributes": {
+          "state_class": "measurement",
+          "unit_of_measurement": "%",
+          "device_class": "battery",
+          "icon": "mdi:battery-charging-30",
+          "friendly_name": "Karolyne Battery level"
+        },
+        "last_changed": "2023-12-14T14:50:43.413941+00:00",
+        "last_updated": "2023-12-14T14:50:43.413941+00:00",
+        "context": {
+          "id": "01HHMCXXTNMVT2MWNHSTJTVFC0",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": {
+        "native_value": 37,
+        "native_unit_of_measurement": "%"
+      },
+      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "sensor.karolyne_battery_state",
+        "state": "charging",
+        "attributes": {
+          "icon": "mdi:battery-plus",
+          "friendly_name": "Karolyne Battery state"
+        },
+        "last_changed": "2023-12-14T14:05:02.006102+00:00",
+        "last_updated": "2023-12-14T14:05:02.006102+00:00",
+        "context": {
+          "id": "01HHMAA8NPYRDHKMGS4JPZFGFT",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": {
+        "native_value": "charging",
+        "native_unit_of_measurement": null
+      },
+      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "sensor.karolyne_charger_type",
+        "state": "ac",
+        "attributes": {
+          "icon": "mdi:power-plug",
+          "friendly_name": "Karolyne Charger type"
+        },
+        "last_changed": "2023-12-14T14:05:02.006274+00:00",
+        "last_updated": "2023-12-14T14:05:02.006274+00:00",
+        "context": {
+          "id": "01HHMAA8NPNZ563TTWM5XSXJH0",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": {
+        "native_value": "ac",
+        "native_unit_of_measurement": null
+      },
+      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "device_tracker.lluz",
+        "state": "unknown",
+        "attributes": {
+          "source_type": "gps",
+          "friendly_name": "LLuz"
+        },
+        "last_changed": "2023-12-13T22:14:50.890141+00:00",
+        "last_updated": "2023-12-13T22:14:50.890141+00:00",
+        "context": {
+          "id": "01HHJKYDRA932RHXFYHCAR7FPH",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": null,
+      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "sensor.lluz_battery_level",
+        "state": "64",
+        "attributes": {
+          "state_class": "measurement",
+          "unit_of_measurement": "%",
+          "device_class": "battery",
+          "icon": "mdi:battery-60",
+          "friendly_name": "LLuz Battery level"
+        },
+        "last_changed": "2023-12-14T13:14:28.979658+00:00",
+        "last_updated": "2023-12-14T13:14:28.979658+00:00",
+        "context": {
+          "id": "01HHM7DPQKANXZRBNHH7WB3J45",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": {
+        "native_value": 64,
+        "native_unit_of_measurement": "%"
+      },
+      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "sensor.lluz_battery_state",
+        "state": "discharging",
+        "attributes": {
+          "icon": "mdi:battery-minus",
+          "friendly_name": "LLuz Battery state"
+        },
+        "last_changed": "2023-12-14T06:21:28.603835+00:00",
+        "last_updated": "2023-12-14T06:21:28.603835+00:00",
+        "context": {
+          "id": "01HHKFSF4V95GFH62KYQT3V99X",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": {
+        "native_value": "discharging",
+        "native_unit_of_measurement": null
+      },
+      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "sensor.lluz_charger_type",
+        "state": "none",
+        "attributes": {
+          "icon": "mdi:battery",
+          "friendly_name": "LLuz Charger type"
+        },
+        "last_changed": "2023-12-14T06:21:28.604063+00:00",
+        "last_updated": "2023-12-14T06:21:28.604063+00:00",
+        "context": {
+          "id": "01HHKFSF4WMCK647AKYMYRVQE4",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": {
+        "native_value": "none",
+        "native_unit_of_measurement": null
+      },
+      "last_seen": "2023-12-14T15:07:11.582245+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "sensor.0x00158d000633b922_battery",
+        "state": "unknown",
+        "attributes": {
+          "state_class": "measurement",
+          "battery": null,
+          "device_temperature": null,
+          "illuminance": 69,
+          "illuminance_lux": 69,
+          "linkquality": 81,
+          "occupancy": false,
+          "power_outage_count": null,
+          "voltage": null,
+          "unit_of_measurement": "%",
+          "device_class": "battery",
+          "friendly_name": "Server Entry Bateria"
+        },
+        "last_changed": "2023-12-13T16:31:25.915939+00:00",
+        "last_updated": "2023-12-13T16:38:02.978868+00:00",
+        "context": {
+          "id": "01HHJ0NQF2VHPMDAB1A3PFHKXQ",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": {
+        "native_value": null,
+        "native_unit_of_measurement": "%"
+      },
+      "last_seen": "2023-12-13T16:38:13.030972+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "binary_sensor.0x00158d000633b922_occupancy",
+        "state": "off",
+        "attributes": {
+          "battery": null,
+          "device_temperature": null,
+          "illuminance": 69,
+          "illuminance_lux": 69,
+          "linkquality": 81,
+          "occupancy": false,
+          "power_outage_count": null,
+          "voltage": null,
+          "device_class": "motion",
+          "friendly_name": "Server Entry Movimento"
+        },
+        "last_changed": "2023-12-13T16:38:02.978806+00:00",
+        "last_updated": "2023-12-13T16:38:02.978806+00:00",
+        "context": {
+          "id": "01HHJ0NQF2PYEQR6T18HHJ99EB",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": null,
+      "last_seen": "2023-12-13T16:38:13.031216+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "sensor.0x00158d000633b922_device_temperature",
+        "state": "unknown",
+        "attributes": {
+          "state_class": "measurement",
+          "battery": null,
+          "device_temperature": null,
+          "illuminance": 69,
+          "illuminance_lux": 69,
+          "linkquality": 81,
+          "occupancy": false,
+          "power_outage_count": null,
+          "voltage": null,
+          "unit_of_measurement": "°C",
+          "device_class": "temperature",
+          "friendly_name": "Server Entry Temperatura"
+        },
+        "last_changed": "2023-12-13T16:31:25.915730+00:00",
+        "last_updated": "2023-12-13T16:38:02.978741+00:00",
+        "context": {
+          "id": "01HHJ0NQF2K1AXXJHGTCVZN29B",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": {
+        "native_value": null,
+        "native_unit_of_measurement": "°C"
+      },
+      "last_seen": "2023-12-13T16:38:13.031417+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "sensor.0x00158d000633b922_illuminance_lux",
+        "state": "69",
+        "attributes": {
+          "state_class": "measurement",
+          "battery": null,
+          "device_temperature": null,
+          "illuminance": 69,
+          "illuminance_lux": 69,
+          "linkquality": 81,
+          "occupancy": false,
+          "power_outage_count": null,
+          "voltage": null,
+          "unit_of_measurement": "lx",
+          "device_class": "illuminance",
+          "friendly_name": "Server Entry Iluminância"
+        },
+        "last_changed": "2023-12-13T16:37:57.972195+00:00",
+        "last_updated": "2023-12-13T16:38:02.978670+00:00",
+        "context": {
+          "id": "01HHJ0NQF2CYETG2X30A6QEJYM",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": {
+        "native_value": "69",
+        "native_unit_of_measurement": "lx"
+      },
+      "last_seen": "2023-12-13T16:38:13.031606+00:00"
+    },
+    {
+      "state": {
+        "entity_id": "sensor.0x00158d000633b922_power_outage_count",
+        "state": "None",
+        "attributes": {
+          "battery": null,
+          "device_temperature": null,
+          "illuminance": 69,
+          "illuminance_lux": 69,
+          "linkquality": 81,
+          "occupancy": false,
+          "power_outage_count": null,
+          "voltage": null,
+          "friendly_name": "Server Entry Power outage count"
+        },
+        "last_changed": "2023-12-13T16:31:29.658124+00:00",
+        "last_updated": "2023-12-13T16:38:02.978504+00:00",
+        "context": {
+          "id": "01HHJ0NQF25A19WR8BBHA9J2DP",
+          "parent_id": null,
+          "user_id": null
+        }
+      },
+      "extra_data": {
+        "native_value": "None",
+        "native_unit_of_measurement": null
+      },
+      "last_seen": "2023-12-13T16:38:13.031772+00:00"
+    }
+  ]
+}

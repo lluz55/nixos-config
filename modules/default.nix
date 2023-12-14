@@ -6,5 +6,6 @@
     ./configuration.nix
     ./desktops
     ./shell
+    ./homeassistant
   ];
 }

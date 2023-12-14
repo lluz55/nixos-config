@@ -1,0 +1,518 @@
+{
+  "version": 1,
+  "minor_version": 4,
+  "key": "core.device_registry",
+  "data": {
+    "devices": [
+      {
+        "area_id": null,
+        "config_entries": [
+          "ca719967c844e72384db0c18a90baac2"
+        ],
+        "configuration_url": null,
+        "connections": [],
+        "disabled_by": null,
+        "entry_type": "service",
+        "hw_version": null,
+        "id": "7b3fa8b5321ab2546df690bd3b770b3d",
+        "identifiers": [
+          [
+            "sun",
+            "ca719967c844e72384db0c18a90baac2"
+          ]
+        ],
+        "manufacturer": null,
+        "model": null,
+        "name_by_user": null,
+        "name": "Sun",
+        "serial_number": null,
+        "sw_version": null,
+        "via_device_id": null
+      },
+      {
+        "area_id": null,
+        "config_entries": [
+          "8d6314e96f6124da30ff0032d800b204"
+        ],
+        "configuration_url": "https://www.met.no/en",
+        "connections": [],
+        "disabled_by": null,
+        "entry_type": "service",
+        "hw_version": null,
+        "id": "7b06b4489b40217767af0a499d544dff",
+        "identifiers": [
+          [
+            "met",
+            "8d6314e96f6124da30ff0032d800b204"
+          ]
+        ],
+        "manufacturer": "Met.no",
+        "model": "Forecast",
+        "name_by_user": null,
+        "name": "Forecast",
+        "serial_number": null,
+        "sw_version": null,
+        "via_device_id": null
+      },
+      {
+        "area_id": null,
+        "config_entries": [
+          "2f5d886a4a4a7cc7de22239afdf3436c"
+        ],
+        "configuration_url": null,
+        "connections": [],
+        "disabled_by": null,
+        "entry_type": null,
+        "hw_version": null,
+        "id": "6bcda03fc39577615931c02bd2e3d984",
+        "identifiers": [
+          [
+            "mqtt",
+            "zigbee2mqtt_0x00158d000633b922"
+          ]
+        ],
+        "manufacturer": "Xiaomi",
+        "model": "Aqara human body movement and illuminance sensor (RTCGQ11LM)",
+        "name_by_user": null,
+        "name": "Server Entry",
+        "serial_number": null,
+        "sw_version": "3000-0001",
+        "via_device_id": null
+      },
+      {
+        "area_id": null,
+        "config_entries": [
+          "3ecbb08534cada0b1fbda6eadfc6b175"
+        ],
+        "configuration_url": "homeassistant://hacs",
+        "connections": [],
+        "disabled_by": null,
+        "entry_type": "service",
+        "hw_version": null,
+        "id": "cd7a67ed3e2d98b40944c6ff72e50c66",
+        "identifiers": [
+          [
+            "hacs",
+            "311536795"
+          ]
+        ],
+        "manufacturer": "blakeblackshear",
+        "model": "integration",
+        "name_by_user": null,
+        "name": "Frigate",
+        "serial_number": null,
+        "sw_version": null,
+        "via_device_id": null
+      },
+      {
+        "area_id": null,
+        "config_entries": [
+          "3ecbb08534cada0b1fbda6eadfc6b175"
+        ],
+        "configuration_url": "homeassistant://hacs",
+        "connections": [],
+        "disabled_by": null,
+        "entry_type": "service",
+        "hw_version": null,
+        "id": "61882836436a9438998abe5d2b13628c",
+        "identifiers": [
+          [
+            "hacs",
+            "0717a0cd-745c-48fd-9b16-c8534c9704f9-bc944b0f-fd42-4a58-a072-ade38d1444cd"
+          ]
+        ],
+        "manufacturer": "hacs.xyz",
+        "model": "",
+        "name_by_user": null,
+        "name": "HACS",
+        "serial_number": null,
+        "sw_version": "1.33.0",
+        "via_device_id": null
+      },
+      {
+        "area_id": null,
+        "config_entries": [
+          "3ecbb08534cada0b1fbda6eadfc6b175"
+        ],
+        "configuration_url": "homeassistant://hacs",
+        "connections": [],
+        "disabled_by": null,
+        "entry_type": "service",
+        "hw_version": null,
+        "id": "fbe430fd79c8af1a05e0e6203ac1a3b3",
+        "identifiers": [
+          [
+            "hacs",
+            "394082552"
+          ]
+        ],
+        "manufacturer": "",
+        "model": "plugin",
+        "name_by_user": null,
+        "name": "Frigate Card",
+        "serial_number": null,
+        "sw_version": null,
+        "via_device_id": null
+      },
+      {
+        "area_id": "entrada",
+        "config_entries": [
+          "cfc2abf3db8f1400e6dd196279b50837"
+        ],
+        "configuration_url": "http://192.168.100.164:5000/cameras/frente_direita",
+        "connections": [],
+        "disabled_by": null,
+        "entry_type": null,
+        "hw_version": null,
+        "id": "32322cbd290306b4408179cfed8c69c4",
+        "identifiers": [
+          [
+            "frigate",
+            "cfc2abf3db8f1400e6dd196279b50837:frente_direita"
+          ]
+        ],
+        "manufacturer": "Frigate",
+        "model": "4.0.0/0.12.1-367d724",
+        "name_by_user": null,
+        "name": "Frente Direita",
+        "serial_number": null,
+        "sw_version": null,
+        "via_device_id": "1211587049a6a9846c3d34e2e2dc173f"
+      },
+      {
+        "area_id": "entrada",
+        "config_entries": [
+          "cfc2abf3db8f1400e6dd196279b50837"
+        ],
+        "configuration_url": "http://192.168.100.164:5000/cameras/frente_esquerda",
+        "connections": [],
+        "disabled_by": null,
+        "entry_type": null,
+        "hw_version": null,
+        "id": "6338c18e485e2ac468e39c6b855da4c1",
+        "identifiers": [
+          [
+            "frigate",
+            "cfc2abf3db8f1400e6dd196279b50837:frente_esquerda"
+          ]
+        ],
+        "manufacturer": "Frigate",
+        "model": "4.0.0/0.12.1-367d724",
+        "name_by_user": null,
+        "name": "Frente Esquerda",
+        "serial_number": null,
+        "sw_version": null,
+        "via_device_id": "1211587049a6a9846c3d34e2e2dc173f"
+      },
+      {
+        "area_id": "quarto",
+        "config_entries": [
+          "cfc2abf3db8f1400e6dd196279b50837"
+        ],
+        "configuration_url": "http://192.168.100.164:5000",
+        "connections": [],
+        "disabled_by": null,
+        "entry_type": null,
+        "hw_version": null,
+        "id": "1211587049a6a9846c3d34e2e2dc173f",
+        "identifiers": [
+          [
+            "frigate",
+            "cfc2abf3db8f1400e6dd196279b50837"
+          ]
+        ],
+        "manufacturer": "Frigate",
+        "model": "4.0.0/0.12.1-367d724",
+        "name_by_user": null,
+        "name": "Frigate",
+        "serial_number": null,
+        "sw_version": null,
+        "via_device_id": "1211587049a6a9846c3d34e2e2dc173f"
+      },
+      {
+        "area_id": "entrada",
+        "config_entries": [
+          "cfc2abf3db8f1400e6dd196279b50837"
+        ],
+        "configuration_url": "http://192.168.100.164:5000/cameras/",
+        "connections": [],
+        "disabled_by": null,
+        "entry_type": null,
+        "hw_version": null,
+        "id": "0349bbc257212dbf925cb5ddcc7421df",
+        "identifiers": [
+          [
+            "frigate",
+            "cfc2abf3db8f1400e6dd196279b50837:portao_direita"
+          ]
+        ],
+        "manufacturer": "Frigate",
+        "model": "4.0.0/0.12.1-367d724",
+        "name_by_user": null,
+        "name": "Portao Direita",
+        "serial_number": null,
+        "sw_version": null,
+        "via_device_id": "1211587049a6a9846c3d34e2e2dc173f"
+      },
+      {
+        "area_id": "varanda",
+        "config_entries": [
+          "cfc2abf3db8f1400e6dd196279b50837"
+        ],
+        "configuration_url": "http://192.168.100.164:5000/cameras/",
+        "connections": [],
+        "disabled_by": null,
+        "entry_type": null,
+        "hw_version": null,
+        "id": "f60236622003e77738c89e5dde8235bb",
+        "identifiers": [
+          [
+            "frigate",
+            "cfc2abf3db8f1400e6dd196279b50837:varanda"
+          ]
+        ],
+        "manufacturer": "Frigate",
+        "model": "4.0.0/0.12.1-367d724",
+        "name_by_user": null,
+        "name": "Varanda",
+        "serial_number": null,
+        "sw_version": null,
+        "via_device_id": "1211587049a6a9846c3d34e2e2dc173f"
+      },
+      {
+        "area_id": "varanda",
+        "config_entries": [
+          "cfc2abf3db8f1400e6dd196279b50837"
+        ],
+        "configuration_url": "http://192.168.100.164:5000/cameras/",
+        "connections": [],
+        "disabled_by": null,
+        "entry_type": null,
+        "hw_version": null,
+        "id": "39891dac725922a8e52de48518affa1f",
+        "identifiers": [
+          [
+            "frigate",
+            "cfc2abf3db8f1400e6dd196279b50837:varanda_direita"
+          ]
+        ],
+        "manufacturer": "Frigate",
+        "model": "4.0.0/0.12.1-367d724",
+        "name_by_user": null,
+        "name": "Varanda Direita",
+        "serial_number": null,
+        "sw_version": null,
+        "via_device_id": "1211587049a6a9846c3d34e2e2dc173f"
+      },
+      {
+        "area_id": "entrada",
+        "config_entries": [
+          "cfc2abf3db8f1400e6dd196279b50837"
+        ],
+        "configuration_url": "http://192.168.100.164:5000/cameras/",
+        "connections": [],
+        "disabled_by": null,
+        "entry_type": null,
+        "hw_version": null,
+        "id": "0f0f536252dd6945e29288fbc521ffef",
+        "identifiers": [
+          [
+            "frigate",
+            "cfc2abf3db8f1400e6dd196279b50837:portao"
+          ]
+        ],
+        "manufacturer": "Frigate",
+        "model": "4.0.0/0.12.1-367d724",
+        "name_by_user": null,
+        "name": "Portao",
+        "serial_number": null,
+        "sw_version": null,
+        "via_device_id": "1211587049a6a9846c3d34e2e2dc173f"
+      },
+      {
+        "area_id": null,
+        "config_entries": [
+          "d3248f6de31914cf99baa8c2366d6356"
+        ],
+        "configuration_url": null,
+        "connections": [],
+        "disabled_by": null,
+        "entry_type": null,
+        "hw_version": null,
+        "id": "2462e7f15f627fdca664588747c82ab7",
+        "identifiers": [
+          [
+            "mobile_app",
+            "a8540ec0a40a2d72"
+          ]
+        ],
+        "manufacturer": "Xiaomi",
+        "model": "220333QNY",
+        "name_by_user": null,
+        "name": "Karolyne",
+        "serial_number": null,
+        "sw_version": "33",
+        "via_device_id": null
+      },
+      {
+        "area_id": null,
+        "config_entries": [
+          "fa50cbf96321d7ad2568dec5c2b771fe"
+        ],
+        "configuration_url": null,
+        "connections": [],
+        "disabled_by": null,
+        "entry_type": null,
+        "hw_version": null,
+        "id": "2eb0c7526bf900b3e69f668034517785",
+        "identifiers": [
+          [
+            "mobile_app",
+            "1ba19e7bc9f4c7e8"
+          ]
+        ],
+        "manufacturer": "Xiaomi",
+        "model": "M2007J20CG",
+        "name_by_user": null,
+        "name": "LLuz",
+        "serial_number": null,
+        "sw_version": "33",
+        "via_device_id": null
+      }
+    ],
+    "deleted_devices": [
+      {
+        "config_entries": [],
+        "connections": [],
+        "identifiers": [
+          [
+            "frigate",
+            "7beaa737fbb537c27788f8f9e11562df:frente_dir"
+          ]
+        ],
+        "id": "0fdcbfcc1b808500b92f17dfe9d325b4",
+        "orphaned_timestamp": 1702501062.7798514
+      },
+      {
+        "config_entries": [],
+        "connections": [],
+        "identifiers": [
+          [
+            "frigate",
+            "7beaa737fbb537c27788f8f9e11562df:frente_esq"
+          ]
+        ],
+        "id": "94fc25bbd005f09d3decc403a0d5b0a6",
+        "orphaned_timestamp": 1702501062.7798514
+      },
+      {
+        "config_entries": [],
+        "connections": [],
+        "identifiers": [
+          [
+            "frigate",
+            "7beaa737fbb537c27788f8f9e11562df:portao_d"
+          ]
+        ],
+        "id": "dc62a4005c03d449dc0fc3db627c2266",
+        "orphaned_timestamp": 1702501062.7798514
+      },
+      {
+        "config_entries": [],
+        "connections": [],
+        "identifiers": [
+          [
+            "frigate",
+            "7beaa737fbb537c27788f8f9e11562df:varanda_d"
+          ]
+        ],
+        "id": "16efaf5b0e2ba90d3f4d59b3208832da",
+        "orphaned_timestamp": 1702501062.7798514
+      },
+      {
+        "config_entries": [],
+        "connections": [],
+        "identifiers": [
+          [
+            "frigate",
+            "7beaa737fbb537c27788f8f9e11562df"
+          ]
+        ],
+        "id": "ef31b316cd6057b20396cb9e37380851",
+        "orphaned_timestamp": 1702501062.7798514
+      },
+      {
+        "config_entries": [],
+        "connections": [],
+        "identifiers": [
+          [
+            "frigate",
+            "7beaa737fbb537c27788f8f9e11562df:varanda"
+          ]
+        ],
+        "id": "8f759a0c5c346df9b9c21f63b507e172",
+        "orphaned_timestamp": 1702501062.7798514
+      },
+      {
+        "config_entries": [],
+        "connections": [],
+        "identifiers": [
+          [
+            "frigate",
+            "7beaa737fbb537c27788f8f9e11562df:portao"
+          ]
+        ],
+        "id": "8944ae8a1b9ca39d6bd9b35d12969edd",
+        "orphaned_timestamp": 1702501062.7798514
+      },
+      {
+        "config_entries": [],
+        "connections": [],
+        "identifiers": [
+          [
+            "frigate",
+            "7beaa737fbb537c27788f8f9e11562df:frente_direita"
+          ]
+        ],
+        "id": "9e740f08ede81b0dd503fee4185e9d05",
+        "orphaned_timestamp": 1702501062.7798514
+      },
+      {
+        "config_entries": [],
+        "connections": [],
+        "identifiers": [
+          [
+            "frigate",
+            "7beaa737fbb537c27788f8f9e11562df:frente_esquerda"
+          ]
+        ],
+        "id": "f1f767fb9630277f747755d449f85951",
+        "orphaned_timestamp": 1702501062.7798514
+      },
+      {
+        "config_entries": [],
+        "connections": [],
+        "identifiers": [
+          [
+            "frigate",
+            "7beaa737fbb537c27788f8f9e11562df:portao_direita"
+          ]
+        ],
+        "id": "8d9ffb480852e5b37a5c3a013f7aed2b",
+        "orphaned_timestamp": 1702501062.7798514
+      },
+      {
+        "config_entries": [],
+        "connections": [],
+        "identifiers": [
+          [
+            "frigate",
+            "7beaa737fbb537c27788f8f9e11562df:varanda_direita"
+          ]
+        ],
+        "id": "fb57476ddc9efa09d42d6d5c4b1b42f6",
+        "orphaned_timestamp": 1702501062.7798514
+      }
+    ]
+  }
+}
