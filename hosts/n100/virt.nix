@@ -1,4 +1,5 @@
-{ pkgs, config, lib, ... }: {
+{ pkgs, config, lib, ... }:
+with lib;{
   #virtualisation.libvirtd.enable = true;
   #virtualisation = {
   #  #cores = 2;
@@ -12,30 +13,46 @@
   #};
 
   boot.kernelModules = [ "kvm-amd" "kvm-intel" ];
-
-  containers.webserver_test = {
+  containers.webserver = {
     autoStart = true;
     privateNetwork = true;
     hostBridge = "br-lan";
     localAddress = "192.168.1.9/24";
-    config = {
+    config = { ... }: {
+      environment.systemPackages = with pkgs; [
+        netcat
+        tcpdump
+      ];
       system.stateVersion = "23.11";
       services.httpd.enable = true;
       services.httpd.adminAddr = "foo@example.org";
-      networking.firewall.allowedTCPPorts = [ 80 ];
+      networking = {
+        defaultGateway = "192.168.1.1";
+        firewall.enable = false;
+        firewall.allowedTCPPorts = [ 80 8080 ];
+        useHostResolvConf = mkForce false;
+      };
+      services.resolved.enable = true;
     };
   };
 
-  containers.cams-test = {
+  containers.ntp = {
     autoStart = true;
     privateNetwork = true;
-    hostBridge = "br-cams";
-    localAddress = "10.1.1.9/24";
+    hostBridge = "br-lan";
+    localAddress = "192.168.1.123/24";
     config = { ... }: {
       system.stateVersion = "23.11";
-      environment.systemPackages = with pkgs; [
-        nmap
-      ];
+      environment.systemPackages = [ ];
+
+      networking = {
+        defaultGateway = "192.168.1.1";
+        firewall.enable = false;
+        firewall.allowedTCPPorts = [ ];
+        firewall.allowedUDPPorts = [ 123 ];
+        useHostResolvConf = mkForce false;
+      };
+      services.resolved.enable = true;
     };
   };
 
