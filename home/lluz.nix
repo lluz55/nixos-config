@@ -12,6 +12,9 @@ let
   ];
 in
 with lib;{
+  imports = [
+    ../options.nix
+  ];
   programs.home-manager.enable = true;
   dconf.settings = mkIf (config.gnome.enable) {
     "org/gnome/desktop/peripherals/keyboard" = {
@@ -26,6 +29,7 @@ with lib;{
       ];
     };
   };
+
   home.packages = with pkgs; [
     # Terminal
     eza
