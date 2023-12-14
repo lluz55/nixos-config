@@ -1,5 +1,4 @@
 { pkgs, config, lib, unstable, ... }:
-
 let
   gasketRev = "09385d485812088e04a98a6e1227bf92663e0b59";
   gasketPkg = (pkgs.gasket.overrideAttrs (final: prev: {
@@ -20,10 +19,8 @@ with lib;{
     ./hardware-configuration.nix
     ./virt.nix
     ./router.nix
-    ./frigate.nix
   ];
 
-  gnome.enable = true;
   gnome.enable = false;
   hass.enable = true;
   frigate.enable = true;
@@ -38,7 +35,6 @@ with lib;{
     };
   };
   environment.systemPackages = with unstable; [
-    tailscale
     wl-clipboard
     lm_sensors
     tailscale
