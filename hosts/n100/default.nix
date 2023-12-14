@@ -24,8 +24,12 @@ with lib;{
   ];
 
   gnome.enable = true;
+  gnome.enable = false;
+  hass.enable = true;
+  frigate.enable = true;
 
   services.tailscale.enable = true;
+  programs.mosh.enable = true;
 
   services.openssh = {
     enable = true;
