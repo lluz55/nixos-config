@@ -37,7 +37,15 @@ with lib;{
   };
   environment.systemPackages = with unstable; [
     tailscale
+    wl-clipboard
     lm_sensors
+    tailscale
+    killall
+    du-dust
+    htop
+    btop
+    mosh
+    nmap
   ];
 
   boot = {
