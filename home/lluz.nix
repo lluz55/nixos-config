@@ -13,7 +13,7 @@ let
 in
 with lib;{
   programs.home-manager.enable = true;
-  dconf.settings = {
+  dconf.settings = mkIf (config.gnome.enable) {
     "org/gnome/desktop/peripherals/keyboard" = {
       numlock-state = false;
     };
