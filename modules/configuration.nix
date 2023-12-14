@@ -1,4 +1,4 @@
-{ unstable, lib, pkgs, inputs, master_user, ... }:
+{ unstable, lib, pkgs, inputs, master-user, ... }:
 
 {
   #imports = ( 
@@ -48,9 +48,9 @@
 
   environment = {
     variables = {
-      TERMINAL = "${master_user.terminal}";
-      EDITOR = "${master_user.editor}";
-      VISUAL = "${master_user.editor}";
+      TERMINAL = "${master-user.terminal}";
+      EDITOR = "${master-user.editor}";
+      VISUAL = "${master-user.editor}";
     };
     #systemPackages = with pkgs; [ ];
   };
@@ -73,10 +73,10 @@
   };
   nixpkgs.config.allowUnfree = true;
 
-  system.stateVersion = "23.05";
+  system.stateVersion = "23.11";
 
-  home-manager.users.${master_user.name} = {
-    home.stateVersion = "23.05";
+  home-manager.users.${master-user.name} = {
+    home.stateVersion = "23.11";
     programs.home-manager.enable = true;
   };
 }
