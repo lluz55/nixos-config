@@ -3,6 +3,10 @@ let
   tailscale_port = toString config.services.tailscale.port;
   ssh_port = "22";
   frigate_port = "5000";
+  ntp_port = "123";
+  hass_port = "8123";
+  zb2m_port = "1883";
+  mosh_ports = "60000-61000";
 in
 {
   boot = {
@@ -36,41 +40,51 @@ in
             type filter hook output priority 100; policy accept;
           }
           chain input {
-            type filter hook input priority 0; policy accept;
+            type filter hook input priority 0; policy drop;
 
-            iifname { "br-lan", "iot-10", "br-cams" } accept comment "Allow local network to access the router"
+            iifname { "br-lan", "iot-10", "br-cams"} accept comment "Allow local network to access the router"
             iifname "enp1s0" ct state { established, related } accept comment "Allow established traffic"
             iifname "enp1s0" icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"
+            iifname "lo" accept comment "Accept everything from loopback interface"
+
+            # Allow ports on WAN interfaces
             tcp dport ${ssh_port} ct state new limit rate 2/minute accept comment "Accept SSH and avoid brute force"
             tcp dport ${frigate_port} accept comment "Allow Frigate"
             udp dport ${tailscale_port} accept comment "Allow Tailscale"
-            #iifname "enp1s0" counter drop comment "Drop all other unsolicited traffic from enp1s0"
-            iifname "lo" accept comment "Accept everything from loopback interface"
+            tcp dport ${hass_port} accept comment "Allow Homeassistant"
+            tcp dport ${zb2m_port} accept comment "Zigbee2mqtt"
+            udp dport ${mosh_ports} accept comment "Allow Mosh"
+
           }
           chain forward {
             type filter hook forward priority 0; policy drop;
             ip protocol tcp flow add @f comment "Offload tcp/udp established traffic"
+            ct status dnat accept comment "Allow NAT through interfaces"
 
+            iifname { "br-cams" } oifname { "enp1s0" } udp dport ${ntp_port} accept comment "Allow NTP extenal access"
+            iifname { "br-cams" } ip saddr 10.1.1.10 oifname { "enp1s0" }  meta nftrace set 1 accept comment "Allow NTP extenal access"
             iifname { "br-lan", "iot-10" } oifname { "enp1s0" } accept comment "Allow trusted LAN to enp1s0"
-            iifname { "enp1s0" } oifname { "br-lan", "iot-10", "br-cams" } ct state { established, related } accept comment "Allow established back to LANs"
+            iifname { "enp1s0" } oifname {  "br-lan", "iot-10", "br-cams" } ct state { established, related } accept comment "Allow established back to LANs"
           }
         }
 
         table ip nat {
           chain prerouting {
             type nat hook prerouting priority dstnat; policy accept;
-            ip daddr 192.168.100.0/24 tcp dport {http, https} meta nftrace set 1 dnat 192.168.1.9
+            tcp dport 10011 dnat 10.1.1.11:80 # TODO: Change to new default lan 
+            tcp dport 10012 dnat 10.1.1.12:80 # TODO: Change to new default lan
+            tcp dport 8123 dnat 10.1.1.10:8123 # TODO: Remove after tests
+            tcp dport 8080 dnat 10.1.1.10:8080 # TODO: Remove after tests
           }
           chain postrouting {
             type nat hook postrouting priority srcnat; policy accept;
-            ip saddr 192.168.100.0/24 ip daddr 192.168.1.9 tcp dport {http, https} counter snat 192.168.100.0/24
             oifname "enp1s0" masquerade
           } 
         }
       '';
     };
   };
-
+  #tcp dport 80 meta nftrace set 1 dnat 10.1.1.9
   systemd.network = {
     wait-online.anyInterface = true;
     netdevs = {
@@ -89,10 +103,11 @@ in
       };
       "50-iot-10" = {
         netdevConfig = {
-          Kind = "vlan";
+          Kind = "bridge";
+          #Kind = "vlan";
           Name = "iot-10";
         };
-        vlanConfig.Id = 10;
+        #vlanConfig.Id = 10;
       };
     };
     networks = {
@@ -115,11 +130,11 @@ in
       };
       "30-enp4s0" = {
         matchConfig.Name = "enp4s0";
-        vlan = [ "iot-10" ];
-        #networkConfig = {
-        #  Bridge = "br-lan";
-        #  ConfigureWithoutCarrier = true;
-        #};
+        #vlan = [ "iot-10" ];
+        networkConfig = {
+          Bridge = "iot-10";
+          ConfigureWithoutCarrier = true;
+        };
         linkConfig.RequiredForOnline = "enslaved";
       };
       # Configure the bridge for its desired function
@@ -129,6 +144,7 @@ in
         address = [
           "192.168.1.1/24"
         ];
+        gateway = [ "192.168.100.1" ];
         networkConfig = {
           ConfigureWithoutCarrier = true;
         };
@@ -144,10 +160,11 @@ in
         networkConfig = {
           ConfigureWithoutCarrier = true;
         };
+        gateway = [ "192.168.100.1" ];
         # Don't wait for it as it also would wait for wlan and DFS which takes around 5 min 
         linkConfig.RequiredForOnline = "no";
       };
-      "50-iot-10" = {
+      "70-iot-10" = {
         matchConfig.Name = "iot-10";
         bridgeConfig = { };
         address = [
