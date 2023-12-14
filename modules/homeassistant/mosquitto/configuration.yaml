@@ -7,7 +7,6 @@ mqtt:
   base_topic: zigbee2mqtt
   server: mqtt://127.0.0.1
   user: lluz
-  password: '130213'
   keepalive: 60
   reject_unauthorized: true
   version: 4

@@ -11,13 +11,10 @@
   sops.secrets.frigate = {
     owner = master-user.name;
   };
+  sops.secrets.mqtt = {
+    owner = master-user.name;
+  };
 
-  #systemd.services."ativate-sops" = {
-  #  script = ''
-  #    echo "Sending secure password: "
-  #    $(cat ${config.sops.secrets."frigate".path})
-  #  '';
-  #};
   environment.systemPackages = with pkgs; [
     sops
     (

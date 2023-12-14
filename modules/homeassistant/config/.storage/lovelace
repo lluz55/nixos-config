@@ -46,14 +46,6 @@
                 }
               ],
               "title": "Server Entry"
-            },
-            {
-              "show_current": true,
-              "show_forecast": true,
-              "type": "weather-forecast",
-              "entity": "weather.forecast_casa",
-              "forecast_type": "daily",
-              "name": "Clima"
             }
           ]
         },

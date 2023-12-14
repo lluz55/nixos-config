@@ -39,6 +39,10 @@ with lib; {
         "/run/udev/" = {
           hostPath = "/run/udev/";
         };
+        # Needed for zigbee2mqtt
+        "/var/env" = {
+          hostPath = config.sops.secrets.mqtt.path;
+        };
         # Needed for zigbee Coordenator
         "/dev/ttyACM0" = {
           hostPath = "/dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_86eda3e37f45ed11bdbac68f0a86e0b4-if00-port0";
@@ -57,6 +61,8 @@ with lib; {
         { node = "/dev/net/tun"; modifier = "rwm"; }
         # Needed for containers inside HASS container to work properly
         { node = "/dev/console"; modifier = "rwm"; }
+        # Needed for containers inside HASS container to work properly
+        { node = "${config.sops.secrets.mqtt.path}"; modifier = "rwm"; }
         # Needed for zigbee Coordenator
         {
           node = "/dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_86eda3e37f45ed11bdbac68f0a86e0b4-if00-port0";
@@ -104,6 +110,7 @@ with lib; {
           ];
           extraOptions = [
             "--network=host"
+            "--env-file=/var/env"
           ];
         };
 
@@ -116,6 +123,7 @@ with lib; {
           extraOptions = [
             "--network=host"
             "--device=/dev/ttyACM0:/dev/ttyACM0"
+            "--env-file=/var/env"
           ];
         };
       };

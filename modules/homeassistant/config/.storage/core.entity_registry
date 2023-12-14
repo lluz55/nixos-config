@@ -785,7 +785,11 @@
         "id": "cbe89605237fd27c2ce202caaef6f871",
         "has_entity_name": true,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:scoreboard-outline",
         "original_name": "capture cpu usage",
@@ -811,7 +815,11 @@
         "id": "d49045a884038be8676d8a80acc81d0e",
         "has_entity_name": true,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:scoreboard-outline",
         "original_name": "detect cpu usage",
@@ -837,7 +845,11 @@
         "id": "233710a632e2aa05a315efee16783e91",
         "has_entity_name": true,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:scoreboard-outline",
         "original_name": "ffmpeg cpu usage",
@@ -863,7 +875,11 @@
         "id": "7af8bab943d03e19f23908ebc30fb7fb",
         "has_entity_name": true,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:scoreboard-outline",
         "original_name": "capture cpu usage",
@@ -889,7 +905,11 @@
         "id": "921943c3cc5760b0454e4db1d823998e",
         "has_entity_name": true,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:scoreboard-outline",
         "original_name": "detect cpu usage",
@@ -915,7 +935,11 @@
         "id": "9059a7fce1afac9cd296cda5b6ade445",
         "has_entity_name": true,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:scoreboard-outline",
         "original_name": "ffmpeg cpu usage",
@@ -941,7 +965,11 @@
         "id": "fb59f9c84893f9b5f7ebcba87ea8db29",
         "has_entity_name": true,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:speedometer",
         "original_name": "Detection fps",
@@ -967,7 +995,11 @@
         "id": "8c20782ef3696e83c1005badc7e3b05b",
         "has_entity_name": true,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:speedometer",
         "original_name": "Coral inference speed",
@@ -993,7 +1025,11 @@
         "id": "cef7ca46b3abc7697465f1c5022e6da4",
         "has_entity_name": true,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:speedometer",
         "original_name": "camera fps",
@@ -1019,7 +1055,11 @@
         "id": "b8aff204b3e72c1406b358c80d53163e",
         "has_entity_name": true,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:speedometer",
         "original_name": "detection fps",
@@ -1045,7 +1085,11 @@
         "id": "280ab3609e290d87144ed7decd810094",
         "has_entity_name": true,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:speedometer",
         "original_name": "process fps",
@@ -1071,7 +1115,11 @@
         "id": "a7351f5b81ce6ccdb87d7442d62e3816",
         "has_entity_name": true,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:speedometer",
         "original_name": "skipped fps",
@@ -1097,7 +1145,11 @@
         "id": "f27b97d4280848475ada4b5e5a7734af",
         "has_entity_name": true,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:speedometer",
         "original_name": "camera fps",
@@ -1123,7 +1175,11 @@
         "id": "b27a58d993a38b3d257de32270c5a332",
         "has_entity_name": true,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:speedometer",
         "original_name": "detection fps",
@@ -1149,7 +1205,11 @@
         "id": "c6100c82a6e3311ac9806d6589d28a55",
         "has_entity_name": true,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:speedometer",
         "original_name": "process fps",
@@ -1175,7 +1235,11 @@
         "id": "0a5b8175c2cd2d4fc03bd0ab329456a2",
         "has_entity_name": true,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:speedometer",
         "original_name": "skipped fps",
@@ -1681,7 +1745,11 @@
         "id": "1acf1321db49def394238cb7a15b153b",
         "has_entity_name": true,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:server",
         "original_name": "Status",
@@ -1892,7 +1960,11 @@
         "id": "4ba8aaecb0affda0798cb810e37d9b30",
         "has_entity_name": true,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:speedometer",
         "original_name": "Contour area",
@@ -1923,7 +1995,11 @@
         "id": "5deb69bbd32a0f6df7dfe40fc358696a",
         "has_entity_name": true,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:speedometer",
         "original_name": "Threshold",
@@ -1954,7 +2030,11 @@
         "id": "adba0f13c891bbfa71fff67ea37e9e5b",
         "has_entity_name": true,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:speedometer",
         "original_name": "Contour area",
@@ -1985,7 +2065,11 @@
         "id": "d2211cf33a3d47ca74517933cf2415a9",
         "has_entity_name": true,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:speedometer",
         "original_name": "Threshold",
@@ -2131,7 +2215,11 @@
         "id": "655612ff683a7b7f143bda80d7817f70",
         "has_entity_name": true,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:contrast-circle",
         "original_name": "Improve Contrast",
@@ -2277,7 +2365,11 @@
         "id": "713ecd1e7ec559edb6d961287fecc2cb",
         "has_entity_name": true,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:contrast-circle",
         "original_name": "Improve Contrast",
@@ -2903,7 +2995,11 @@
         "id": "a26b52db6ba2111268f152807004c04b",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:walk",
         "original_name": "Karolyne Detected activity",
@@ -2931,7 +3027,11 @@
         "id": "15687652be947929ac03f1f8887a154d",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:sleep",
         "original_name": "Karolyne Sleep confidence",
@@ -2957,7 +3057,11 @@
         "id": "a03b4a500103eee521c1cdeb2c2461e4",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:sleep",
         "original_name": "Karolyne Sleep segment",
@@ -2983,7 +3087,11 @@
         "id": "23331d882ba0f11b42f581546d0bf50f",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:car",
         "original_name": "Karolyne Android Auto",
@@ -3009,7 +3117,11 @@
         "id": "53923bf6588f99e706a002b68f1b4797",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:android",
         "original_name": "Karolyne OS version",
@@ -3035,7 +3147,11 @@
         "id": "c7d06f53cc64e64735bc8d91de62f0c5",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:security",
         "original_name": "Karolyne Security patch",
@@ -3061,7 +3177,11 @@
         "id": "3740a5d503263363b1a35401c614f7a5",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:android",
         "original_name": "Karolyne Current version",
@@ -3089,7 +3209,11 @@
         "id": "e87a8412caf99af6a9655b9d21fa69e5",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:radio-tower",
         "original_name": "Karolyne App Rx GB",
@@ -3117,7 +3241,11 @@
         "id": "db78e89b689bca0b7b16a9868e840930",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:radio-tower",
         "original_name": "Karolyne App Tx GB",
@@ -3145,7 +3273,11 @@
         "id": "688357ab06eeff3d4a546f7e92d11c6e",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:memory",
         "original_name": "Karolyne App memory",
@@ -3171,7 +3303,11 @@
         "id": "544fbaa1d14435f6918e0471d3a8f9a8",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:timer-outline",
         "original_name": "Karolyne App inactive",
@@ -3197,7 +3333,11 @@
         "id": "b22cc41989b3e56b4f6a09387966f983",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:android",
         "original_name": "Karolyne App standby bucket",
@@ -3223,7 +3363,11 @@
         "id": "d0327cbedb9d65d840ce11cb052b141f",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:android",
         "original_name": "Karolyne App importance",
@@ -3249,7 +3393,11 @@
         "id": "acedf5ba65ce070fead252b8c534c7d2",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:volume-high",
         "original_name": "Karolyne Ringer mode",
@@ -3275,7 +3423,11 @@
         "id": "48e74804fde1434a37f672db1f3de645",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:volume-high",
         "original_name": "Karolyne Audio mode",
@@ -3301,7 +3453,11 @@
         "id": "aee631bd644cc6752a5da614f7f36fdc",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:headphones",
         "original_name": "Karolyne Headphones",
@@ -3327,7 +3483,11 @@
         "id": "6e8eb3197f9607f531f449a3c50faecc",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:microphone-off",
         "original_name": "Karolyne Mic muted",
@@ -3353,7 +3513,11 @@
         "id": "2156630c15ad2c83c3d8e058945312d1",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:volume-high",
         "original_name": "Karolyne Speakerphone",
@@ -3379,7 +3543,11 @@
         "id": "0e7ffa9886c681b025dec454ff4009ca",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:music",
         "original_name": "Karolyne Music active",
@@ -3405,7 +3573,11 @@
         "id": "c8f309e6d1d1a9a628d64a527c419363",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:alarm",
         "original_name": "Karolyne Volume level alarm",
@@ -3431,7 +3603,11 @@
         "id": "f2e4197b88e36912efef94352418676c",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:phone",
         "original_name": "Karolyne Volume level call",
@@ -3457,7 +3633,11 @@
         "id": "b0ff05b9a7079be484d1892f4f575688",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:music",
         "original_name": "Karolyne Volume level music",
@@ -3483,7 +3663,11 @@
         "id": "11ed4e0ef8236d200ca6e5ecf1ea3944",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:phone-ring",
         "original_name": "Karolyne Volume level ringer",
@@ -3509,7 +3693,11 @@
         "id": "2c46a1b0c0b6ac1896fffb37e6d65ff3",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:bell-ring",
         "original_name": "Karolyne Volume level notification",
@@ -3535,7 +3723,11 @@
         "id": "cbc3cd4c80f84277a7d41e31c1447217",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:cellphone-sound",
         "original_name": "Karolyne Volume level system",
@@ -3561,7 +3753,11 @@
         "id": "2bbd6848f55c1403b79978fccbcb91ba",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:volume-high",
         "original_name": "Karolyne Volume level DTMF",
@@ -3587,7 +3783,11 @@
         "id": "417d5534de00795a34db9955dc9edea6",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:human",
         "original_name": "Karolyne Volume level accessibility",
@@ -3601,9 +3801,7 @@
       {
         "aliases": [],
         "area_id": null,
-        "capabilities": {
-          "state_class": "measurement"
-        },
+        "capabilities": null,
         "config_entry_id": "d3248f6de31914cf99baa8c2366d6356",
         "device_class": null,
         "device_id": "2462e7f15f627fdca664588747c82ab7",
@@ -3675,7 +3873,11 @@
         "id": "91b82678723c58baf5d67bb25d3d6b5e",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": "plug",
         "original_icon": "mdi:power-plug",
         "original_name": "Karolyne Is charging",
@@ -3731,7 +3933,11 @@
         "id": "d8ff9be3e3a2b018b22e679fdc11422d",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:battery-heart-variant",
         "original_name": "Karolyne Battery health",
@@ -3759,7 +3965,11 @@
         "id": "b4b36fcb1e00ec258e43c08732a2cb89",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": "temperature",
         "original_icon": "mdi:battery",
         "original_name": "Karolyne Battery temperature",
@@ -3787,7 +3997,11 @@
         "id": "dc12e79b5422c80b99a3e37027759af0",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": "power",
         "original_icon": "mdi:battery-plus",
         "original_name": "Karolyne Battery power",
@@ -3815,7 +4029,11 @@
         "id": "f5053ea9437f4285e9af8cb03c4d67db",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:bluetooth",
         "original_name": "Karolyne Bluetooth connection",
@@ -3841,7 +4059,11 @@
         "id": "d94b393a06031fb29b631c948c3bc943",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:bluetooth",
         "original_name": "Karolyne Bluetooth state",
@@ -3867,7 +4089,11 @@
         "id": "43104fc7fece998252b407a753ee6c7e",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:bluetooth",
         "original_name": "Karolyne BLE transmitter",
@@ -3893,7 +4119,11 @@
         "id": "0d141e4bea210d036231c946b5d3fe4d",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:bluetooth",
         "original_name": "Karolyne Beacon monitor",
@@ -3921,7 +4151,11 @@
         "id": "39811aa2f16dfec71f45027bd806855c",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": "battery",
         "original_icon": "mdi:car-battery",
         "original_name": "Karolyne Car battery",
@@ -3947,7 +4181,11 @@
         "id": "410491beed57bbf272a196f5ff51e308",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:car-info",
         "original_name": "Karolyne Car name",
@@ -3973,7 +4211,11 @@
         "id": "b813f126bfd3251366d9c8ad83035edc",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": "plug",
         "original_icon": "mdi:ev-station",
         "original_name": "Karolyne Car charging status",
@@ -3999,7 +4241,11 @@
         "id": "4c67fea25097690f7d2d301e7ee3971c",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:car-electric",
         "original_name": "Karolyne Car EV connector type",
@@ -4027,7 +4273,11 @@
         "id": "52c6399e516d64d6bc170688b3693652",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": "battery",
         "original_icon": "mdi:barrel",
         "original_name": "Karolyne Car fuel",
@@ -4053,7 +4303,11 @@
         "id": "2a9fda574d4199a254c86a1f17c388fd",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:gas-station",
         "original_name": "Karolyne Car fuel type",
@@ -4081,7 +4335,11 @@
         "id": "3c70720e3c5688960d5055a371420cab",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": "distance",
         "original_icon": "mdi:map-marker-distance",
         "original_name": "Karolyne Car odometer",
@@ -4107,7 +4365,11 @@
         "id": "d4de1f2cb268865267b232585e1135ef",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:brightness-6",
         "original_name": "Karolyne Screen brightness",
@@ -4133,7 +4395,11 @@
         "id": "a5518499adb2544e4676dc771504957d",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:cellphone-off",
         "original_name": "Karolyne Screen off timeout",
@@ -4159,7 +4425,11 @@
         "id": "9aaebda77b82aaa26a7287f185cb4cab",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:minus-circle",
         "original_name": "Karolyne Do Not Disturb sensor",
@@ -4185,7 +4455,11 @@
         "id": "a51bb6193f8bc303b53992b421977391",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:palette",
         "original_name": "Karolyne Accent color",
@@ -4211,7 +4485,11 @@
         "id": "f61bcea06d199e4819e1dd1000867c8a",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:briefcase",
         "original_name": "Karolyne Work profile",
@@ -4237,7 +4515,11 @@
         "id": "3a8aaa8060494387d54344755362e9b2",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:map",
         "original_name": "Karolyne Geocoded location",
@@ -4263,7 +4545,11 @@
         "id": "c1b994319749726b803611b6c0ea8cbd",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:cellphone-lock",
         "original_name": "Karolyne Device locked",
@@ -4289,7 +4575,11 @@
         "id": "11a1c0ea721f39d909afb9af16761747",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:cellphone-key",
         "original_name": "Karolyne Device secure",
@@ -4315,7 +4605,11 @@
         "id": "37a0e940fcfe812a9165bbcc98bb795b",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:cellphone-lock",
         "original_name": "Karolyne Keyguard locked",
@@ -4341,7 +4635,11 @@
         "id": "a9c89ba6816cae881e4d668e9397f247",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:cellphone-key",
         "original_name": "Karolyne Keyguard secure",
@@ -4367,7 +4665,11 @@
         "id": "a8d2f8601a12065adbb5229a6c05b53e",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:android",
         "original_name": "Karolyne Last used app",
@@ -4393,7 +4695,11 @@
         "id": "28224cb4270702b91e7ac2aa4f967a1d",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": "timestamp",
         "original_icon": "mdi:restart",
         "original_name": "Karolyne Last reboot",
@@ -4419,7 +4725,11 @@
         "id": "d78ccebf32f89b8be2608e0fdd0fbca8",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:update",
         "original_name": "Karolyne Last update trigger",
@@ -4447,7 +4757,11 @@
         "id": "306dd203fb0bc69d27e9016a61f36b8a",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": "illuminance",
         "original_icon": "mdi:brightness-5",
         "original_name": "Karolyne Light sensor",
@@ -4473,7 +4787,11 @@
         "id": "5b32116846fa7b496b8e03af0632635c",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:crosshairs-gps",
         "original_name": "Karolyne High accuracy mode",
@@ -4499,7 +4817,11 @@
         "id": "681e0d95c4f02a4e6a329744c5d62f00",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:timer",
         "original_name": "Karolyne High accuracy update interval",
@@ -4525,7 +4847,11 @@
         "id": "9ff8f708fa97246cde557be9936a9187",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:signal",
         "original_name": "Karolyne Mobile data",
@@ -4551,7 +4877,11 @@
         "id": "e368478f2eca82ae650a25d547a10c61",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:toggle-switch",
         "original_name": "Karolyne Mobile data roaming",
@@ -4577,7 +4907,11 @@
         "id": "e7d5cb149c875edbba8c06f61168debe",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:wifi",
         "original_name": "Karolyne WiFi connection",
@@ -4603,7 +4937,11 @@
         "id": "ecca62e5993afc83c96fa0f39461365d",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:wifi",
         "original_name": "Karolyne WiFi BSSID",
@@ -4629,7 +4967,11 @@
         "id": "db0dbf4329c8495b10b76dff84b8cb35",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:ip",
         "original_name": "Karolyne WiFi IP address",
@@ -4657,7 +4999,11 @@
         "id": "c30d5dbce01315c79144ccf032802e1c",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:wifi-strength-3",
         "original_name": "Karolyne WiFi link speed",
@@ -4683,7 +5029,11 @@
         "id": "f6da1dbb3d8aecaf9119051a54703272",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:wifi",
         "original_name": "Karolyne WiFi state",
@@ -4711,7 +5061,11 @@
         "id": "4c5bd73bb32b701e2592630c65083213",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:wifi",
         "original_name": "Karolyne WiFi frequency",
@@ -4739,7 +5093,11 @@
         "id": "f54ca04eb9a5b84db63b3396e4e9ae05",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": "signal_strength",
         "original_icon": "mdi:wifi-strength-3",
         "original_name": "Karolyne WiFi signal strength",
@@ -4765,7 +5123,11 @@
         "id": "54ea719598773db748968fe424b229f0",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:ip",
         "original_name": "Karolyne Public IP address",
@@ -4791,7 +5153,11 @@
         "id": "ea0f6340cc2e3ed5d6e754bc0b7917f0",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:network",
         "original_name": "Karolyne Network type",
@@ -4817,7 +5183,11 @@
         "id": "f7d3283102fa6b2237879c450f99067c",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:nfc-variant",
         "original_name": "Karolyne NFC state",
@@ -4843,7 +5213,11 @@
         "id": "43296b775840981d1312e5c63afd47a2",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": "timestamp",
         "original_icon": "mdi:alarm",
         "original_name": "Karolyne Next alarm",
@@ -4869,7 +5243,11 @@
         "id": "45cabee00d99c9c45e7cf31baa9ac3e9",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:bell-ring",
         "original_name": "Karolyne Last notification",
@@ -4895,7 +5273,11 @@
         "id": "09f061ae92de911753d331f8892a79cb",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:bell-ring",
         "original_name": "Karolyne Last removed notification",
@@ -4923,7 +5305,11 @@
         "id": "24e31a236915abe412c4e894fedc8f54",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:bell-ring",
         "original_name": "Karolyne Active notification count",
@@ -4949,7 +5335,11 @@
         "id": "7db2a40a8bba60f656d425b2c0473a7f",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:play-circle",
         "original_name": "Karolyne Media session",
@@ -4975,7 +5365,11 @@
         "id": "c2b9bd88115cd0a532aa8defde501193",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:phone",
         "original_name": "Karolyne Phone state",
@@ -5001,7 +5395,11 @@
         "id": "18c3885e7487d18e89d0819d104f84b7",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:sim",
         "original_name": "Karolyne SIM 1",
@@ -5027,7 +5425,11 @@
         "id": "7f40c7d610450032a9f4c63f1dc307d0",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:sim",
         "original_name": "Karolyne SIM 2",
@@ -5053,7 +5455,11 @@
         "id": "94e1ab5e2aa867899f25dae7c9ab23fd",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:cellphone",
         "original_name": "Karolyne Interactive",
@@ -5079,7 +5485,11 @@
         "id": "39e1bde385e6da811439ea211313462f",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:sleep",
         "original_name": "Karolyne Doze mode",
@@ -5105,7 +5515,11 @@
         "id": "6baff849a2ea7ae1d023c274ab878558",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:battery-plus",
         "original_name": "Karolyne Power save",
@@ -5131,7 +5545,11 @@
         "id": "240d38bc647722fcbd4344260921c977",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:leak",
         "original_name": "Karolyne Proximity sensor",
@@ -5159,7 +5577,11 @@
         "id": "c1e9e62cc8409bd10344a047bc00b40b",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:walk",
         "original_name": "Karolyne Steps sensor",
@@ -5187,7 +5609,11 @@
         "id": "f3bf5a4b0c3d565308664e05408db50f",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:harddisk",
         "original_name": "Karolyne Internal storage",
@@ -5215,7 +5641,11 @@
         "id": "ac3a450662e630ad62961d9ec3328a29",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:micro-sd",
         "original_name": "Karolyne External storage",
@@ -5241,7 +5671,11 @@
         "id": "0494960b087d602ecd09458260a4ec5d",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:map-clock",
         "original_name": "Karolyne Current time zone",
@@ -5269,7 +5703,11 @@
         "id": "2991c05a44dd6cd878ccb0cc73a48d1b",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:radio-tower",
         "original_name": "Karolyne Total Rx GB",
@@ -5297,7 +5735,11 @@
         "id": "3ee8244deaae1289b13f453617adcee5",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:radio-tower",
         "original_name": "Karolyne Total Tx GB",
@@ -5353,7 +5795,11 @@
         "id": "b63e184675c63abe2a8a4dd60fb49666",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:walk",
         "original_name": "LLuz Detected activity",
@@ -5381,7 +5827,11 @@
         "id": "c0ffe5283d73326fa2382307112a995a",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:sleep",
         "original_name": "LLuz Sleep confidence",
@@ -5407,7 +5857,11 @@
         "id": "b83f854e4e9efcda88a69d0ac83198ad",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:sleep",
         "original_name": "LLuz Sleep segment",
@@ -5433,7 +5887,11 @@
         "id": "7f460373e57846755a58a13e2e43348c",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:car",
         "original_name": "LLuz Android Auto",
@@ -5459,7 +5917,11 @@
         "id": "fdb371824beb3d6b4ee085e5ae14bc6b",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:android",
         "original_name": "LLuz OS version",
@@ -5485,7 +5947,11 @@
         "id": "3c10511bb56a9478dd41411eccd9e03f",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:security",
         "original_name": "LLuz Security patch",
@@ -5511,7 +5977,11 @@
         "id": "64861908ef47d4108d2d470ba5a755b0",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:android",
         "original_name": "LLuz Current version",
@@ -5539,7 +6009,11 @@
         "id": "4929e3cffcefa7544d40f1574e4aab9f",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:radio-tower",
         "original_name": "LLuz App Rx GB",
@@ -5567,7 +6041,11 @@
         "id": "0099f97e05fb5692d22dfaed6180f05c",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:radio-tower",
         "original_name": "LLuz App Tx GB",
@@ -5595,7 +6073,11 @@
         "id": "69af475898c18d29a54113dc148df3d3",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:memory",
         "original_name": "LLuz App memory",
@@ -5621,7 +6103,11 @@
         "id": "b5efd953d0db577dab702611b375cbb4",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:timer-outline",
         "original_name": "LLuz App inactive",
@@ -5647,7 +6133,11 @@
         "id": "3399f4830f21a61d5cc97af2e7fdf9a4",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:android",
         "original_name": "LLuz App standby bucket",
@@ -5673,7 +6163,11 @@
         "id": "726d237d8034e6797da17b19bc79d2ea",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:android",
         "original_name": "LLuz App importance",
@@ -5699,7 +6193,11 @@
         "id": "fedbb053c67f641f875b971cffe2c143",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:volume-high",
         "original_name": "LLuz Ringer mode",
@@ -5725,7 +6223,11 @@
         "id": "9c6cbf204764d06afda8ab654b267495",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:volume-high",
         "original_name": "LLuz Audio mode",
@@ -5751,7 +6253,11 @@
         "id": "44e2dcc9cc2301bccf3af8d25857ac42",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:headphones",
         "original_name": "LLuz Headphones",
@@ -5777,7 +6283,11 @@
         "id": "bcbba2693b23542cfd2d3e7360afcde9",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:microphone-off",
         "original_name": "LLuz Mic muted",
@@ -5803,7 +6313,11 @@
         "id": "49e59fde59722fbf56efa90ce5dfa784",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:volume-high",
         "original_name": "LLuz Speakerphone",
@@ -5829,7 +6343,11 @@
         "id": "fee0d4b8e85bdf5fb0ed6478798c1b2e",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:music",
         "original_name": "LLuz Music active",
@@ -5855,7 +6373,11 @@
         "id": "5c503eecc522620178e83750e9cf5663",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:alarm",
         "original_name": "LLuz Volume level alarm",
@@ -5881,7 +6403,11 @@
         "id": "8135c44b03dff43204ef06ede7ce0f24",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:phone",
         "original_name": "LLuz Volume level call",
@@ -5907,7 +6433,11 @@
         "id": "63f249bae2454fe6e8ba92b395e87742",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:music",
         "original_name": "LLuz Volume level music",
@@ -5933,7 +6463,11 @@
         "id": "3d0de557e809e3933cd8e2ecb0d25084",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:phone-ring",
         "original_name": "LLuz Volume level ringer",
@@ -5959,7 +6493,11 @@
         "id": "3396f8e5d004109f10405b50170ff642",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:bell-ring",
         "original_name": "LLuz Volume level notification",
@@ -5985,7 +6523,11 @@
         "id": "d1655868897e0edbdef31eaceef9ef6e",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:cellphone-sound",
         "original_name": "LLuz Volume level system",
@@ -6011,7 +6553,11 @@
         "id": "1b096240872e0946f34f6bc8810a28e6",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:volume-high",
         "original_name": "LLuz Volume level DTMF",
@@ -6037,7 +6583,11 @@
         "id": "c464529f0ad6d5c01acffa93e9a73e57",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:human",
         "original_name": "LLuz Volume level accessibility",
@@ -6051,9 +6601,7 @@
       {
         "aliases": [],
         "area_id": null,
-        "capabilities": {
-          "state_class": "measurement"
-        },
+        "capabilities": null,
         "config_entry_id": "fa50cbf96321d7ad2568dec5c2b771fe",
         "device_class": null,
         "device_id": "2eb0c7526bf900b3e69f668034517785",
@@ -6125,7 +6673,11 @@
         "id": "b7004428863de2eeb162ab38b23d1873",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": "plug",
         "original_icon": "mdi:power-plug",
         "original_name": "LLuz Is charging",
@@ -6181,7 +6733,11 @@
         "id": "938645e558dc6e12ed4197f2aa31cedb",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:battery-heart-variant",
         "original_name": "LLuz Battery health",
@@ -6209,7 +6765,11 @@
         "id": "209919cc8d6bccddfbc0f11c5c50123d",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": "temperature",
         "original_icon": "mdi:battery",
         "original_name": "LLuz Battery temperature",
@@ -6237,7 +6797,11 @@
         "id": "0e28cdf4091f6ce71f8ae0b8af1cae43",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": "power",
         "original_icon": "mdi:battery-plus",
         "original_name": "LLuz Battery power",
@@ -6265,7 +6829,11 @@
         "id": "ecdb47778c999295f013af85f07e5090",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:bluetooth",
         "original_name": "LLuz Bluetooth connection",
@@ -6291,7 +6859,11 @@
         "id": "b75747dffc145f083961b94f380e28e0",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:bluetooth",
         "original_name": "LLuz Bluetooth state",
@@ -6317,7 +6889,11 @@
         "id": "602343ad9f109d7aeb6b97e736b49694",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:bluetooth",
         "original_name": "LLuz BLE transmitter",
@@ -6343,7 +6919,11 @@
         "id": "4db5832ffedcf6fddfc8dab3fb772ef1",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:bluetooth",
         "original_name": "LLuz Beacon monitor",
@@ -6371,7 +6951,11 @@
         "id": "7e8f4dda223ddee345d25fe2bcf57f4d",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": "battery",
         "original_icon": "mdi:car-battery",
         "original_name": "LLuz Car battery",
@@ -6397,7 +6981,11 @@
         "id": "1e75f88d3a88a66e33bbf15512be8797",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:car-info",
         "original_name": "LLuz Car name",
@@ -6423,7 +7011,11 @@
         "id": "7934dc557b926c26a1db8c8aded2cc82",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": "plug",
         "original_icon": "mdi:ev-station",
         "original_name": "LLuz Car charging status",
@@ -6449,7 +7041,11 @@
         "id": "c66277a8eeea7976e10701cad8ba8373",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:car-electric",
         "original_name": "LLuz Car EV connector type",
@@ -6477,7 +7073,11 @@
         "id": "f2f8ba5fa011d1b7457bd031b1958ef5",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": "battery",
         "original_icon": "mdi:barrel",
         "original_name": "LLuz Car fuel",
@@ -6503,7 +7103,11 @@
         "id": "ece8e443e564f54d24b53c77d2e82c10",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:gas-station",
         "original_name": "LLuz Car fuel type",
@@ -6531,7 +7135,11 @@
         "id": "adc7f6cd5172b40b8721e446047f7345",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": "distance",
         "original_icon": "mdi:map-marker-distance",
         "original_name": "LLuz Car odometer",
@@ -6557,7 +7165,11 @@
         "id": "2ceb97761c5ab59586387bd8ae160000",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:brightness-6",
         "original_name": "LLuz Screen brightness",
@@ -6583,7 +7195,11 @@
         "id": "1490a78402afb0e0eb8ba8846a0e0a98",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:cellphone-off",
         "original_name": "LLuz Screen off timeout",
@@ -6609,7 +7225,11 @@
         "id": "b32f693e9cdc3fad4c8bd155a4f49ecc",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:minus-circle",
         "original_name": "LLuz Do Not Disturb sensor",
@@ -6635,7 +7255,11 @@
         "id": "3c6f5fd6fca953a5f88d92aaa2bb7d73",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:palette",
         "original_name": "LLuz Accent color",
@@ -6661,7 +7285,11 @@
         "id": "068ab620a3ced2967ed5dddb92d24f60",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:briefcase",
         "original_name": "LLuz Work profile",
@@ -6687,7 +7315,11 @@
         "id": "723f13f0ddb64568c915e78cc0f81ab7",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:map",
         "original_name": "LLuz Geocoded location",
@@ -6713,7 +7345,11 @@
         "id": "cafd30040c0e0741c4b94439f9d03cac",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:cellphone-lock",
         "original_name": "LLuz Device locked",
@@ -6739,7 +7375,11 @@
         "id": "1eb8a6a6a1233563bf3050396111aba2",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:cellphone-key",
         "original_name": "LLuz Device secure",
@@ -6765,7 +7405,11 @@
         "id": "144880b6f0f531e50c10ad4214dadfcd",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:cellphone-lock",
         "original_name": "LLuz Keyguard locked",
@@ -6791,7 +7435,11 @@
         "id": "9336514c9b30ca65f3c90b95a10b70b6",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:cellphone-key",
         "original_name": "LLuz Keyguard secure",
@@ -6817,7 +7465,11 @@
         "id": "74f208995872d673e2d15f97cd085d76",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:android",
         "original_name": "LLuz Last used app",
@@ -6843,7 +7495,11 @@
         "id": "e594f4c7239fbd6475315b16bb78da15",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": "timestamp",
         "original_icon": "mdi:restart",
         "original_name": "LLuz Last reboot",
@@ -6869,7 +7525,11 @@
         "id": "881913dbd1cadeb4e949cce118632e05",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:update",
         "original_name": "LLuz Last update trigger",
@@ -6897,7 +7557,11 @@
         "id": "c9f13c72f57ac31220504663cd86c197",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": "illuminance",
         "original_icon": "mdi:brightness-5",
         "original_name": "LLuz Light sensor",
@@ -6923,7 +7587,11 @@
         "id": "555bf1e8b02e733a3d73a5dc2c887267",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:crosshairs-gps",
         "original_name": "LLuz High accuracy mode",
@@ -6949,7 +7617,11 @@
         "id": "d68c240da9928024c56d0a7f73cef87a",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:timer",
         "original_name": "LLuz High accuracy update interval",
@@ -6975,7 +7647,11 @@
         "id": "7a42eb0a0d63a7d031f78b5a0e7c832c",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:signal",
         "original_name": "LLuz Mobile data",
@@ -7001,7 +7677,11 @@
         "id": "1da3dbbafbe4c4fa7931231ae97b2700",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:toggle-switch",
         "original_name": "LLuz Mobile data roaming",
@@ -7027,7 +7707,11 @@
         "id": "e2dcdebc93d0e0f908dc2414dabbf3aa",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:wifi",
         "original_name": "LLuz WiFi connection",
@@ -7053,7 +7737,11 @@
         "id": "7f807cf79452c08e980340472ebb2de8",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:wifi",
         "original_name": "LLuz WiFi BSSID",
@@ -7079,7 +7767,11 @@
         "id": "faa1fb14e1ba4abc15ab34b3e5ac8aa9",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:ip",
         "original_name": "LLuz WiFi IP address",
@@ -7107,7 +7799,11 @@
         "id": "491b9b3f58fbd7571dc2b8e04970cbb8",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:wifi-strength-3",
         "original_name": "LLuz WiFi link speed",
@@ -7133,7 +7829,11 @@
         "id": "72ad8c39fb489df0460b9271e50f32e3",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:wifi",
         "original_name": "LLuz WiFi state",
@@ -7161,7 +7861,11 @@
         "id": "558ee04ed485dc5285faf8570e5644f6",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:wifi",
         "original_name": "LLuz WiFi frequency",
@@ -7189,7 +7893,11 @@
         "id": "3d8e1ed899050b9939cefd0157660f27",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": "signal_strength",
         "original_icon": "mdi:wifi-strength-3",
         "original_name": "LLuz WiFi signal strength",
@@ -7215,7 +7923,11 @@
         "id": "924d17d80b7d3fa3f15f1fc4d812c5c2",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:ip",
         "original_name": "LLuz Public IP address",
@@ -7241,7 +7953,11 @@
         "id": "dda7813cc4319f0458000132785efe41",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:network",
         "original_name": "LLuz Network type",
@@ -7267,7 +7983,11 @@
         "id": "4c3ebe10853831feeebc5e74e2e9a8e8",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:nfc-variant",
         "original_name": "LLuz NFC state",
@@ -7293,7 +8013,11 @@
         "id": "ac65214f875f40644d8e0850ab3a341d",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": "timestamp",
         "original_icon": "mdi:alarm",
         "original_name": "LLuz Next alarm",
@@ -7319,7 +8043,11 @@
         "id": "6cc75676533ee928d5e0d783ce9445d6",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:bell-ring",
         "original_name": "LLuz Last notification",
@@ -7345,7 +8073,11 @@
         "id": "97d775c1c5c1b550b7f9d144ed2c5cb8",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:bell-ring",
         "original_name": "LLuz Last removed notification",
@@ -7373,7 +8105,11 @@
         "id": "fbcc6a45bef3eb512b912a830421d29e",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:bell-ring",
         "original_name": "LLuz Active notification count",
@@ -7399,7 +8135,11 @@
         "id": "19fb744ca198e97ba55ef8160dc9d34a",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:play-circle",
         "original_name": "LLuz Media session",
@@ -7425,7 +8165,11 @@
         "id": "88b413aeee7b8b4c61870d34991d148c",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:phone",
         "original_name": "LLuz Phone state",
@@ -7451,7 +8195,11 @@
         "id": "cbae9c7a9fe9aeb4cc63f084f0fd260f",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:sim",
         "original_name": "LLuz SIM 1",
@@ -7477,7 +8225,11 @@
         "id": "4b00818730e2f95c60d756494724ab63",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:sim",
         "original_name": "LLuz SIM 2",
@@ -7503,7 +8255,11 @@
         "id": "9da5975e1bc42b6aa1e6eaf072216175",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:cellphone",
         "original_name": "LLuz Interactive",
@@ -7529,7 +8285,11 @@
         "id": "2559d71d3e6f78f4c3b3ea90890d9491",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:sleep",
         "original_name": "LLuz Doze mode",
@@ -7555,7 +8315,11 @@
         "id": "358be24119c41cb5f0741be657f0314c",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:battery-plus",
         "original_name": "LLuz Power save",
@@ -7581,7 +8345,11 @@
         "id": "a6a07d8bb0994e530e70f4fed84a151e",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:leak",
         "original_name": "LLuz Proximity sensor",
@@ -7609,7 +8377,11 @@
         "id": "7eac2fdceb78589b7b459fdac76a3ac2",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:walk",
         "original_name": "LLuz Steps sensor",
@@ -7637,7 +8409,11 @@
         "id": "d3509f8f84cf3b4b0483d1466f4b25c4",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:harddisk",
         "original_name": "LLuz Internal storage",
@@ -7665,7 +8441,11 @@
         "id": "dd4ea5a3b1efd9ca32881bb6e9a98f3d",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:micro-sd",
         "original_name": "LLuz External storage",
@@ -7691,7 +8471,11 @@
         "id": "0cf0bea609028a9fb118c028bc275d32",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:map-clock",
         "original_name": "LLuz Current time zone",
@@ -7719,7 +8503,11 @@
         "id": "c0c0d83b3d6210f3f20e7588d843592a",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:radio-tower",
         "original_name": "LLuz Mobile Rx GB",
@@ -7747,7 +8535,11 @@
         "id": "4a5b52a4dfdc916d2f04aaccec118d73",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:radio-tower",
         "original_name": "LLuz Mobile Tx GB",
@@ -7775,7 +8567,11 @@
         "id": "2829f35dd2831e3117ab387fa0ad7fcc",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:radio-tower",
         "original_name": "LLuz Total Rx GB",
@@ -7803,7 +8599,11 @@
         "id": "6076cc65578c00b1370e24cbc82db81e",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:radio-tower",
         "original_name": "LLuz Total Tx GB",
@@ -7831,7 +8631,11 @@
         "id": "a362169620986560df0940f358a8d79c",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:radio-tower",
         "original_name": "Karolyne Mobile Rx GB",
@@ -7859,7 +8663,11 @@
         "id": "808ac56e337b6053c71b9e78148e4a4a",
         "has_entity_name": false,
         "name": null,
-        "options": {},
+        "options": {
+          "conversation": {
+            "should_expose": false
+          }
+        },
         "original_device_class": null,
         "original_icon": "mdi:radio-tower",
         "original_name": "Karolyne Mobile Tx GB",
