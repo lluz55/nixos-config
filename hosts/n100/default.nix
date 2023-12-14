@@ -1,5 +1,19 @@
 { pkgs, config, lib, unstable, ... }:
 
+let
+  gasketRev = "09385d485812088e04a98a6e1227bf92663e0b59";
+  gasketPkg = (pkgs.gasket.overrideAttrs (final: prev: {
+    version = builtins.substring 0 6 gasketRev;
+    src = pkgs.fetchFromGitHub {
+      owner = "google";
+      repo = "gasket-driver";
+      rev = gasketRev;
+      hash = "sha256-fcnqCBh04e+w8g079JyuyY2RPu34M+/X+Q8ObE+42i4=";
+    };
+  })).override {
+    kernel = config.boot.kernelPackages.kernel;
+  };
+in
 with lib;{
   imports = [
     ./../../modules
@@ -29,6 +43,7 @@ with lib;{
       efi.canTouchEfiVariables = true;
       timeout = 2;
     };
+    extraModulePackages = [ gasketPkg ];
   };
 
   programs.light.enable = true;
