@@ -66,6 +66,7 @@ with lib; {
 
       config = { ... }: {
         boot.isContainer = true;
+
         environment.systemPackages = with pkgs; [
           # Needed for debug
           netcat

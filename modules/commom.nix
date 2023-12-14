@@ -1,7 +1,25 @@
-{ pkgs, ... }:
+{ pkgs, inputs, config, master-user, ... }:
 
 {
-  environment.systemPackages = [
+  imports = [ inputs.sops-nix.nixosModules.sops ];
+
+  sops.defaultSopsFile = ../secrets/all_secrets.yaml;
+  sops.defaultSopsFormat = "yaml";
+
+  sops.age.keyFile = "/home/${master-user.name}/.config/sops/age/keys.txt";
+
+  sops.secrets.frigate = {
+    owner = master-user.name;
+  };
+
+  #systemd.services."ativate-sops" = {
+  #  script = ''
+  #    echo "Sending secure password: "
+  #    $(cat ${config.sops.secrets."frigate".path})
+  #  '';
+  #};
+  environment.systemPackages = with pkgs; [
+    sops
     (
       let
         base = pkgs.appimageTools.defaultFhsEnvArgs;
