@@ -1,0 +1,21 @@
+info  2023-08-26 13:06:01: Logging to console and directory: '/app/data/log/2023-08-26.13-06-01' filename: log.txt
+info  2023-08-26 13:06:01: Starting Zigbee2MQTT version 1.32.2 (commit #1ec1e57)
+info  2023-08-26 13:06:01: Starting zigbee-herdsman (0.17.2)
+info  2023-08-26 13:06:02: zigbee-herdsman started (resumed)
+info  2023-08-26 13:06:02: Coordinator firmware version: '{"meta":{"maintrel":1,"majorrel":2,"minorrel":7,"product":1,"revision":20210708,"transportrev":2},"type":"zStack3x0"}'
+info  2023-08-26 13:06:02: Currently 1 devices are joined:
+info  2023-08-26 13:06:02: MonSen_Entrada_Quarto (0x00158d000633b922): RTCGQ11LM - Xiaomi Aqara human body movement and illuminance sensor (EndDevice)
+info  2023-08-26 13:06:02: Zigbee: disabling joining new devices.
+info  2023-08-26 13:06:03: Connecting to MQTT server at mqtt://172.18.0.4
+error 2023-08-26 13:06:03: MQTT error: connect ECONNREFUSED 172.18.0.4:1883
+error 2023-08-26 13:06:03: MQTT failed to connect, exiting...
+info  2023-08-26 13:06:03: Stopping zigbee-herdsman...
+error 2023-08-26 13:06:04: MQTT error: connect ECONNREFUSED 172.18.0.4:1883
+error 2023-08-26 13:06:05: MQTT error: connect ECONNREFUSED 172.18.0.4:1883
+error 2023-08-26 13:06:06: MQTT error: connect ECONNREFUSED 172.18.0.4:1883
+error 2023-08-26 13:06:07: MQTT error: connect ECONNREFUSED 172.18.0.4:1883
+error 2023-08-26 13:06:08: MQTT error: connect ECONNREFUSED 172.18.0.4:1883
+error 2023-08-26 13:06:09: MQTT error: connect ECONNREFUSED 172.18.0.4:1883
+error 2023-08-26 13:06:10: MQTT error: connect ECONNREFUSED 172.18.0.4:1883
+error 2023-08-26 13:06:11: MQTT error: connect ECONNREFUSED 172.18.0.4:1883
+info  2023-08-26 13:06:12: Stopped zigbee-herdsman
