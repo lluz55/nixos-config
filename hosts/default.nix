@@ -22,6 +22,7 @@ with lib;
     };
     modules = [
       ./n100
+      ../modules/commom.nix
       master-user.user
       home-manager.nixosModules.home-manager
       {
@@ -44,6 +45,7 @@ with lib;
 
     modules = [
       ./gl62m
+      ../modules/commom.nix
       karolayne.user
       master-user.user
       home-manager.nixosModules.home-manager
