@@ -24,6 +24,7 @@ with lib;
       ./n100
       ../modules/commom.nix
       master-user.user
+      sops-nix.nixosModules.sops
       home-manager.nixosModules.home-manager
       {
         home-manager = {

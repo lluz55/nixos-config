@@ -19,6 +19,11 @@
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs = inputs @ { self, nixpkgs, nixpkgs-unstable, home-manager, sops-nix, ... }:
@@ -31,6 +36,7 @@
       nixosConfigurations = (
         import ./hosts {
           inherit (nixpkgs) lib;
+          inherit sops-nix;
           inherit inputs nixpkgs nixpkgs-unstable;
           inherit home-manager karolayne master-user;
         }
