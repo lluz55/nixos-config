@@ -1,4 +1,4 @@
-{ config, nixpkgs, master-user, lib, ... }:
+{ config, master-user, lib, ... }:
 with lib;
 {
   config = mkIf (config.frigate.enable) {
