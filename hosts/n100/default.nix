@@ -21,6 +21,11 @@ with lib;{
     ./router.nix
   ];
 
+  console = {
+    font = "Lat2-Terminus16";
+    keyMap = "br-abnt2";
+  };
+
   gnome.enable = false;
   hass.enable = true;
   frigate.enable = true;

@@ -25,7 +25,7 @@
         }
       },
       "extra_data": null,
-      "last_seen": "2023-12-14T19:45:28.999204+00:00"
+      "last_seen": "2023-12-15T14:15:29.081765+00:00"
     },
     {
       "state": {
@@ -49,7 +49,7 @@
         }
       },
       "extra_data": null,
-      "last_seen": "2023-12-14T19:45:28.999204+00:00"
+      "last_seen": "2023-12-15T14:15:29.081765+00:00"
     },
     {
       "state": {
@@ -67,32 +67,31 @@
         }
       },
       "extra_data": null,
-      "last_seen": "2023-12-14T19:45:28.999204+00:00"
+      "last_seen": "2023-12-15T14:15:29.081765+00:00"
     },
     {
       "state": {
         "entity_id": "sensor.karolyne_battery_level",
-        "state": "85",
+        "state": "26",
         "attributes": {
-          "state_class": "measurement",
           "unit_of_measurement": "%",
           "device_class": "battery",
-          "icon": "mdi:battery-80",
+          "icon": "mdi:battery-20",
           "friendly_name": "Karolyne Battery level"
         },
-        "last_changed": "2023-12-14T19:30:24.735248+00:00",
-        "last_updated": "2023-12-14T19:30:24.735248+00:00",
+        "last_changed": "2023-12-15T14:13:45.645501+00:00",
+        "last_updated": "2023-12-15T14:13:45.645501+00:00",
         "context": {
-          "id": "01HHMWY1TZGG46EC80FM5GVAZJ",
+          "id": "01HHPX6Z1DE83509BQ8BS0041F",
           "parent_id": null,
           "user_id": null
         }
       },
       "extra_data": {
-        "native_value": 85,
+        "native_value": 26,
         "native_unit_of_measurement": "%"
       },
-      "last_seen": "2023-12-14T19:45:28.999204+00:00"
+      "last_seen": "2023-12-15T14:15:29.081765+00:00"
     },
     {
       "state": {
@@ -114,7 +113,7 @@
         "native_value": "discharging",
         "native_unit_of_measurement": null
       },
-      "last_seen": "2023-12-14T19:45:28.999204+00:00"
+      "last_seen": "2023-12-15T14:15:29.081765+00:00"
     },
     {
       "state": {
@@ -136,7 +135,7 @@
         "native_value": "none",
         "native_unit_of_measurement": null
       },
-      "last_seen": "2023-12-14T19:45:28.999204+00:00"
+      "last_seen": "2023-12-15T14:15:29.081765+00:00"
     },
     {
       "state": {
@@ -155,32 +154,31 @@
         }
       },
       "extra_data": null,
-      "last_seen": "2023-12-14T19:45:28.999204+00:00"
+      "last_seen": "2023-12-15T14:15:29.081765+00:00"
     },
     {
       "state": {
         "entity_id": "sensor.lluz_battery_level",
-        "state": "52",
+        "state": "62",
         "attributes": {
-          "state_class": "measurement",
           "unit_of_measurement": "%",
           "device_class": "battery",
-          "icon": "mdi:battery-50",
+          "icon": "mdi:battery-60",
           "friendly_name": "LLuz Battery level"
         },
-        "last_changed": "2023-12-14T19:30:24.736961+00:00",
-        "last_updated": "2023-12-14T19:30:24.736961+00:00",
+        "last_changed": "2023-12-15T13:59:31.680987+00:00",
+        "last_updated": "2023-12-15T13:59:31.680987+00:00",
         "context": {
-          "id": "01HHMWY1V00WVQHES2D66YSRE9",
+          "id": "01HHPWCX30ECATMR1FFBXPHAH2",
           "parent_id": null,
           "user_id": null
         }
       },
       "extra_data": {
-        "native_value": 52,
+        "native_value": 62,
         "native_unit_of_measurement": "%"
       },
-      "last_seen": "2023-12-14T19:45:28.999204+00:00"
+      "last_seen": "2023-12-15T14:15:29.081765+00:00"
     },
     {
       "state": {
@@ -202,7 +200,7 @@
         "native_value": "discharging",
         "native_unit_of_measurement": null
       },
-      "last_seen": "2023-12-14T19:45:28.999204+00:00"
+      "last_seen": "2023-12-15T14:15:29.081765+00:00"
     },
     {
       "state": {
@@ -224,7 +222,7 @@
         "native_value": "none",
         "native_unit_of_measurement": null
       },
-      "last_seen": "2023-12-14T19:45:28.999204+00:00"
+      "last_seen": "2023-12-15T14:15:29.081765+00:00"
     },
     {
       "state": {
@@ -243,7 +241,7 @@
         }
       },
       "extra_data": null,
-      "last_seen": "2023-12-14T19:45:28.999204+00:00"
+      "last_seen": "2023-12-15T14:15:29.081765+00:00"
     },
     {
       "state": {
@@ -270,7 +268,7 @@
         }
       },
       "extra_data": null,
-      "last_seen": "2023-12-14T19:45:28.999204+00:00"
+      "last_seen": "2023-12-15T14:15:29.081765+00:00"
     },
     {
       "state": {
@@ -298,7 +296,7 @@
         }
       },
       "extra_data": null,
-      "last_seen": "2023-12-14T19:45:28.999204+00:00"
+      "last_seen": "2023-12-15T14:15:29.081765+00:00"
     },
     {
       "state": {
@@ -326,7 +324,7 @@
         }
       },
       "extra_data": null,
-      "last_seen": "2023-12-14T19:45:28.999204+00:00"
+      "last_seen": "2023-12-15T14:15:29.081765+00:00"
     },
     {
       "state": {
@@ -335,21 +333,21 @@
         "attributes": {
           "state_class": "measurement",
           "battery": 100,
-          "device_temperature": 38,
-          "illuminance": 442,
-          "illuminance_lux": 442,
-          "linkquality": 36,
+          "device_temperature": 33,
+          "illuminance": 909,
+          "illuminance_lux": 909,
+          "linkquality": 87,
           "occupancy": false,
           "power_outage_count": 29,
-          "voltage": 3045,
+          "voltage": 3035,
           "unit_of_measurement": "%",
           "device_class": "battery",
           "friendly_name": "Server Entry Bateria"
         },
         "last_changed": "2023-12-14T19:31:01.038250+00:00",
-        "last_updated": "2023-12-14T19:31:01.038250+00:00",
+        "last_updated": "2023-12-15T14:14:41.906804+00:00",
         "context": {
-          "id": "01HHMWZ59EJXVCMPSN4W46TMME",
+          "id": "01HHPX8NZJB179M8TKB28WSM1Y",
           "parent_id": null,
           "user_id": null
         }
@@ -358,71 +356,71 @@
         "native_value": "100",
         "native_unit_of_measurement": "%"
       },
-      "last_seen": "2023-12-14T19:45:28.999204+00:00"
+      "last_seen": "2023-12-15T14:15:29.081765+00:00"
     },
     {
       "state": {
         "entity_id": "sensor.server_entry_device_temperature",
-        "state": "38",
+        "state": "33",
         "attributes": {
           "state_class": "measurement",
           "battery": 100,
-          "device_temperature": 38,
-          "illuminance": 442,
-          "illuminance_lux": 442,
-          "linkquality": 36,
+          "device_temperature": 33,
+          "illuminance": 909,
+          "illuminance_lux": 909,
+          "linkquality": 87,
           "occupancy": false,
           "power_outage_count": 29,
-          "voltage": 3045,
+          "voltage": 3035,
           "unit_of_measurement": "°C",
           "device_class": "temperature",
           "friendly_name": "Server Entry Temperatura"
         },
-        "last_changed": "2023-12-14T19:31:01.038188+00:00",
-        "last_updated": "2023-12-14T19:31:01.038188+00:00",
+        "last_changed": "2023-12-15T12:13:56.970245+00:00",
+        "last_updated": "2023-12-15T14:14:41.906743+00:00",
         "context": {
-          "id": "01HHMWZ59EJ8PC5NF9GBBQZHM5",
+          "id": "01HHPX8NZJADWDZ77K35TW5CDT",
           "parent_id": null,
           "user_id": null
         }
       },
       "extra_data": {
-        "native_value": "38",
+        "native_value": "33",
         "native_unit_of_measurement": "°C"
       },
-      "last_seen": "2023-12-14T19:45:28.999204+00:00"
+      "last_seen": "2023-12-15T14:15:29.081765+00:00"
     },
     {
       "state": {
         "entity_id": "sensor.server_entry_illuminance_lux",
-        "state": "442",
+        "state": "909",
         "attributes": {
           "state_class": "measurement",
           "battery": 100,
-          "device_temperature": 38,
-          "illuminance": 442,
-          "illuminance_lux": 442,
-          "linkquality": 36,
+          "device_temperature": 33,
+          "illuminance": 909,
+          "illuminance_lux": 909,
+          "linkquality": 87,
           "occupancy": false,
           "power_outage_count": 29,
-          "voltage": 3045,
+          "voltage": 3035,
           "unit_of_measurement": "lx",
           "device_class": "illuminance",
           "friendly_name": "Server Entry Iluminância"
         },
-        "last_changed": "2023-12-14T19:31:01.038115+00:00",
-        "last_updated": "2023-12-14T19:31:01.038115+00:00",
+        "last_changed": "2023-12-15T11:12:30.596226+00:00",
+        "last_updated": "2023-12-15T14:14:41.906673+00:00",
         "context": {
-          "id": "01HHMWZ59E4MJ68MZK54E7XB20",
+          "id": "01HHPX8NZJYPTYDW68W7TBS91F",
           "parent_id": null,
           "user_id": null
         }
       },
       "extra_data": {
-        "native_value": "442",
+        "native_value": "909",
         "native_unit_of_measurement": "lx"
       },
-      "last_seen": "2023-12-14T19:45:28.999204+00:00"
+      "last_seen": "2023-12-15T14:15:29.081765+00:00"
     },
     {
       "state": {
@@ -430,19 +428,19 @@
         "state": "29",
         "attributes": {
           "battery": 100,
-          "device_temperature": 38,
-          "illuminance": 442,
-          "illuminance_lux": 442,
-          "linkquality": 36,
+          "device_temperature": 33,
+          "illuminance": 909,
+          "illuminance_lux": 909,
+          "linkquality": 87,
           "occupancy": false,
           "power_outage_count": 29,
-          "voltage": 3045,
+          "voltage": 3035,
           "friendly_name": "Server Entry Power outage count"
         },
         "last_changed": "2023-12-14T19:31:01.038030+00:00",
-        "last_updated": "2023-12-14T19:31:01.038030+00:00",
+        "last_updated": "2023-12-15T14:14:41.906593+00:00",
         "context": {
-          "id": "01HHMWZ59EQ8SS658A1EZ4TBCC",
+          "id": "01HHPX8NZJPX83TDBZ27BZFZQE",
           "parent_id": null,
           "user_id": null
         }
@@ -451,7 +449,7 @@
         "native_value": "29",
         "native_unit_of_measurement": null
       },
-      "last_seen": "2023-12-14T19:45:28.999204+00:00"
+      "last_seen": "2023-12-15T14:15:29.081765+00:00"
     },
     {
       "state": {
@@ -459,26 +457,26 @@
         "state": "off",
         "attributes": {
           "battery": 100,
-          "device_temperature": 38,
-          "illuminance": 442,
-          "illuminance_lux": 442,
-          "linkquality": 36,
+          "device_temperature": 33,
+          "illuminance": 909,
+          "illuminance_lux": 909,
+          "linkquality": 87,
           "occupancy": false,
           "power_outage_count": 29,
-          "voltage": 3045,
+          "voltage": 3035,
           "device_class": "motion",
           "friendly_name": "Server Entry Movimento"
         },
-        "last_changed": "2023-12-14T19:31:01.037868+00:00",
-        "last_updated": "2023-12-14T19:31:01.037868+00:00",
+        "last_changed": "2023-12-15T14:14:41.906472+00:00",
+        "last_updated": "2023-12-15T14:14:41.906472+00:00",
         "context": {
-          "id": "01HHMWZ59D38ZACDFBSK1K3Z2Q",
+          "id": "01HHPX8NZJZ22RX5AKV0BF8VG1",
           "parent_id": null,
           "user_id": null
         }
       },
       "extra_data": null,
-      "last_seen": "2023-12-14T19:45:28.999204+00:00"
+      "last_seen": "2023-12-15T14:15:29.081765+00:00"
     },
     {
       "state": {
@@ -506,7 +504,7 @@
         }
       },
       "extra_data": null,
-      "last_seen": "2023-12-14T19:45:28.999204+00:00"
+      "last_seen": "2023-12-15T14:15:29.081765+00:00"
     },
     {
       "state": {

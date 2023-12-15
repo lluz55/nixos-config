@@ -21,6 +21,10 @@ with lib; {
 
   gnome.enable = true;
 
+  console = {
+    font = "Lat2-Terminus16";
+    keyMap = "us";
+  };
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
     loader = {
