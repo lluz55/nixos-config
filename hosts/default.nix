@@ -37,6 +37,30 @@ with lib;
       }
     ];
   };
+
+  b450 = nixosSystem {
+    inherit system;
+    specialArgs = {
+      inherit inputs unstable master-user;
+    };
+    modules = [
+      ./b450
+      ../modules/commom.nix
+      master-user.user
+      home-manager.nixosModules.home-manager
+      {
+        home-manager = {
+          useGlobalPkgs = true;
+          useUserPackages = true;
+          extraSpecialArgs = { inherit pkgs unstable master-user; };
+          users = {
+            lluz.imports = [ ../home/lluz.nix ];
+          };
+        };
+      }
+    ];
+  };
+
   gl62m = nixosSystem {
     inherit system;
     specialArgs = {
