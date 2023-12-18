@@ -23,6 +23,7 @@
     killall
     nmap
     lazygit
+    htop
     (
       let
         base = pkgs.appimageTools.defaultFhsEnvArgs;
