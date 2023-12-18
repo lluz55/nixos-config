@@ -25,6 +25,15 @@ with lib; {
     font = "Lat2-Terminus16";
     keyMap = "us";
   };
+  services = {
+    openssh = {
+      enable = true;
+      settings = {
+        PasswordAuthentication = true;
+      };
+    };
+  };
+
   boot = {
     kernelPackages = pkgs.linuxPackages_latest;
     loader = {
@@ -54,6 +63,13 @@ with lib; {
   #sway.enable = true;
 
   environment = {
-    systemPackages = with pkgs; [ ];
+    systemPackages = with pkgs; [
+      vscode
+      nmap
+      remmina
+      x2goclient
+      turbovnc
+      lazygit
+    ];
   };
 }
