@@ -49,11 +49,11 @@ in
 
             # Allow ports on WAN interfaces
             tcp dport ${ssh_port} ct state new limit rate 2/minute accept comment "Accept SSH and avoid brute force"
-            tcp dport ${frigate_port} accept comment "Allow Frigate"
-            udp dport ${tailscale_port} accept comment "Allow Tailscale"
             tcp dport ${hass_port} accept comment "Allow Homeassistant"
             tcp dport ${zb2m_port} accept comment "Zigbee2mqtt"
             udp dport ${mosh_ports} accept comment "Allow Mosh"
+            tcp dport ${frigate_port} accept comment "Allow Frigate"
+            udp dport ${tailscale_port} accept comment "Allow Tailscale"
 
           }
           chain forward {
@@ -62,7 +62,7 @@ in
             ct status dnat accept comment "Allow NAT through interfaces"
 
             iifname { "br-cams" } oifname { "enp1s0" } udp dport ${ntp_port} accept comment "Allow NTP extenal access"
-            iifname { "br-cams" } ip saddr 10.1.1.10 oifname { "enp1s0" }  meta nftrace set 1 accept comment "Allow NTP extenal access"
+            iifname { "br-cams" } ip saddr 10.1.1.10 oifname { "enp1s0" } accept comment "Allow NTP extenal access"
             iifname { "br-lan", "iot-10" } oifname { "enp1s0" } accept comment "Allow trusted LAN to enp1s0"
             iifname { "enp1s0" } oifname {  "br-lan", "iot-10", "br-cams" } ct state { established, related } accept comment "Allow established back to LANs"
           }
@@ -75,6 +75,10 @@ in
             tcp dport 10012 dnat 10.1.1.12:80 # TODO: Change to new default lan
             tcp dport 8123 dnat 10.1.1.10:8123 # TODO: Remove after tests
             tcp dport 8080 dnat 10.1.1.10:8080 # TODO: Remove after tests
+            tcp dport 20022 dnat 192.168.1.120:22 # TODO: Remove after tests
+            tcp dport 4822 meta nftrace set 1 dnat 192.168.1.120 # TODO: Remove after tests
+            tcp dport 3389 meta nftrace set 1 dnat 192.168.1.120 # TODO: Remove after tests
+            tcp dport 5900 meta nftrace set 1 dnat 192.168.1.120 # TODO: Remove after tests
           }
           chain postrouting {
             type nat hook postrouting priority srcnat; policy accept;
@@ -218,6 +222,7 @@ in
         "192.168.1.1"
         "10.0.10.1"
         "10.1.1.1"
+        "b4:2e:99:f4:ba:f3,b450,192.168.1.120,infinite"
       ];
 
       # local domains

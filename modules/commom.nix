@@ -17,6 +17,9 @@
 
   environment.systemPackages = with pkgs; [
     sops
+    killall
+    nmap
+    lazygit
     (
       let
         base = pkgs.appimageTools.defaultFhsEnvArgs;
