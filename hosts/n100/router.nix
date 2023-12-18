@@ -22,7 +22,7 @@ in
     hostName = "n100";
     useNetworkd = true;
     useDHCP = false;
-
+    interfaces."enp2s0".wakeOnLan.enable = true;
     # No local firewall.
     nat.enable = false;
     firewall.enable = false;
@@ -78,7 +78,7 @@ in
             tcp dport 20022 dnat 192.168.1.120:22 # TODO: Remove after tests
             tcp dport 4822 meta nftrace set 1 dnat 192.168.1.120 # TODO: Remove after tests
             tcp dport 3389 meta nftrace set 1 dnat 192.168.1.120 # TODO: Remove after tests
-            tcp dport 5900 meta nftrace set 1 dnat 192.168.1.120 # TODO: Remove after tests
+            tcp dport 5900-5999 meta nftrace set 1 dnat 192.168.1.120 comment "Allow VNC access to server" # TODO: Remove after tests
           }
           chain postrouting {
             type nat hook postrouting priority srcnat; policy accept;
