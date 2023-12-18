@@ -1,7 +1,10 @@
 { pkgs, inputs, config, master-user, ... }:
 
 {
-  imports = [ inputs.sops-nix.nixosModules.sops ];
+  imports = [
+    inputs.sops-nix.nixosModules.sops
+    inputs.vscode-server.nixosModules.default
+  ];
 
   sops.defaultSopsFile = ../secrets/all_secrets.yaml;
   sops.defaultSopsFormat = "yaml";

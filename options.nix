@@ -48,6 +48,15 @@ with lib;{
         '';
       };
     };
+    vscode-server = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = mkDoc ''
+          Enable VS Code Server
+        '';
+      };
+    };
     hass = {
       enable = mkOption {
         type = types.bool;
