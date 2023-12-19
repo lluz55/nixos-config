@@ -27,22 +27,39 @@
       url = "github:nix-community/nixos-vscode-server";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs @ { self, nixpkgs, nixpkgs-unstable, home-manager, sops-nix, ... }:
+  outputs = inputs @ { self, nixpkgs, nixpkgs-unstable, home-manager, sops-nix, flake-parts, ... }:
     let
       users = import ./users.nix;
       master-user = users.master-user;
       karolayne = users.karolayne;
     in
-    {
-      nixosConfigurations = (
-        import ./hosts {
-          inherit (nixpkgs) lib;
-          inherit sops-nix;
-          inherit inputs nixpkgs nixpkgs-unstable;
-          inherit home-manager karolayne master-user;
-        }
-      );
-    };
+
+    flake-parts.lib.mkFlake
+      { inherit inputs; }
+      {
+        systems = [ "x86_64-linux" ];
+        perSystem = { pkgs, system, nixpkgs', ... }:
+          {
+            imports = [
+              (import ./shells/flutter.nix {
+                inherit system nixpkgs;
+                inherit (nixpkgs) lib;
+              })
+            ];
+          };
+        flake.nixosConfigurations = (
+          import ./hosts {
+            inherit (nixpkgs) lib;
+            inherit sops-nix;
+            inherit inputs nixpkgs nixpkgs-unstable;
+            inherit home-manager karolayne master-user;
+          }
+        );
+      };
 }
