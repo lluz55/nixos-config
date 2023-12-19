@@ -70,6 +70,7 @@ with lib; {
       x2goclient
       turbovnc
       lazygit
+      vivaldi
     ];
   };
 }
