@@ -39,14 +39,23 @@
       master-user = users.master-user;
       karolayne = users.karolayne;
     in
-    {
-      nixosConfigurations = (
-        import ./hosts {
-          inherit (nixpkgs) lib;
-          inherit sops-nix;
-          inherit inputs nixpkgs nixpkgs-unstable;
-          inherit home-manager karolayne master-user;
-        }
-      );
-    };
+
+    flake-parts.lib.mkFlake { inherit inputs; }
+      {
+        systems = [ "x86_64-linux" ];
+        flake = {
+          templates.default = {
+            path = ./templates/flake;
+            description = "nix flake new -t github:lluz55/nixos-config .";
+          };
+          nixosConfigurations = (
+            import ./hosts {
+              inherit (nixpkgs) lib;
+              inherit sops-nix;
+              inherit inputs nixpkgs nixpkgs-unstable;
+              inherit home-manager karolayne master-user;
+            }
+          );
+        };
+      };
 }
