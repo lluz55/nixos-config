@@ -44,9 +44,9 @@
       {
         systems = [ "x86_64-linux" ];
         flake = {
-          templates.default = {
-            path = ./templates/flake;
-            description = "nix flake new -t github:lluz55/nixos-config .";
+          templates.flutter = {
+            path = ./templates/flutter;
+            description = "nix flake new -t github:lluz55/nixos-config#flake .";
           };
           nixosConfigurations = (
             import ./hosts {
