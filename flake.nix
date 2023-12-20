@@ -39,27 +39,14 @@
       master-user = users.master-user;
       karolayne = users.karolayne;
     in
-
-    flake-parts.lib.mkFlake
-      { inherit inputs; }
-      {
-        systems = [ "x86_64-linux" ];
-        perSystem = { pkgs, system, nixpkgs', ... }:
-          {
-            imports = [
-              (import ./shells/flutter.nix {
-                inherit system nixpkgs;
-                inherit (nixpkgs) lib;
-              })
-            ];
-          };
-        flake.nixosConfigurations = (
-          import ./hosts {
-            inherit (nixpkgs) lib;
-            inherit sops-nix;
-            inherit inputs nixpkgs nixpkgs-unstable;
-            inherit home-manager karolayne master-user;
-          }
-        );
-      };
+    {
+      nixosConfigurations = (
+        import ./hosts {
+          inherit (nixpkgs) lib;
+          inherit sops-nix;
+          inherit inputs nixpkgs nixpkgs-unstable;
+          inherit home-manager karolayne master-user;
+        }
+      );
+    };
 }

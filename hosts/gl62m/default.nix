@@ -59,6 +59,13 @@ with lib; {
   };
 
   programs.light.enable = true;
+  programs.direnv = {
+    enable = true;
+    nix-direnv = {
+      enable = true;
+      package = pkgs.nix-direnv;
+    };
+  };
 
   #sway.enable = true;
 
