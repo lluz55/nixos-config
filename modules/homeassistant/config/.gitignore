@@ -13,4 +13,4 @@ secrets.yaml
 known_devices.yaml
 
 www/icons
-homeassistant.*
+home-assistant.*
