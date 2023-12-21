@@ -11,3 +11,6 @@
 ip_bans.yaml
 secrets.yaml
 known_devices.yaml
+
+www/icons
+homeassistant.*
