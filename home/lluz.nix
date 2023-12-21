@@ -13,7 +13,7 @@ let
 in
 with lib;{
   imports = [
-    ../options.nix
+    ../modules/options.nix
   ];
   programs.home-manager.enable = true;
   dconf.settings = mkIf (config.gnome.enable) {

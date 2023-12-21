@@ -1,7 +1,7 @@
 { ... }:
 {
   imports = [
-    ../options.nix
+    ../modules/options.nix
     ./configuration.nix
     ./desktops
     ./shell
