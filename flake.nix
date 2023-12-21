@@ -46,7 +46,7 @@
         flake = {
           templates.flutter = {
             path = ./templates/flutter;
-            description = "nix flake new -t github:lluz55/nixos-config#flake .";
+            description = "nix flake new -t github:lluz55/nixos-config#flutter <directory>";
           };
           nixosConfigurations = (
             import ./hosts {
