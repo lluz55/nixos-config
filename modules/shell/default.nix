@@ -4,5 +4,6 @@
 { ... }:
 {
   #./zsh.nix
-  #imports = [ ./git.nix ];
+  imports = [ ./fish.nix ];
+
 }
