@@ -1,5 +1,4 @@
-{ lib, config, ... }:
-with lib;
+{ ... }:
 {
   programs.fish = {
     enable = true;
