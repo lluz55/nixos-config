@@ -1,5 +1,5 @@
-{ ... }:
-{
+{ lib, ... }:
+with lib;{
   programs.fish = {
     enable = true;
     interactiveShellInit = ''

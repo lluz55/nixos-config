@@ -42,7 +42,7 @@ in
           chain input {
             type filter hook input priority 0; policy drop;
 
-            iifname { "br-lan", "iot-10", "br-cams"} accept comment "Allow local network to access the router"
+            iifname { "br-lan", "br-home", "br-cams"} accept comment "Allow local network to access the router"
             iifname "enp1s0" ct state { established, related } accept comment "Allow established traffic"
             iifname "enp1s0" icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"
             iifname "lo" accept comment "Accept everything from loopback interface"
@@ -63,8 +63,8 @@ in
 
             iifname { "br-cams" } oifname { "enp1s0" } udp dport ${ntp_port} accept comment "Allow NTP extenal access"
             iifname { "br-cams" } ip saddr 10.1.1.10 oifname { "enp1s0" } accept comment "Allow NTP extenal access"
-            iifname { "br-lan", "iot-10" } oifname { "enp1s0" } accept comment "Allow trusted LAN to enp1s0"
-            iifname { "enp1s0" } oifname {  "br-lan", "iot-10", "br-cams" } ct state { established, related } accept comment "Allow established back to LANs"
+            iifname { "br-lan", "br-home" } oifname { "enp1s0" } accept comment "Allow trusted LAN to enp1s0"
+            iifname { "enp1s0" } oifname {  "br-lan", "br-home", "br-cams" } ct state { established, related } accept comment "Allow established back to LANs"
           }
         }
 
@@ -105,13 +105,20 @@ in
           Name = "br-cams";
         };
       };
-      "50-iot-10" = {
+      #"50-br-guests" = {
+      #  netdevConfig = {
+      #    Kind = "bridge";
+      #    #Kind = "vlan";
+      #    Name = "br-guests";
+      #  };
+      #  #vlanConfig.Id = 99;
+      #};
+      "60-br-home" = {
         netdevConfig = {
-          Kind = "bridge";
-          #Kind = "vlan";
-          Name = "iot-10";
+          Kind = "vlan";
+          Name = "br-home";
         };
-        #vlanConfig.Id = 10;
+        vlanConfig.Id = 55;
       };
     };
     networks = {
@@ -134,11 +141,8 @@ in
       };
       "30-enp4s0" = {
         matchConfig.Name = "enp4s0";
-        #vlan = [ "iot-10" ];
-        networkConfig = {
-          Bridge = "iot-10";
-          ConfigureWithoutCarrier = true;
-        };
+        vlan = [ "br-home" ];
+        networkConfig = { };
         linkConfig.RequiredForOnline = "enslaved";
       };
       # Configure the bridge for its desired function
@@ -168,11 +172,11 @@ in
         # Don't wait for it as it also would wait for wlan and DFS which takes around 5 min 
         linkConfig.RequiredForOnline = "no";
       };
-      "70-iot-10" = {
-        matchConfig.Name = "iot-10";
+      "70-br-home" = {
+        matchConfig.Name = "br-home";
         bridgeConfig = { };
         address = [
-          "10.0.10.1/24"
+          "10.0.55.1/24"
         ];
         networkConfig = {
           ConfigureWithoutCarrier = true;
@@ -215,12 +219,12 @@ in
       dhcp-range = [
         "br-lan,192.168.1.100,192.168.1.150,24h"
         "br-cams,10.1.1.100,10.1.1.150,24h"
-        "iot-10,10.0.10.100,10.0.10.150,24h"
+        "br-home,10.0.55.100,10.0.55.150,24h"
       ];
-      interface = [ "br-lan" "iot-10" "br-cams" ];
+      interface = [ "br-lan" "br-home" "br-cams" ];
       dhcp-host = [
         "192.168.1.1"
-        "10.0.10.1"
+        "10.0.55.1"
         "10.1.1.1"
         "b4:2e:99:f4:ba:f3,b450,192.168.1.120,infinite"
       ];
@@ -239,4 +243,3 @@ in
   # The service irqbalance is useful as it assigns certain IRQ calls to specific CPUs instead of letting the first CPU core to handle everything. This is supposed to increase performance by hitting CPU cache more often.
   services.irqbalance.enable = true;
 }
-
