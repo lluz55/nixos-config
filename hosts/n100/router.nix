@@ -42,7 +42,7 @@ in
           chain input {
             type filter hook input priority 0; policy drop;
 
-            iifname { "br-lan", "br-home", "br-cams", "mngt"} accept comment "Allow local network to access the router"
+            iifname { "br-lan", "mgmt", "br-cams", "br-home"} accept comment "Allow local network to access the router"
             iifname "enp1s0" ct state { established, related } accept comment "Allow established traffic"
             iifname "enp1s0" icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"
             iifname "lo" accept comment "Accept everything from loopback interface"
@@ -63,8 +63,8 @@ in
 
             iifname { "br-cams" } oifname { "enp1s0" } udp dport ${ntp_port} accept comment "Allow NTP extenal access"
             iifname { "br-cams" } ip saddr 10.1.1.10 oifname { "enp1s0" } accept comment "Allow NTP extenal access"
-            iifname { "br-lan", "br-home", "mngt" } oifname { "enp1s0" } accept comment "Allow trusted LAN to enp1s0"
-            iifname { "enp1s0" } oifname {  "br-lan", "br-home", "br-cams", "mngt" } ct state { established, related } accept comment "Allow established back to LANs"
+            iifname { "br-lan", "mgmt", "br-home" } oifname { "enp1s0" } accept comment "Allow trusted LAN to enp1s0"
+            iifname { "enp1s0" } oifname {  "br-lan", "mgmt", "br-cams", "br-home" } ct state { established, related } accept comment "Allow established back to LANs"
           }
         }
 
@@ -113,19 +113,20 @@ in
       #  };
       #  #vlanConfig.Id = 99;
       #};
-      "60-br-home" = {
+      "60-mgmt" = {
+        netdevConfig = {
+          Kind = "bridge";
+          #Kind = "vlan";
+          Name = "mgmt";
+        };
+        #vlanConfig.Id = 55;
+      };
+      "70-br-home" = {
         netdevConfig = {
           Kind = "vlan";
           Name = "br-home";
         };
-        vlanConfig.Id = 55;
-      };
-      "70-mngt" = {
-        netdevConfig = {
-          Kind = "vlan";
-          Name = "mngt";
-        };
-        vlanConfig.Id = 66;
+        vlanConfig.Id = 99;
       };
     };
     networks = {
@@ -148,8 +149,11 @@ in
       };
       "30-enp4s0" = {
         matchConfig.Name = "enp4s0";
-        vlan = [ "br-home" "mngt" ];
-        networkConfig = { };
+        #vlan = [ "mgmt" "br-home" ];
+        networkConfig = {
+          Bridge = "mgmt";
+          ConfigureWithoutCarrier = true;
+        };
         linkConfig.RequiredForOnline = "enslaved";
       };
       # Configure the bridge for its desired function
@@ -179,11 +183,11 @@ in
         # Don't wait for it as it also would wait for wlan and DFS which takes around 5 min 
         linkConfig.RequiredForOnline = "no";
       };
-      "70-br-home" = {
-        matchConfig.Name = "br-home";
+      "70-mgmt" = {
+        matchConfig.Name = "mgmt";
         bridgeConfig = { };
         address = [
-          "10.0.55.1/24"
+          "6.6.6.1/24"
         ];
         networkConfig = {
           ConfigureWithoutCarrier = true;
@@ -191,12 +195,13 @@ in
         # Don't wait for it as it also would wait for wlan and DFS which takes around 5 min 
         linkConfig.RequiredForOnline = "no";
       };
-      "80-mngt" = {
-        matchConfig.Name = "mngt";
+      "80-br-home" = {
+        matchConfig.Name = "br-home";
         bridgeConfig = { };
         address = [
-          "6.6.6.1/24"
+          "10.0.55.1/24"
         ];
+        gateway = [ "192.168.100.1" ];
         networkConfig = {
           ConfigureWithoutCarrier = true;
         };
@@ -239,9 +244,9 @@ in
         "br-lan,192.168.1.100,192.168.1.150,24h"
         "br-cams,10.1.1.100,10.1.1.150,24h"
         "br-home,10.0.55.100,10.0.55.150,24h"
-        "mngt,6.6.6.100,6.6.6.150,24h"
+        "mgmt,6.6.6.100,6.6.6.150,24h"
       ];
-      interface = [ "br-lan" "br-home" "br-cams" "mngt" ];
+      interface = [ "br-lan" "mgmt" "br-cams" "br-home" ];
       dhcp-host = [
         "192.168.1.1"
         "10.0.55.1"
