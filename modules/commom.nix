@@ -11,11 +11,22 @@
 
   sops.age.keyFile = "/home/${master-user.name}/.config/sops/age/keys.txt";
 
-  sops.secrets.frigate = {
-    owner = master-user.name;
-  };
-  sops.secrets.mqtt = {
-    owner = master-user.name;
+  sops.secrets = {
+    frigate = {
+      owner = master-user.name;
+    };
+    mqtt = {
+      owner = master-user.name;
+    };
+    poco-mac = {
+      owner = master-user.name;
+    };
+    b450-mac = {
+      owner = master-user.name;
+    };
+    gl62m-mac = {
+      owner = master-user.name;
+    };
   };
 
   environment.systemPackages = with pkgs; [

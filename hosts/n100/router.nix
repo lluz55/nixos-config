@@ -7,6 +7,9 @@ let
   hass_port = "8123";
   zb2m_port = "1883";
   mosh_ports = "60000-61000";
+  b450-mac = (builtins.readFile config.sops.secrets.b450-mac.path);
+  poco-mac = (builtins.readFile config.sops.secrets.poco-mac.path);
+  gl62m-mac = (builtins.readFile config.sops.secrets.gl62m-mac.path);
 in
 {
   boot = {
@@ -42,15 +45,22 @@ in
           chain input {
             type filter hook input priority 0; policy drop;
 
-            iifname { "br-lan", "mgmt", "br-cams", "br-home"} accept comment "Allow local network to access the router"
+            iifname { "br-lan", "vl-mgmt",  "br-cams"} accept comment "Allow local network to access the router"
+
+            # Guests and Home networks
+            iifname {"vl-guests", "vl-home"} udp dport 67-68 accept
+            iifname {"vl-guests", "vl-home"} meta l4proto { udp, tcp} th dport 53 accept
+            iifname "vl-guests" oifname { "vl-guests", "vl-home", "vl-mgmt", "br-cams", "br-lan"} drop comment "Block access to other networks"
+            iifname "vl-home" oifname { "vl-guests", "vl-mgmt", "br-cams"} drop comment "Block access to other networks"
+
             iifname "enp1s0" ct state { established, related } accept comment "Allow established traffic"
             iifname "enp1s0" icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"
             iifname "lo" accept comment "Accept everything from loopback interface"
 
-            # Allow ports on WAN interfaces
+            # Allow ports on WAN interface
             tcp dport ${ssh_port} ct state new limit rate 2/minute accept comment "Accept SSH and avoid brute force"
             tcp dport ${hass_port} accept comment "Allow Homeassistant"
-            tcp dport ${zb2m_port} accept comment "Zigbee2mqtt"
+            tcp dport ${zb2m_port} accept comment "Allow Zigbee2mqtt"
             udp dport ${mosh_ports} accept comment "Allow Mosh"
             tcp dport ${frigate_port} accept comment "Allow Frigate"
             udp dport ${tailscale_port} accept comment "Allow Tailscale"
@@ -62,9 +72,9 @@ in
             ct status dnat accept comment "Allow NAT through interfaces"
 
             iifname { "br-cams" } oifname { "enp1s0" } udp dport ${ntp_port} accept comment "Allow NTP extenal access"
-            iifname { "br-cams" } ip saddr 10.1.1.10 oifname { "enp1s0" } accept comment "Allow NTP extenal access"
-            iifname { "br-lan", "mgmt", "br-home" } oifname { "enp1s0" } accept comment "Allow trusted LAN to enp1s0"
-            iifname { "enp1s0" } oifname {  "br-lan", "mgmt", "br-cams", "br-home" } ct state { established, related } accept comment "Allow established back to LANs"
+            iifname { "br-cams" } ip saddr 10.1.1.10 oifname { "enp1s0" } accept comment "Allow Frigate extenal access"
+            iifname { "br-lan", "vl-mgmt", "vl-home", "vl-guests"} oifname { "enp1s0" } accept comment "Allow trusted LAN to enp1s0 (external access)"
+            iifname { "enp1s0" } oifname {  "br-lan", "vl-mgmt", "br-cams", "vl-home", "vl-guests" } ct state { established, related } accept comment "Allow established back to LANs"
           }
         }
 
@@ -76,9 +86,9 @@ in
             tcp dport 8123 dnat 10.1.1.10:8123 # TODO: Remove after tests
             tcp dport 8080 dnat 10.1.1.10:8080 # TODO: Remove after tests
             tcp dport 20022 dnat 192.168.1.120:22 # TODO: Remove after tests
-            tcp dport 4822 meta nftrace set 1 dnat 192.168.1.120 # TODO: Remove after tests
-            tcp dport 3389 meta nftrace set 1 dnat 192.168.1.120 # TODO: Remove after tests
-            tcp dport 5900-5999 meta nftrace set 1 dnat 192.168.1.120 comment "Allow VNC access to server" # TODO: Remove after tests
+            tcp dport 4822 dnat 192.168.1.120 # TODO: Remove after tests
+            tcp dport 3389 dnat 192.168.1.120 # TODO: Remove after tests
+            tcp dport 5900-5999 dnat 192.168.1.120 comment "Allow VNC access to server" # TODO: Remove after tests
           }
           chain postrouting {
             type nat hook postrouting priority srcnat; policy accept;
@@ -105,31 +115,44 @@ in
           Name = "br-cams";
         };
       };
-      #"50-br-guests" = {
-      #  netdevConfig = {
-      #    Kind = "bridge";
-      #    #Kind = "vlan";
-      #    Name = "br-guests";
-      #  };
-      #  #vlanConfig.Id = 99;
-      #};
-      "60-mgmt" = {
-        netdevConfig = {
-          Kind = "bridge";
-          #Kind = "vlan";
-          Name = "mgmt";
-        };
-        #vlanConfig.Id = 55;
-      };
-      "70-br-home" = {
+      "40-vl-guests" = {
         netdevConfig = {
           Kind = "vlan";
-          Name = "br-home";
+          Name = "vl-guests";
         };
-        vlanConfig.Id = 99;
+        vlanConfig.Id = 10;
+      };
+      "50-vl-mgmt" = {
+        netdevConfig = {
+          Kind = "vlan";
+          Name = "vl-mgmt";
+        };
+        vlanConfig.Id = 66;
+      };
+      "60-vl-home" = {
+        netdevConfig = {
+          Kind = "vlan";
+          Name = "vl-home";
+        };
+        vlanConfig.Id = 55;
       };
     };
     networks = {
+      "10-enp1s0" = {
+        matchConfig.Name = "enp1s0";
+        networkConfig = {
+          # start a DHCP Client for IPv4 Addressing/Routing
+          DHCP = "ipv4";
+          # accept Router Advertisements for Stateless IPv6 Autoconfiguraton (SLAAC)
+          IPv6AcceptRA = true;
+          DNSOverTLS = true;
+          DNSSEC = true;
+          IPv6PrivacyExtensions = false;
+          IPForward = true;
+        };
+        # make routing on this interface a dependency for network-online.target
+        linkConfig.RequiredForOnline = "routable";
+      };
       # Connect the bridge ports to the bridge
       "30-enp2s0" = {
         matchConfig.Name = "enp2s0";
@@ -149,11 +172,8 @@ in
       };
       "30-enp4s0" = {
         matchConfig.Name = "enp4s0";
-        #vlan = [ "mgmt" "br-home" ];
-        networkConfig = {
-          Bridge = "mgmt";
-          ConfigureWithoutCarrier = true;
-        };
+        vlan = [ "vl-mgmt" "vl-home" "vl-guests" ];
+        networkConfig = { };
         linkConfig.RequiredForOnline = "enslaved";
       };
       # Configure the bridge for its desired function
@@ -183,20 +203,21 @@ in
         # Don't wait for it as it also would wait for wlan and DFS which takes around 5 min 
         linkConfig.RequiredForOnline = "no";
       };
-      "70-mgmt" = {
-        matchConfig.Name = "mgmt";
+      "70-vl-mgmt" = {
+        matchConfig.Name = "vl-mgmt";
         bridgeConfig = { };
         address = [
-          "6.6.6.1/24"
+          "10.0.66.1/24"
         ];
+        gateway = [ "192.168.100.1" ];
         networkConfig = {
           ConfigureWithoutCarrier = true;
         };
         # Don't wait for it as it also would wait for wlan and DFS which takes around 5 min 
         linkConfig.RequiredForOnline = "no";
       };
-      "80-br-home" = {
-        matchConfig.Name = "br-home";
+      "80-vl-home" = {
+        matchConfig.Name = "vl-home";
         bridgeConfig = { };
         address = [
           "10.0.55.1/24"
@@ -208,20 +229,18 @@ in
         # Don't wait for it as it also would wait for wlan and DFS which takes around 5 min 
         linkConfig.RequiredForOnline = "no";
       };
-      "10-enp1s0" = {
-        matchConfig.Name = "enp1s0";
+      "90-vl-guests" = {
+        matchConfig.Name = "vl-guests";
+        bridgeConfig = { };
+        address = [
+          "10.0.10.1/24"
+        ];
+        gateway = [ "192.168.100.1" ];
         networkConfig = {
-          # start a DHCP Client for IPv4 Addressing/Routing
-          DHCP = "ipv4";
-          # accept Router Advertisements for Stateless IPv6 Autoconfiguraton (SLAAC)
-          IPv6AcceptRA = true;
-          DNSOverTLS = true;
-          DNSSEC = true;
-          IPv6PrivacyExtensions = false;
-          IPForward = true;
+          ConfigureWithoutCarrier = true;
         };
-        # make routing on this interface a dependency for network-online.target
-        linkConfig.RequiredForOnline = "routable";
+        # Don't wait for it as it also would wait for wlan and DFS which takes around 5 min 
+        linkConfig.RequiredForOnline = "no";
       };
     };
   };
@@ -243,16 +262,26 @@ in
       dhcp-range = [
         "br-lan,192.168.1.100,192.168.1.150,24h"
         "br-cams,10.1.1.100,10.1.1.150,24h"
-        "br-home,10.0.55.100,10.0.55.150,24h"
-        "mgmt,6.6.6.100,6.6.6.150,24h"
+        "vl-mgmt,10.0.66.100,10.0.66.150,24h"
+        "vl-home,10.0.55.100,10.0.55.150,24h"
+        "vl-guests,10.0.10.100,10.0.10.150,24h"
       ];
-      interface = [ "br-lan" "mgmt" "br-cams" "br-home" ];
       dhcp-host = [
         "192.168.1.1"
+        "10.0.66.1"
         "10.0.55.1"
-        "6.6.6.1"
+        "10.0.10.1"
         "10.1.1.1"
-        "b4:2e:99:f4:ba:f3,b450,192.168.1.120,infinite"
+
+        # DHCP Leases
+        # Main PC
+        "${b450-mac},b450,192.168.1.120,infinite"
+        # Main smartphone
+        "${poco-mac},POCO_X3,10.0.66.2,infinite"
+        "${poco-mac},POCO_X3,10.0.55.2,infinite"
+        # Main Note
+        "${gl62m-mac},Gl62m,10.0.66.3,infinite"
+        "${gl62m-mac},Gl62m,10.0.55.3,infinite"
       ];
 
       # local domains
