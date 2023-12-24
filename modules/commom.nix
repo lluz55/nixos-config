@@ -27,6 +27,9 @@
     gl62m-mac = {
       owner = master-user.name;
     };
+    rn10c-mac = {
+      owner = master-user.name;
+    };
   };
 
   environment.systemPackages = with pkgs; [

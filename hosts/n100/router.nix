@@ -1,5 +1,6 @@
-{ config, ... }:
+{ config, lib, pkgs, ... }:
 let
+  # Important ports 
   tailscale_port = toString config.services.tailscale.port;
   ssh_port = "22";
   frigate_port = "5000";
@@ -7,9 +8,7 @@ let
   hass_port = "8123";
   zb2m_port = "1883";
   mosh_ports = "60000-61000";
-  b450-mac = (builtins.readFile config.sops.secrets.b450-mac.path);
-  poco-mac = (builtins.readFile config.sops.secrets.poco-mac.path);
-  gl62m-mac = (builtins.readFile config.sops.secrets.gl62m-mac.path);
+
 in
 {
   boot = {
@@ -44,8 +43,7 @@ in
           }
           chain input {
             type filter hook input priority 0; policy drop;
-
-            iifname { "br-lan", "vl-mgmt",  "br-cams"} accept comment "Allow local network to access the router"
+            iifname { "br-lan", "br-cams", "vl-mgmt"} accept comment "Allow local network to access the router"
 
             # Guests and Home networks
             iifname {"vl-guests", "vl-home"} udp dport 67-68 accept
@@ -59,12 +57,11 @@ in
 
             # Allow ports on WAN interface
             tcp dport ${ssh_port} ct state new limit rate 2/minute accept comment "Accept SSH and avoid brute force"
-            tcp dport ${hass_port} accept comment "Allow Homeassistant"
-            tcp dport ${zb2m_port} accept comment "Allow Zigbee2mqtt"
-            udp dport ${mosh_ports} accept comment "Allow Mosh"
-            tcp dport ${frigate_port} accept comment "Allow Frigate"
-            udp dport ${tailscale_port} accept comment "Allow Tailscale"
-
+            tcp dport ${hass_port} accept comment "Accept Homeassistant"
+            tcp dport ${zb2m_port} accept comment "Accept Zigbee2mqtt"
+            udp dport ${mosh_ports} accept comment "Accept Mosh"
+            tcp dport ${frigate_port} accept comment "Accept Frigate"
+            udp dport ${tailscale_port} accept comment "Accept Tailscale"
           }
           chain forward {
             type filter hook forward priority 0; policy drop;
@@ -73,7 +70,7 @@ in
 
             iifname { "br-cams" } oifname { "enp1s0" } udp dport ${ntp_port} accept comment "Allow NTP extenal access"
             iifname { "br-cams" } ip saddr 10.1.1.10 oifname { "enp1s0" } accept comment "Allow Frigate extenal access"
-            iifname { "br-lan", "vl-mgmt", "vl-home", "vl-guests"} oifname { "enp1s0" } accept comment "Allow trusted LAN to enp1s0 (external access)"
+            iifname { "br-lan", "vl-mgmt",  "vl-guests"} oifname { "enp1s0" } accept comment "Allow trusted LAN to enp1s0 (external access)"
             iifname { "enp1s0" } oifname {  "br-lan", "vl-mgmt", "br-cams", "vl-home", "vl-guests" } ct state { established, related } accept comment "Allow established back to LANs"
           }
         }
@@ -246,6 +243,20 @@ in
   };
   services.resolved.enable = false;
 
+  systemd.services.allowDevicesHome = {
+    wantedBy = [ "multi-user.target" ];
+    script = ''
+      ${pkgs.nftables}/bin/nft add rule ip filter forward iifname "vl-home" ether saddr {\
+      ${lib.strings.concatMapStrings (x: "$(cat " + x + "), ")[
+        config.sops.secrets.poco-mac.path 
+        config.sops.secrets.gl62m-mac.path 
+        config.sops.secrets.rn10c-mac.path 
+        config.sops.secrets.b450-mac.path 
+      ]} \
+      } oifname "enp1s0" accept
+    '';
+  };
+
   services.dnsmasq = {
     enable = true;
     settings = {
@@ -275,13 +286,16 @@ in
 
         # DHCP Leases
         # Main PC
-        "${b450-mac},b450,192.168.1.120,infinite"
-        # Main smartphone
-        "${poco-mac},POCO_X3,10.0.66.2,infinite"
-        "${poco-mac},POCO_X3,10.0.55.2,infinite"
-        # Main Note
-        "${gl62m-mac},Gl62m,10.0.66.3,infinite"
-        "${gl62m-mac},Gl62m,10.0.55.3,infinite"
+        #"${b450-mac},b450,192.168.1.120,infinite"
+        ## Main smartphone
+        #"${poco-mac},POCO_X3,10.0.66.2,infinite"
+        #"${poco-mac},POCO_X3,10.0.55.2,infinite"
+        ## Main Note
+        #"${gl62m-mac},Gl62m,10.0.66.3,infinite"
+        #"${gl62m-mac},Gl62m,10.0.55.3,infinite"
+
+        # Wife's smartphone
+        #"${rn10c-mac},rn10c,10.0.55.4, infinite"
       ];
 
       # local domains
