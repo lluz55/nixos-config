@@ -9,6 +9,11 @@ let
   zb2m_port = "1883";
   mosh_ports = "60000-61000";
 
+  # Interfaces
+  WAN = "enp1s0";
+  LAN0 = "enp2s0";
+  LAN1 = "enp3s0";
+  LAN2 = "enp4s0";
 in
 {
   boot = {
@@ -24,7 +29,7 @@ in
     hostName = "n100";
     useNetworkd = true;
     useDHCP = false;
-    interfaces."enp2s0".wakeOnLan.enable = true;
+    interfaces."${LAN0}".wakeOnLan.enable = true;
     # No local firewall.
     nat.enable = false;
     firewall.enable = false;
@@ -36,7 +41,7 @@ in
         table ip filter {
           flowtable f {
             hook ingress priority 0; 
-            devices = { "enp1s0", "enp2s0", "enp3s0", "enp4s0"};
+            devices = { "${WAN}", "${LAN0}", "${LAN1}", "${LAN2}"};
           }
           chain output {
             type filter hook output priority 100; policy accept;
@@ -51,8 +56,8 @@ in
             iifname "vl-guests" oifname { "vl-guests", "vl-home", "vl-mgmt", "br-cams", "br-lan"} drop comment "Block access to other networks"
             iifname "vl-home" oifname { "vl-guests", "vl-mgmt", "br-cams"} drop comment "Block access to other networks"
 
-            iifname "enp1s0" ct state { established, related } accept comment "Allow established traffic"
-            iifname "enp1s0" icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"
+            iifname "${WAN}" ct state { established, related } accept comment "Allow established traffic"
+            iifname "${WAN}" icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"
             iifname "lo" accept comment "Accept everything from loopback interface"
 
             # Allow ports on WAN interface
@@ -68,10 +73,10 @@ in
             ip protocol tcp flow add @f comment "Offload tcp/udp established traffic"
             ct status dnat accept comment "Allow NAT through interfaces"
 
-            iifname { "br-cams" } oifname { "enp1s0" } udp dport ${ntp_port} accept comment "Allow NTP extenal access"
-            iifname { "br-cams" } ip saddr 10.1.1.10 oifname { "enp1s0" } accept comment "Allow Frigate extenal access"
-            iifname { "br-lan", "vl-mgmt",  "vl-guests"} oifname { "enp1s0" } accept comment "Allow trusted LAN to enp1s0 (external access)"
-            iifname { "enp1s0" } oifname {  "br-lan", "vl-mgmt", "br-cams", "vl-home", "vl-guests" } ct state { established, related } accept comment "Allow established back to LANs"
+            iifname { "br-cams" } oifname { "${WAN}" } udp dport ${ntp_port} accept comment "Allow NTP extenal access"
+            iifname { "br-cams" } ip saddr 10.1.1.10 oifname { "${WAN}" } accept comment "Allow Frigate extenal access"
+            iifname { "br-lan", "vl-mgmt",  "vl-guests"} oifname { "${WAN}" } accept comment "Allow trusted LAN to ${WAN} (external access)"
+            iifname { "${WAN}" } oifname {  "br-lan", "vl-mgmt", "br-cams", "vl-home", "vl-guests" } ct state { established, related } accept comment "Allow established back to LANs"
           }
         }
 
@@ -89,7 +94,7 @@ in
           }
           chain postrouting {
             type nat hook postrouting priority srcnat; policy accept;
-            oifname "enp1s0" masquerade
+            oifname "${WAN}" masquerade
           } 
         }
       '';
@@ -135,8 +140,8 @@ in
       };
     };
     networks = {
-      "10-enp1s0" = {
-        matchConfig.Name = "enp1s0";
+      "10-${WAN}" = {
+        matchConfig.Name = "${WAN}";
         networkConfig = {
           # start a DHCP Client for IPv4 Addressing/Routing
           DHCP = "ipv4";
@@ -151,24 +156,24 @@ in
         linkConfig.RequiredForOnline = "routable";
       };
       # Connect the bridge ports to the bridge
-      "30-enp2s0" = {
-        matchConfig.Name = "enp2s0";
+      "30-${LAN0}" = {
+        matchConfig.Name = "${LAN0}";
         networkConfig = {
           Bridge = "br-lan";
           ConfigureWithoutCarrier = true;
         };
         linkConfig.RequiredForOnline = "enslaved";
       };
-      "30-enp3s0" = {
-        matchConfig.Name = "enp3s0";
+      "30-${LAN1}" = {
+        matchConfig.Name = "${LAN1}";
         networkConfig = {
           Bridge = "br-cams";
           ConfigureWithoutCarrier = true;
         };
         linkConfig.RequiredForOnline = "enslaved";
       };
-      "30-enp4s0" = {
-        matchConfig.Name = "enp4s0";
+      "30-${LAN2}" = {
+        matchConfig.Name = "${LAN2}";
         vlan = [ "vl-mgmt" "vl-home" "vl-guests" ];
         networkConfig = { };
         linkConfig.RequiredForOnline = "enslaved";
@@ -253,7 +258,7 @@ in
         config.sops.secrets.rn10c-mac.path 
         config.sops.secrets.b450-mac.path 
       ]} \
-      } oifname "enp1s0" accept
+      } oifname "${WAN}" accept
     '';
   };
 
