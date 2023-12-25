@@ -31,9 +31,10 @@
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
+    secrets.url = "git+file:///home/lluz/.secrets/";
   };
 
-  outputs = inputs @ { self, nixpkgs, nixpkgs-unstable, home-manager, sops-nix, flake-parts, ... }:
+  outputs = inputs @ { self, secrets, nixpkgs, nixpkgs-unstable, home-manager, sops-nix, flake-parts, ... }:
     let
       users = import ./users.nix;
       master-user = users.master-user;
@@ -51,7 +52,7 @@
           nixosConfigurations = (
             import ./hosts {
               inherit (nixpkgs) lib;
-              inherit sops-nix;
+              inherit sops-nix secrets;
               inherit inputs nixpkgs nixpkgs-unstable;
               inherit home-manager karolayne master-user;
             }

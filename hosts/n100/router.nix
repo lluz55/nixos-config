@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 let
   # Important ports 
   tailscale_port = toString config.services.tailscale.port;
@@ -14,7 +14,14 @@ let
   LAN0 = "enp2s0";
   LAN1 = "enp3s0";
   LAN2 = "enp4s0";
+
+  # TODO: To use git ssh key authentication the private key must be in `/root/.ssh` 
+  # when using `nix-rebuild switch...`
+  # TODO: Use own module for this
+  secrets = builtins.getFlake "git+ssh://git@github.com/lluz55/secrets.git";
+  macs = secrets.outputs.macs;
 in
+with lib;
 {
   boot = {
     kernel = {
@@ -248,19 +255,70 @@ in
   };
   services.resolved.enable = false;
 
-  systemd.services.allowDevicesHome = {
-    wantedBy = [ "multi-user.target" ];
-    script = ''
-      ${pkgs.nftables}/bin/nft add rule ip filter forward iifname "vl-home" ether saddr {\
-      ${lib.strings.concatMapStrings (x: "$(cat " + x + "), ")[
-        config.sops.secrets.poco-mac.path 
-        config.sops.secrets.gl62m-mac.path 
-        config.sops.secrets.rn10c-mac.path 
-        config.sops.secrets.b450-mac.path 
-      ]} \
-      } oifname "${WAN}" accept
-    '';
-  };
+  #systemd.services.allowDevicesHome = {
+  #  wantedBy = [ "multi-user.target" ];
+  #  script = ''
+  #    ${pkgs.nftables}/bin/nft add rule ip filter forward iifname "vl-home" ether saddr {\
+  #    ${lib.strings.concatMapStrings (x: "$(cat " + x + "), ")[
+  #      config.sops..poco-mac.path 
+  #      config.sops..gl62m-mac.path 
+  #      config.sops..rn10c-mac.path 
+  #      config.sops..b450-mac.path 
+  #    ]} \
+  #    } oifname "${WAN}" accept
+  #  '';
+  #};
+
+  #systemd.services.dnsmasq.serviceConfig.ExecStart =
+  #  let
+  #    b450 = (builtins.readFile config.sops..b450-mac.path);
+  #    gl62m = (builtins.readFile config.sops..gl62m-mac.path);
+  #    poco = (builtins.readFile config.sops..poco-mac.path);
+  #    rn10c = (builtins.readFile config.sops..rn10c-mac.path);
+  #    a = (builtins.readFile config.sops..a.path);
+  #    dnsmasq_conf = pkgs.writeText "dnsmasq.conf" ''
+  #      address=/n100.lan/192.168.1.1
+  #      bogus-priv
+  #      cache-size=1000
+  #      conf-file=/etc/dnsmasq-conf.conf
+  #      dhcp-host=192.168.1.1
+  #      dhcp-host=10.0.66.1
+  #      dhcp-host=10.0.55.1
+  #      dhcp-host=10.0.10.1
+  #      dhcp-host=10.1.1.1
+  #      dhcp-leasefile=/var/lib/dnsmasq/dnsmasq.leases
+  #      dhcp-range=br-lan,192.168.1.100,192.168.1.150,24h
+  #      dhcp-range=br-cams,10.1.1.100,10.1.1.150,24h
+  #      dhcp-range=vl-mgmt,10.0.66.100,10.0.66.150,24h
+  #      dhcp-range=vl-home,10.0.55.100,10.0.55.150,24h
+  #      dhcp-range=vl-guests,10.0.10.100,10.0.10.150,24h
+  #      domain=lan
+  #      domain-needed
+  #      expand-hosts
+  #      local=/lan/
+  #      no-hosts
+  #      no-resolv
+  #      resolv-file=/etc/dnsmasq-resolv.conf
+  #      server=8.8.8.8
+  #      server=1.1.1.1
+
+  #      # DHCP Leases ${a}
+  #      # Main PC
+  #      dhcp-host=${b450},b450,192.168.1.120,infinite
+  #      # Main smartphone
+  #      dhcp-host=${poco},poco,10.0.66.2,infinite
+  #      dhcp-host=${poco},poco,10.0.55.2,infinite
+  #      # Main Note
+  #      dhcp-host=${gl62m},gl62m,10.0.55.3,infinite
+  #      dhcp-host=${gl62m},gl62m,10.0.66.3,infinite
+
+  #      #Wife's smartphone
+  #      dhcp-host=${rn10c},rn10c,10.0.66.4,infinite
+  #    '';
+  #  in
+  #  lib.mkForce "${pkgs.dnsmasq}/bin/dnsmasq -k --enable-dbus --user=dnsmasq -C ${pkgs.writeText "dnsmasq.conf" ''
+  #  conf-file=${dnsmasq_conf}
+  #''}";
 
   services.dnsmasq = {
     enable = true;
@@ -291,16 +349,16 @@ in
 
         # DHCP Leases
         # Main PC
-        #"${b450-mac},b450,192.168.1.120,infinite"
+        "${macs.b450},b450,192.168.1.120,infinite"
         ## Main smartphone
-        #"${poco-mac},POCO_X3,10.0.66.2,infinite"
-        #"${poco-mac},POCO_X3,10.0.55.2,infinite"
+        "${macs.poco},POCO_X3,10.0.66.2,infinite"
+        "${macs.poco},POCO_X3,10.0.55.2,infinite"
         ## Main Note
-        #"${gl62m-mac},Gl62m,10.0.66.3,infinite"
-        #"${gl62m-mac},Gl62m,10.0.55.3,infinite"
+        "${macs.gl62m},Gl62m,10.0.66.3,infinite"
+        "${macs.gl62m},Gl62m,10.0.55.3,infinite"
 
         # Wife's smartphone
-        #"${rn10c-mac},rn10c,10.0.55.4, infinite"
+        "${macs.rn10c},rn10c,10.0.55.4, infinite"
       ];
 
       # local domains

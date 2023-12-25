@@ -1,12 +1,12 @@
 {
     "0x00158d000633b922": {
         "occupancy": false,
-        "illuminance": 411,
-        "illuminance_lux": 411,
+        "illuminance": 226,
+        "illuminance_lux": 226,
         "linkquality": 36,
         "voltage": 3025,
         "battery": 100,
-        "device_temperature": 36,
+        "device_temperature": 38,
         "power_outage_count": 29
     }
 }

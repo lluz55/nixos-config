@@ -217,6 +217,19 @@
         "type": "github"
       }
     },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1702312524,
+        "narHash": "sha256-gkZJRDBUCpTPBvQk25G0B7vfbpEYM5s5OZqghkjZsnE=",
+        "path": "/nix/store/4fgs7yzsy2dqnjw8j42qlp9i1vgarzy0-source",
+        "rev": "a9bf124c46ef298113270b1f84a164865987a91c",
+        "type": "path"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
     "nixvim": {
       "inputs": {
         "beautysh": "beautysh",
@@ -300,8 +313,26 @@
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixvim": "nixvim",
+        "secrets": "secrets",
         "sops-nix": "sops-nix",
         "vscode-server": "vscode-server"
+      }
+    },
+    "secrets": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "dirtyRev": "80bd40114c7dea7fd1e8be25f1387ce9fad43e80-dirty",
+        "dirtyShortRev": "80bd401-dirty",
+        "lastModified": 1702589672,
+        "narHash": "sha256-nUZDI1Im4uXYXs+bx8xh0QJEljk4DnYlS+Rru/nKo1A=",
+        "type": "git",
+        "url": "file:///home/lluz/.secrets/"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///home/lluz/.secrets/"
       }
     },
     "sops-nix": {
