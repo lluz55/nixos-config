@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, secrets, ... }:
 let
   # Important ports 
   tailscale_port = toString config.services.tailscale.port;
@@ -18,8 +18,7 @@ let
   # TODO: To use git ssh key authentication the private key must be in `/root/.ssh` 
   # when using `nix-rebuild switch...`
   # TODO: Use own module for this
-  secrets = builtins.getFlake "git+ssh://git@github.com/lluz55/secrets.git";
-  macs = secrets.outputs.macs;
+  macs = secrets.macs;
 in
 with lib;
 {

@@ -1,5 +1,5 @@
 {
-  description = "Personal NixOs system flake";
+  description = "Pers system flake";
   # nixConfig = {
   #   extra-substituters = [
   #     "https://nix-community.cachix.org"
@@ -9,7 +9,7 @@
   #   ];
   # };
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixvim = {
       url = "github:nix-community/nixvim/nixos-23.05";
@@ -17,10 +17,6 @@
     };
     home-manager = {
       url = "github:nix-community/home-manager/master";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     vscode-server = {
@@ -31,14 +27,17 @@
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
-    secrets.url = "git+file:///home/lluz/.secrets/";
   };
 
-  outputs = inputs @ { self, secrets, nixpkgs, nixpkgs-unstable, home-manager, sops-nix, flake-parts, ... }:
+  outputs = inputs @ { self, nixpkgs, nixpkgs-unstable, home-manager, flake-parts, ... }:
     let
       users = import ./users.nix;
       master-user = users.master-user;
       karolayne = users.karolayne;
+      secrets = import (builtins.fetchGit {
+        url = "git+ssh://git@github.com/lluz55/secrets.git";
+        ref = "master";
+      });
     in
 
     flake-parts.lib.mkFlake { inherit inputs; }
@@ -52,7 +51,7 @@
           nixosConfigurations = (
             import ./hosts {
               inherit (nixpkgs) lib;
-              inherit sops-nix secrets;
+              inherit secrets;
               inherit inputs nixpkgs nixpkgs-unstable;
               inherit home-manager karolayne master-user;
             }

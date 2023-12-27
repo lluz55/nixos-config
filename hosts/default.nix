@@ -1,4 +1,4 @@
-{ inputs, secrets, home-manager, nixpkgs, nixpkgs-unstable, sops-nix, master-user, karolayne, ... }:
+{ inputs, secrets, home-manager, nixpkgs, nixpkgs-unstable, master-user, karolayne, ... }:
 let
   system = "x86_64-linux";
 
@@ -19,7 +19,7 @@ with lib;
     {
       inherit system;
       specialArgs = {
-        inherit inputs unstable master-user secrets;
+        inherit inputs pkgs unstable master-user secrets;
       };
       modules = [
         ./n100

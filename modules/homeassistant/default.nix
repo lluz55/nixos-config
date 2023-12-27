@@ -1,9 +1,12 @@
-{ pkgs, config, lib, master-user, ... }:
+{ pkgs, config, lib, master-user, secrets, ... }:
 let
   hass_path = "/home/${master-user.name}/.nixos-config/modules/homeassistant";
   mosquitto_path = "${hass_path}/mosquitto";
   hass_config_path = "${hass_path}/config";
   zigbee2mqtt_path = "${hass_path}/zigbee2mqtt";
+
+  mqtt = secrets.hass.mqtt;
+  host = secrets.host;
 in
 with lib; {
   config = mkIf (config.hass.enable) {
@@ -39,10 +42,6 @@ with lib; {
         "/run/udev/" = {
           hostPath = "/run/udev/";
         };
-        # Needed for zigbee2mqtt
-        "/var/env" = {
-          hostPath = config.sops.secrets.mqtt.path;
-        };
         # Needed for zigbee Coordenator
         "/dev/ttyACM0" = {
           hostPath = "/dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_86eda3e37f45ed11bdbac68f0a86e0b4-if00-port0";
@@ -61,8 +60,6 @@ with lib; {
         { node = "/dev/net/tun"; modifier = "rwm"; }
         # Needed for containers inside HASS container to work properly
         { node = "/dev/console"; modifier = "rwm"; }
-        # Needed for containers inside HASS container to work properly
-        { node = "${config.sops.secrets.mqtt.path}"; modifier = "rwm"; }
         # Needed for zigbee Coordenator
         {
           node = "/dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_86eda3e37f45ed11bdbac68f0a86e0b4-if00-port0";
@@ -98,7 +95,7 @@ with lib; {
             "/var/hass/config:/config:rw"
           ];
           extraOptions = [
-            "--network=host"
+            "--network=${host}"
             "--privileged"
           ];
         };
@@ -112,6 +109,9 @@ with lib; {
             "--network=host"
             "--env-file=/var/env"
           ];
+          environment = {
+            ZIGBEE2MQTT_CONFIG_PASSWORD = mqtt;
+          };
         };
 
         virtualisation.oci-containers.containers."zigbee2mqtt" = {
@@ -123,8 +123,10 @@ with lib; {
           extraOptions = [
             "--network=host"
             "--device=/dev/ttyACM0:/dev/ttyACM0"
-            "--env-file=/var/env"
           ];
+          environment = {
+            ZIGBEE2MQTT_CONFIG_PASSWORD = mqtt;
+          };
         };
       };
     };
