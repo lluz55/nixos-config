@@ -15,7 +15,10 @@ with lib;{
   imports = [
     ../modules/options.nix
   ];
+
+  home.stateVersion = "23.11";
   programs.home-manager.enable = true;
+
   dconf.settings = mkIf (config.gnome.enable) {
     "org/gnome/desktop/peripherals/keyboard" = {
       numlock-state = false;
