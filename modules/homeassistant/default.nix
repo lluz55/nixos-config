@@ -6,7 +6,6 @@ let
   zigbee2mqtt_path = "${hass_path}/zigbee2mqtt";
 
   mqtt = secrets.hass.mqtt;
-  host = secrets.host;
 in
 with lib; {
   config = mkIf (config.hass.enable) {
@@ -95,7 +94,7 @@ with lib; {
             "/var/hass/config:/config:rw"
           ];
           extraOptions = [
-            "--network=${host}"
+            "--network=host"
             "--privileged"
           ];
         };

@@ -15,6 +15,7 @@ in
 with lib;
 {
   imports = [ ../users.nix ];
+
   n100 = nixosSystem
     {
       inherit system;
@@ -23,7 +24,7 @@ with lib;
       };
       modules = [
         ./n100
-        ../modules/commom.nix
+        ../modules
         ./configuration.nix
         master-user.user
         home-manager.nixosModules.home-manager
@@ -47,7 +48,7 @@ with lib;
     };
     modules = [
       ./b450
-      ../modules/commom.nix
+      ./modules
       ./configuration.nix
       master-user.user
       home-manager.nixosModules.home-manager
@@ -72,7 +73,7 @@ with lib;
 
     modules = [
       ./gl62m
-      ../modules/commom.nix
+      ../modules
       ./configuration.nix
       karolayne.user
       master-user.user
