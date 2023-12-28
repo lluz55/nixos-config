@@ -57,6 +57,10 @@ with lib;{
       timeout = 2;
     };
     extraModulePackages = [ gasketPkg ];
+    tmp = {
+      useTmpfs = true;
+      tmpfsSize = "30%";
+    };
   };
 
   programs.light.enable = true;
