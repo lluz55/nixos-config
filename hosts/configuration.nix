@@ -1,23 +1,5 @@
-{ unstable, lib, pkgs, inputs, master-user, ... }:
-
+{ pkgs, inputs, master-user, ... }:
 {
-  #imports = ( 
-  #   import ../modules/desktops 
-  #   ++ import ../modules/editors
-  #   ++ import ../modules/hardware
-  #   ++ import ../modules/programs
-  #   ++ import ../modules/shell 
-  # );
-  #
-
-  #virtualisation.docker = {
-  #  enable = true;
-  #  rootless = {
-  #    enable = true;
-  #    setSocketVariable = true;
-  #  };
-  #};
-
   time.timeZone = "America/Recife";
   i18n = {
     defaultLocale = "pt_BR.UTF-8";
@@ -26,7 +8,6 @@
       LC_MONETARY = "pt_BR.UTF-8";
     };
   };
-
 
   security = {
     polkit.enable = true;
@@ -49,7 +30,6 @@
       EDITOR = "${master-user.editor}";
       VISUAL = "${master-user.editor}";
     };
-    #systemPackages = with pkgs; [ ];
   };
 
   programs.fish.enable = true;
@@ -57,6 +37,7 @@
 
   nix = {
     settings = {
+      tarball-ttl = 0;
       auto-optimise-store = true;
       experimental-features = [ "nix-command" "flakes" ];
     };
@@ -72,8 +53,4 @@
 
   system.stateVersion = "23.11";
 
-  home-manager.users.${master-user.name} = {
-    home.stateVersion = "23.11";
-    programs.home-manager.enable = true;
-  };
 }

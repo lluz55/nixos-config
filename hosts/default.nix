@@ -24,6 +24,7 @@ with lib;
       modules = [
         ./n100
         ../modules/commom.nix
+        ./configuration.nix
         master-user.user
         home-manager.nixosModules.home-manager
         {
@@ -47,6 +48,7 @@ with lib;
     modules = [
       ./b450
       ../modules/commom.nix
+      ./configuration.nix
       master-user.user
       home-manager.nixosModules.home-manager
       {
@@ -71,6 +73,7 @@ with lib;
     modules = [
       ./gl62m
       ../modules/commom.nix
+      ./configuration.nix
       karolayne.user
       master-user.user
       home-manager.nixosModules.home-manager
