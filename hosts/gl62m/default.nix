@@ -19,7 +19,16 @@ with lib; {
   };
 
   gnome.enable = true;
-
+  i18n = {
+    supportedLocales = lib.mkDefault [
+      "en_US.UTF-8/UTF-8"
+      "pt_BR.UTF-8/UTF-8"
+    ];
+  };
+  services.logind.extraConfig = ''
+    IdleAction=suspend
+    IdleActionSec=30min
+  '';
   console = {
     font = "Lat2-Terminus16";
     keyMap = "us";
