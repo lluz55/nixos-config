@@ -32,7 +32,7 @@
   outputs = inputs @ { self, nixpkgs, nixpkgs-unstable, home-manager, flake-parts, ... }:
     let
       users = import ./users.nix;
-      master-user = users.master-user;
+      masterUser = users.masterUser;
       karolayne = users.karolayne;
       secrets = import (builtins.fetchGit {
         url = "git+ssh://git@github.com/lluz55/secrets.git";
@@ -52,19 +52,19 @@
       mkSystem = name: cfg:
         let
           additionalUser = cfg.additionalUser or false;
+          masterUsername = masterUser.name;
         in
         with lib;
         nixosSystem
           {
             inherit system;
             specialArgs = {
-              inherit inputs unstable master-user secrets;
             } // attrsets.optionalAttrs (additionalUser) { inherit additionalUser; };
             modules = [
               ./modules
               ./hosts/configuration.nix
               ./hosts/${ name}
-              master-user.user
+              masterUser.user
               home-manager.nixosModules.home-manager
               {
                 home-manager = {

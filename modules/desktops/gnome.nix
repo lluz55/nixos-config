@@ -1,4 +1,4 @@
-{ config, lib, pkgs, master-user, ... }:
+{ config, lib, pkgs, masterUser, ... }:
 let
   colors = import ../theming/colors.nix;
 in

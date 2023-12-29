@@ -1,4 +1,4 @@
-{ config, master-user, lib, secrets, ... }:
+{ config, masterUser, lib, secrets, ... }:
 let
   frigate = secrets.hass.frigate;
 in
@@ -6,7 +6,7 @@ with lib;
 {
   config = mkIf (config.frigate.enable) {
     systemd.tmpfiles.rules = [
-      "d /home/${master-user.name}/.frigate 0770 ${master-user.name} users -"
+      "d /home/${masterUser.name}/.frigate 0770 ${masterUser.name} users -"
     ];
 
     virtualisation.oci-containers.containers = {
@@ -21,8 +21,8 @@ with lib;
         ];
         volumes = [
           "/etc/localtime:/etc/localtime:ro"
-          "/home/${master-user.name}/.nixos-config/modules/frigate:/config"
-          "/home/${master-user.name}/.frigate:/media/frigate"
+          "/home/${masterUser.name}/.nixos-config/modules/frigate:/config"
+          "/home/${masterUser.name}/.frigate:/media/frigate"
         ];
         environment = { FRIGATE_PASSWORD = frigate; };
         ports = [

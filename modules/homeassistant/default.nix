@@ -1,6 +1,6 @@
-{ pkgs, config, lib, master-user, secrets, ... }:
+{ pkgs, config, lib, masterUser, secrets, ... }:
 let
-  hass_path = "/home/${master-user.name}/.nixos-config/modules/homeassistant";
+  hass_path = "/home/${masterUser.name}/.nixos-config/modules/homeassistant";
   mosquitto_path = "${hass_path}/mosquitto";
   hass_config_path = "${hass_path}/config";
   zigbee2mqtt_path = "${hass_path}/zigbee2mqtt";
@@ -11,10 +11,10 @@ with lib; {
   config = mkIf (config.hass.enable) {
     # Create files if doens't exist for Docker/Podman
     systemd.tmpfiles.rules = [
-      "d ${hass_path} 0770 ${master-user.name} users -"
-      "d ${hass_config_path} 0770 ${master-user.name} users -"
-      "d ${mosquitto_path} 0770 ${master-user.name} users -"
-      "d ${zigbee2mqtt_path} 0770 ${master-user.name} users -"
+      "d ${hass_path} 0770 ${masterUser.name} users -"
+      "d ${hass_config_path} 0770 ${masterUser.name} users -"
+      "d ${mosquitto_path} 0770 ${masterUser.name} users -"
+      "d ${zigbee2mqtt_path} 0770 ${masterUser.name} users -"
     ];
 
     containers.hass = {

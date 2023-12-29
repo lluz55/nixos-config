@@ -1,5 +1,5 @@
 {
-  master-user = {
+  masterUser = {
     name = "lluz";
     terminal = "kitty";
     editor = "nvim";

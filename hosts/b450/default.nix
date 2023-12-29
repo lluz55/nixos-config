@@ -1,8 +1,8 @@
-{ pkgs, lib, config, master-user, ... }:
+{ pkgs, lib, config, masterUser, ... }:
 let
   launch_vnc = (pkgs.writeScriptBin "launch_vnc" ''
     #!${pkgs.stdenv.shell}
-    ${pkgs.turbovnc}/bin/Xvnc -iglx -depth 24 -rfbwait 120000 -deferupdate 1 -securitytypes none & DISPLAY=:0 ${pkgs.i3}/bin/i3 -c /home/${master-user.name}/.config/i3/config 
+    ${pkgs.turbovnc}/bin/Xvnc -iglx -depth 24 -rfbwait 120000 -deferupdate 1 -securitytypes none & DISPLAY=:0 ${pkgs.i3}/bin/i3 -c /home/${masterUser.name}/.config/i3/config 
   ''
   );
 in
@@ -73,7 +73,7 @@ with lib; {
   systemd.services.xvnc = {
     script = ''
       echo "Launch VNC"
-      #${pkgs.turbovnc}/bin/Xvnc -iglx -depth 24 -rfbwait 120000 -deferupdate 1 -securitytypes none & DISPLAY=:0 ${pkgs.i3}/bin/i3 -c /home/${master-user.name}/.config/i3/config 
+      #${pkgs.turbovnc}/bin/Xvnc -iglx -depth 24 -rfbwait 120000 -deferupdate 1 -securitytypes none & DISPLAY=:0 ${pkgs.i3}/bin/i3 -c /home/${masterUser.name}/.config/i3/config 
     '';
     wantedBy = [ "multi-user.target" ];
   };

@@ -1,4 +1,4 @@
-{ pkgs, inputs, master-user, ... }:
+{ pkgs, inputs, masterUser, ... }:
 {
   time.timeZone = "America/Recife";
   i18n = {
@@ -26,9 +26,9 @@
 
   environment = {
     variables = {
-      TERMINAL = "${master-user.terminal}";
-      EDITOR = "${master-user.editor}";
-      VISUAL = "${master-user.editor}";
+      TERMINAL = "${masterUser.terminal}";
+      EDITOR = "${masterUser.editor}";
+      VISUAL = "${masterUser.editor}";
     };
   };
 
