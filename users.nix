@@ -14,6 +14,7 @@
     };
   };
   karolayne = {
+    name = "karolayne";
     user = {
       users.users.karolayne = {
         isNormalUser = true;

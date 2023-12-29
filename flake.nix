@@ -52,7 +52,7 @@
       mkSystem = name: cfg:
         let
           masterUsername = masterUser.name;
-          additionalUserExists = (cfg.additionalUser or false);
+          additionalUserExists = ((cfg.additionalUser or null) != null);
           additionalUsername = cfg.additionalUser.name;
         in
         with lib;
@@ -87,7 +87,7 @@
             # In case additional modules was passed
             ++ (cfg.modules or [ ])
             # Details from additional user
-            ++ (cfg.additionalUser.user or [ ]);
+            ++ (if additionalUserExists then [ cfg.additionalUser.user ] else [ ]);
           };
       # All hosts
       hosts = {
