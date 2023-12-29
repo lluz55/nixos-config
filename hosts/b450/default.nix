@@ -8,7 +8,6 @@ let
 in
 with lib; {
   imports = [
-    ../../modules
     ./hardware-configuration.nix
   ];
 

@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, ... }:
 {
   services.dnsmasq = {
     enable = true;

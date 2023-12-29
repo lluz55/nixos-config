@@ -1,7 +1,6 @@
 #
 # Programs
 #
-
 [
   ./alacritty.nix
   ./eww.nix
