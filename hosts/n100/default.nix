@@ -27,6 +27,7 @@ with lib;{
   gnome.enable = false;
   hass.enable = true;
   frigate.enable = true;
+  vscode-server.enable = true;
 
   services.tailscale.enable = true;
   programs.mosh.enable = true;
