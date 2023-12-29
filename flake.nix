@@ -51,40 +51,50 @@
       };
       mkSystem = name: cfg:
         let
-          additionalUser = cfg.additionalUser or false;
           masterUsername = masterUser.name;
+          additionalUserExists = (cfg.additionalUser or false);
+          additionalUsername = cfg.additionalUser.name;
         in
         with lib;
         nixosSystem
           {
             inherit system;
             specialArgs = {
-            } // attrsets.optionalAttrs (additionalUser) { inherit additionalUser; };
+              inherit inputs unstable masterUser secrets;
+            } // attrsets.optionalAttrs (additionalUserExists) { inherit (cfg) additionalUser; };
             modules = [
               ./modules
               ./hosts/configuration.nix
-              ./hosts/${ name}
+              ./hosts/${name}
               masterUser.user
               home-manager.nixosModules.home-manager
               {
                 home-manager = {
                   useGlobalPkgs = true;
                   useUserPackages = true;
-                  extraSpecialArgs = { inherit pkgs unstable master-user; };
+                  extraSpecialArgs = { inherit pkgs unstable masterUser; };
                   users = {
-                    "${master-user.name}".imports = [ ./home/${master-user.name}.nix ];
+                    # Load HM configuration for main user
+                    "${masterUsername}".imports = [ ./home/${masterUsername}.nix ];
                   }
-                  // attrsets.optionalAttrs (additionalUser) {
-                    "${additionalUser.name}".imports = [ ./home/${additionalUser.name}.nix ];
+                  # Load HM configuration for additional user
+                  // attrsets.optionalAttrs (additionalUserExists) {
+                    "${additionalUsername}".imports = [ ./home/${additionalUsername}.nix ];
                   };
                 };
               }
-            ] ++ (cfg.modules or [ ]) ++ (cfg.additionalUser.user or [ ]);
+            ]
+            # In case additional modules was passed
+            ++ (cfg.modules or [ ])
+            # Details from additional user
+            ++ (cfg.additionalUser.user or [ ]);
           };
-      systems = {
+      # All hosts
+      hosts = {
         n100 = { };
         b450 = { };
         gl62m = {
+          # TODO: Maybe convert to a List
           additionalUser = karolayne;
         };
       };
@@ -97,7 +107,7 @@
             path = ./templates/flutter;
             description = "nix flake new -t github:lluz55/nixos-config#flutter <directory>";
           };
-          nixosConfigurations = lib.mapAttrs mkSystem systems;
+          nixosConfigurations = lib.mapAttrs mkSystem hosts;
         };
       };
 }
