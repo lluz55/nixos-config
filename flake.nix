@@ -38,8 +38,57 @@
         url = "git+ssh://git@github.com/lluz55/secrets.git";
         ref = "master";
       });
-    in
+      system = "x86_64-linux";
 
+      unstable = import nixpkgs-unstable {
+        inherit system;
+        config.allowUnfree = true;
+      };
+      lib = nixpkgs.lib;
+      pkgs = import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      };
+      mkSystem = name: cfg:
+        let
+          additionalUser = cfg.additionalUser or false;
+        in
+        with lib;
+        nixosSystem
+          {
+            inherit system;
+            specialArgs = {
+              inherit inputs unstable master-user secrets;
+            } // attrsets.optionalAttrs (additionalUser) { inherit additionalUser; };
+            modules = [
+              ./modules
+              ./hosts/configuration.nix
+              ./hosts/${ name}
+              master-user.user
+              home-manager.nixosModules.home-manager
+              {
+                home-manager = {
+                  useGlobalPkgs = true;
+                  useUserPackages = true;
+                  extraSpecialArgs = { inherit pkgs unstable master-user; };
+                  users = {
+                    "${master-user.name}".imports = [ ./home/${master-user.name}.nix ];
+                  }
+                  // attrsets.optionalAttrs (additionalUser) {
+                    "${additionalUser.name}".imports = [ ./home/${additionalUser.name}.nix ];
+                  };
+                };
+              }
+            ] ++ (cfg.modules or [ ]) ++ (cfg.additionalUser.user or [ ]);
+          };
+      systems = {
+        n100 = { };
+        b450 = { };
+        gl62m = {
+          additionalUser = karolayne;
+        };
+      };
+    in
     flake-parts.lib.mkFlake { inherit inputs; }
       {
         systems = [ "x86_64-linux" ];
@@ -48,14 +97,7 @@
             path = ./templates/flutter;
             description = "nix flake new -t github:lluz55/nixos-config#flutter <directory>";
           };
-          nixosConfigurations = (
-            import ./hosts {
-              inherit (nixpkgs) lib;
-              inherit secrets;
-              inherit inputs nixpkgs nixpkgs-unstable;
-              inherit home-manager karolayne master-user;
-            }
-          );
+          nixosConfigurations = lib.mapAttrs mkSystem systems;
         };
       };
 }
