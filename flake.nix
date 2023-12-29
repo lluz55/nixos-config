@@ -52,7 +52,7 @@
       mkSystem = name: cfg:
         let
           masterUsername = masterUser.name;
-          additionalUserExists = ((cfg.additionalUser or null) != null);
+          additionalUserExists = ((cfg.additionalUser or null) != null); # Variable must be boolean
           additionalUsername = cfg.additionalUser.name;
         in
         with lib;
@@ -77,8 +77,8 @@
                     # Load HM configuration for main user
                     "${masterUsername}".imports = [ ./home/${masterUsername}.nix ];
                   }
-                  # Load HM configuration for additional user
                   // attrsets.optionalAttrs (additionalUserExists) {
+                    # Load HM configuration for additional user
                     "${additionalUsername}".imports = [ ./home/${additionalUsername}.nix ];
                   };
                 };
