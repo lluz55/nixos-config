@@ -5,6 +5,9 @@ detectors: # <---- add detectors
   coral:
     type: edgetpu
     device: usb
+birdseye:
+  enabled: True
+  mode: motion
 
 cameras:
   frente_esquerda: # <------ Name the camera
