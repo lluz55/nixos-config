@@ -15,6 +15,27 @@ in
       checkRuleset = false;
       ruleset = ''
         table ip filter {
+          set authorized_home {
+            typeof ether saddr
+            flags constant
+            elements = {
+              ${config.macs.rn10c},
+              ${config.macs.poco},
+              ${config.macs.gl62m},
+              ${config.macs.b450},
+              ${config.macs.honor},
+              ${config.macs.mibox2},
+            }
+          }
+          set authorized_mgmt {
+            typeof ether saddr
+            flags constant
+            elements = {
+              ${config.macs.poco},
+              ${config.macs.gl62m},
+              ${config.macs.b450},
+            }
+          }
           flowtable f {
             hook ingress priority 0; 
             devices = { "${config.WAN}", "${config.LAN0}", "${config.LAN1}", "${config.LAN2}"};
@@ -31,6 +52,8 @@ in
             iifname {"vl-guests", "vl-home"} meta l4proto { udp, tcp} th dport 53 accept
             iifname "vl-guests" oifname { "vl-guests", "vl-home", "vl-mgmt", "br-cams", "br-lan"} drop comment "Block access to other networks"
             iifname "vl-home" oifname { "vl-guests", "vl-mgmt", "br-cams"} drop comment "Block access to other networks"
+            iifname { "vl-home" } ether saddr @authorized_home oifname "${config.WAN}" accept 
+            iifname { "vl-mgmt" } ether saddr @authorized_mgmt oifname "${config.WAN}" accept 
 
             iifname "${config.WAN}" ct state { established, related } accept comment "Allow established traffic"
             iifname "${config.WAN}" icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"
@@ -49,9 +72,11 @@ in
             ip protocol tcp flow add @f comment "Offload tcp/udp established traffic"
             ct status dnat accept comment "Allow NAT through interfaces"
 
+            iifname { "vl-home" } ether saddr @authorized_home oifname "${config.WAN}" accept 
+            iifname { "vl-mgmt" } ether saddr @authorized_mgmt oifname "${config.WAN}" accept 
             iifname { "br-cams" } oifname { "${config.WAN}" } udp dport ${ntp_port} accept comment "Allow NTP extenal access"
             iifname { "br-cams" } ip saddr 10.1.1.10 oifname { "${config.WAN}" } accept comment "Allow Frigate extenal access"
-            iifname { "br-lan", "vl-mgmt",  "vl-guests"} oifname { "${config.WAN}" } accept comment "Allow trusted config.LAN to ${config.WAN} (external access)"
+            iifname { "br-lan", "vl-guests"} oifname { "${config.WAN}" } accept comment "Allow trusted config.LAN to ${config.WAN} (external access)"
             iifname { "${config.WAN}" } oifname {  "br-lan", "vl-mgmt", "br-cams", "vl-home", "vl-guests" } ct state { established, related } accept comment "Allow established back to config.LANs"
           }
         }
