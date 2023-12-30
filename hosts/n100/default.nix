@@ -42,6 +42,7 @@ with lib;{
     wl-clipboard
     lm_sensors
     tailscale
+    arp-scan
     killall
     du-dust
     htop
