@@ -18,6 +18,7 @@ with lib;
           "--device=/dev/bus/usb:/dev/bus/usb"
           "--privileged"
           "--mount=type=tmpfs,target=/tmp/cache,tmpfs-size=1000000000"
+          "--cap-add=CAP_PERFMON"
         ];
         volumes = [
           "/etc/localtime:/etc/localtime:ro"

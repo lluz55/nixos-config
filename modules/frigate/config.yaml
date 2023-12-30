@@ -9,6 +9,7 @@ detectors: # <---- add detectors
 cameras:
   frente_esquerda: # <------ Name the camera
     ffmpeg:
+      hwaccel_args: preset-vaapi
       inputs:
         - path: rtsp://10.1.1.12:554/user=admin&password={FRIGATE_PASSWORD}&channel=1&stream=1.sdp
           roles:
@@ -48,6 +49,7 @@ cameras:
           - cat
   frente_direita:
     ffmpeg:
+      hwaccel_args: preset-vaapi
       inputs:
         - path: rtsp://10.1.1.11:554/user=lluz&password={FRIGATE_PASSWORD}&ch02.264?dev=1/live
           roles:
