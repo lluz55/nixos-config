@@ -81,6 +81,7 @@ with lib; {
           firewall.allowedTCPPorts = [ 8123 8080 ];
           useHostResolvConf = mkForce false;
           defaultGateway = "10.1.1.1";
+          nameservers = [ "1.1.1.1" "8.8.8.8" ];
         };
         services = {
           resolved.enable = true;
