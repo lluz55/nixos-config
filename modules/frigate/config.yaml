@@ -28,13 +28,21 @@ cameras:
     rtmp:
       enabled: False
     zones:  
-      varanda:
-        coordinates: 1204,720,1280,720,0,720,0,0,180,0
+      calcada_direita:
+        coordinates: 1280,242,1280,0,756,0,727,232
+        objects:
+          - person
+      calcada_esquerda:
+        coordinates: 346,45,0,68,0,248,294,234
+        objects:
+          - person
+      portao_dentro:
+        coordinates: 81,720,638,720,511,470,117,450
         objects:
           - person
           - cat
-      portao:
-        coordinates: 606,0,1280,403,1280,602,1157,634,252,0
+      portao_fora:
+        coordinates: 274,257,351,172,686,165,732,251
         objects:
           - person
     record:
@@ -61,18 +69,19 @@ cameras:
       height: 720 # <---- update for your camera's resolution
       fps: 5
     zones:  
-      varanda_direita:
-        coordinates: 1123,720,1280,524,1280,363,1219,318,640,634,629,720
+      varanda:
+        coordinates: 1280,720,1280,245,950,720
         objects:
           - person
           - cat
-      portao_direita:
-        coordinates: 555,548,859,429,734,367,552,435
+      frente_portao:
+        coordinates: 1091,393,1004,365,823,434,842,527
         objects:
           - person
+          - motorcycle
     motion:
       mask:
-        - 0,720,0,309,99,226,200,187,285,194,552,429,486,578,270,720
+        - 0,720,0,309,209,262,469,209,649,232,889,349,816,540,376,720
     snapshots:
       enabled: True
       bounding_box: False
@@ -92,6 +101,7 @@ objects:
   track:
     - person
     - cat
+    - motorcycle
   filters:
     person:
       min_area: 5000
