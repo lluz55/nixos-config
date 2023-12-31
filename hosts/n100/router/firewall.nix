@@ -76,8 +76,8 @@ in
             iifname { "vl-mgmt" } ether saddr @authorized_mgmt oifname "${config.WAN}" accept 
             iifname { "br-cams" } oifname { "${config.WAN}" } udp dport ${ntp_port} accept comment "Allow NTP extenal access"
             iifname { "br-cams" } ip saddr 10.1.1.10 oifname { "${config.WAN}" } accept comment "Allow Frigate extenal access"
-            iifname { "br-lan", "vl-guests"} oifname { "${config.WAN}" } accept comment "Allow trusted config.LAN to ${config.WAN} (external access)"
-            iifname { "${config.WAN}" } oifname {  "br-lan", "vl-mgmt", "br-cams", "vl-home", "vl-guests" } ct state { established, related } accept comment "Allow established back to config.LANs"
+            iifname { "br-lan", "vl-guests"} oifname { "${config.WAN}" } accept comment "Allow trusted to WAN interface (external access)"
+            iifname { "${config.WAN}" } oifname {  "br-lan", "vl-mgmt", "br-cams", "vl-home", "vl-guests" } ct state { established, related } accept comment "Allow established back to other networks"
           }
         }
 
