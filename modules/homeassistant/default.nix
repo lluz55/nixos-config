@@ -74,11 +74,13 @@ with lib; {
           netcat
           tcpdump
           tailscale
+          nmap
         ];
         system.stateVersion = "23.11";
         networking = {
-          firewall.enable = false;
-          firewall.allowedTCPPorts = [ 8123 8080 ];
+          firewall.enable = true;
+          firewall.allowedTCPPorts = [ 8123 8080 1883 ];
+          firewall.allowedUDPPorts = [ 1883 ];
           useHostResolvConf = mkForce false;
           defaultGateway = "10.1.1.1";
           nameservers = [ "1.1.1.1" "8.8.8.8" ];
@@ -107,7 +109,6 @@ with lib; {
           ];
           extraOptions = [
             "--network=host"
-            "--env-file=/var/env"
           ];
           environment = {
             ZIGBEE2MQTT_CONFIG_PASSWORD = mqtt;
