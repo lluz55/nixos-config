@@ -14,7 +14,7 @@ in
       enable = true;
       checkRuleset = false;
       ruleset = ''
-        table ip filter {
+        table inet filter {
           set authorized_home {
             typeof ether saddr
             flags constant
@@ -36,6 +36,9 @@ in
               ${config.macs.b450},
             }
           }
+          limit slow {
+            rate over 1 mbytes/second 
+          }
           flowtable f {
             hook ingress priority 0; 
             devices = { "${config.WAN}", "${config.LAN0}", "${config.LAN1}", "${config.LAN2}"};
@@ -54,6 +57,10 @@ in
             iifname "vl-home" oifname { "vl-guests", "vl-mgmt", "br-cams"} drop comment "Block access to other networks"
             iifname { "vl-home" } ether saddr @authorized_home oifname "${config.WAN}" accept 
             iifname { "vl-mgmt" } ether saddr @authorized_mgmt oifname "${config.WAN}" accept 
+            #iifname "vl-guests" oifname "${config.WAN}" accept
+            
+            # Limit guests network bandwidth
+            meta iifname "vl-guests" limit rate over 500 kbytes/second drop
 
             iifname "${config.WAN}" ct state { established, related } accept comment "Allow established traffic"
             iifname "${config.WAN}" icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"
