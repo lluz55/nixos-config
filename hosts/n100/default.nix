@@ -28,6 +28,7 @@ with lib;{
   hass.enable = true;
   frigate.enable = true;
   vscode-server.enable = true;
+  glances.enable = true;
 
   services.tailscale.enable = true;
   programs.mosh.enable = true;
@@ -45,6 +46,7 @@ with lib;{
     arp-scan
     killall
     du-dust
+    glances
     htop
     btop
     mosh

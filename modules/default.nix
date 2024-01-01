@@ -6,6 +6,7 @@
     ./shell
     ./homeassistant
     ./frigate
+    ./tools
 
     inputs.vscode-server.nixosModules.default
   ];

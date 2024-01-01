@@ -66,5 +66,14 @@ with lib;{
         '';
       };
     };
+    glanecs = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = mkDoc ''
+          Enable Glances and creating a startup service for it
+        '';
+      };
+    };
   };
 }

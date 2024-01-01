@@ -1,0 +1,6 @@
+{ ... }:
+{
+  imports = [
+    ./glances.nix
+  ];
+}
