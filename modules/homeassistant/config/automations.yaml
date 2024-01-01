@@ -1,1 +1,65 @@
-[]
+- id: '1704127526092'
+  alias: Pessoa no portão
+  description: Alguem está no portão
+  trigger:
+  - type: motion
+    platform: device
+    device_id: 1f7eabfa6745feda96d8bd8e91a7823f
+    entity_id: d4429a33e47a822cf2f6513e9ef42d32
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 1
+  condition: []
+  action:
+  - service: notify.mobile_app_sm_t725
+    data:
+      message: Alguem no portão
+    enabled: false
+  - service: notify.mobile_app_m2007j20cg
+    data:
+      message: Alguem no portão
+  - service: notify.mobile_app_sm_t725
+    data:
+      message: command_screen_on
+  mode: single
+- id: '1704128366970'
+  alias: No portão by câmera
+  description: Alguem está no portão
+  trigger:
+  - type: occupied
+    platform: device
+    device_id: 2b8a26947b47c51d2cdeb60024a1df07
+    entity_id: 985def2e262fbeac988d112b21738737
+    domain: binary_sensor
+    for:
+      hours: 0
+      minutes: 0
+      seconds: 1
+  condition: []
+  action:
+  - service: notify.mobile_app_sm_t725
+    data:
+      message: Alguem no portão
+    enabled: false
+  - service: notify.mobile_app_m2007j20cg
+    data:
+      message: Alguem no portão
+  - service: notify.mobile_app_sm_t725
+    data:
+      message: command_screen_on
+  mode: single
+- id: '1704130671221'
+  alias: Câmera esq test
+  description: ''
+  use_blueprint:
+    path: SgtBatten/Stable.yaml
+    input:
+      camera: camera.frente_esquerda
+      notify_device: 71c6c0351848b5c6d3aa985aaa5c43a4
+      message: '{{ label }} detected - {{ camera_name }}'
+      critical: 'true'
+      zone_filter: false
+      labels:
+      - person
