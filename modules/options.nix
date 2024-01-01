@@ -66,7 +66,7 @@ with lib;{
         '';
       };
     };
-    glanecs = {
+    glances = {
       enable = mkOption {
         type = types.bool;
         default = false;
