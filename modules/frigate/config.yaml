@@ -5,9 +5,6 @@ detectors: # <---- add detectors
   coral:
     type: edgetpu
     device: usb
-birdseye:
-  enabled: True
-  mode: motion
 
 cameras:
   frente_esquerda: # <------ Name the camera
@@ -27,18 +24,27 @@ cameras:
       enabled: True
       bounding_box: False
       required_zones:
-       - varanda
-       - portao
+       - calcada_direita
+       - calcada_esquerda
+       - portao_fora
+       - portao_dentro
     rtmp:
       enabled: False
     zones:  
-      varanda:
-        coordinates: 1204,720,1280,720,0,720,0,0,180,0
+      portao_fora:
+        coordinates: 322,177,742,156,771,240,297,241
         objects:
           - person
-          - cat
-      portao:
-        coordinates: 606,0,1280,403,1280,602,1157,634,252,0
+      portao_dentro:
+        coordinates: 537,720,65,720,90,451,558,467
+        objects:
+          - person
+      calcada_direita:
+        coordinates: 1280,245,805,237,817,76,1280,69
+        objects:
+          - person
+      calcada_esquerda:
+        coordinates: 328,126,0,131,0,249,305,233
         objects:
           - person
     record:
@@ -49,7 +55,6 @@ cameras:
           default: 10
         objects:
           - person
-          - cat
   frente_direita:
     ffmpeg:
       hwaccel_args: preset-vaapi
@@ -66,24 +71,25 @@ cameras:
       height: 720 # <---- update for your camera's resolution
       fps: 5
     zones:  
-      varanda_direita:
-        coordinates: 1123,720,1280,524,1280,363,1219,318,640,634,629,720
+      varanda:
+        coordinates: 1280,720,1280,265,507,720
         objects:
           - person
           - cat
-      portao_direita:
-        coordinates: 555,548,859,429,734,367,552,435
+      frente_portao:
+        coordinates: 889,503,1033,423,958,364,813,444
         objects:
           - person
+          - motorcycle
     motion:
       mask:
-        - 0,720,0,309,99,226,200,187,285,194,552,429,486,578,270,720
+        - 0,720,0,317,333,235,571,246,897,356,824,550,472,720
     snapshots:
       enabled: True
       bounding_box: False
-      required_zones:
-       - varanda_d 
-       - portao_d
+      #required_zones:
+        #- varanda_d 
+        #- portao_d
     record:
       enabled: True
       events:
@@ -97,6 +103,7 @@ objects:
   track:
     - person
     - cat
+    - motorcycle
   filters:
     person:
       min_area: 5000
