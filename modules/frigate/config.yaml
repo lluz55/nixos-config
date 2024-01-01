@@ -32,7 +32,7 @@ cameras:
       enabled: False
     zones:  
       portao_fora:
-        coordinates: 322,177,742,156,771,240,297,241
+        coordinates: 325,140,811,111,812,231,297,241
         objects:
           - person
       portao_dentro:
