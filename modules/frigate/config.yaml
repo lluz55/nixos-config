@@ -1,5 +1,9 @@
 mqtt:
-  enabled: False
+  enabled: True
+  user: lluz
+  password: "{FRIGATE_MQTT_PASSWORD}"
+  topic_prefix: zigbee2mqtt
+  host: 127.0.0.1
 
 detectors: # <---- add detectors
   coral:

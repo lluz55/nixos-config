@@ -1,6 +1,7 @@
 { config, masterUser, lib, secrets, ... }:
 let
   frigate = secrets.hass.frigate;
+  mqtt = secrets.hass.mqtt;
 in
 with lib;
 {
@@ -25,7 +26,10 @@ with lib;
           "/home/${masterUser.name}/.nixos-config/modules/frigate:/config"
           "/home/${masterUser.name}/.frigate:/media/frigate"
         ];
-        environment = { FRIGATE_PASSWORD = frigate; };
+        environment = {
+          FRIGATE_PASSWORD = frigate;
+          FRIGATE_MQTT_PASSWORD = mqtt;
+        };
         ports = [
           "5000:5000"
           "8554:8554"
