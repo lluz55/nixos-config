@@ -36,7 +36,7 @@ cameras:
       enabled: False
     zones:  
       portao_fora:
-        coordinates: 325,140,811,111,812,231,297,241
+        coordinates: 197,70,732,41,741,234,136,237
         objects:
           - person
       portao_dentro:
@@ -44,11 +44,11 @@ cameras:
         objects:
           - person
       calcada_direita:
-        coordinates: 1280,245,805,237,817,76,1280,69
+        coordinates: 1280,245,805,237,843,0,1280,0
         objects:
           - person
       calcada_esquerda:
-        coordinates: 328,126,0,131,0,249,305,233
+        coordinates: 229,50,0,62,0,249,202,244
         objects:
           - person
     record:
