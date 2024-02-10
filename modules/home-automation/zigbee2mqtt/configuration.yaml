@@ -1,0 +1,37 @@
+homeassistant:
+  discovery_topic: homeassistant
+  legacy_entity_attributes: true
+  legacy_triggers: true
+permit_join: false
+mqtt:
+  base_topic: zigbee2mqtt
+  server: mqtt://127.0.0.1
+  user: lluz
+  keepalive: 60
+  reject_unauthorized: true
+  version: 4
+serial:
+  port: /dev/ttyACM0
+frontend: true
+devices:
+  '0xa4c138cea8629bb4':
+    friendly_name: switch.main_entry
+  '0xa4c138288f164e42':
+    friendly_name: switch.bathroom
+  '0xa4c1384828367953':
+    friendly_name: contact.parents_main_door
+  '0x00158d000633b922':
+    friendly_name: motion.bathroom
+    occupancy_timeout: 1
+    no_occupancy_since: []
+  '0xa4c1382a40441b56':
+    friendly_name: contact.main_door
+  '0xa4c138a80e665643':
+    friendly_name: plugs.note_charger
+    state_action: false
+  '0xa4c138bd4ae0b0f1':
+    friendly_name: switch.parents_main_entry
+  '0x28dba7fffe60b5d5':
+    friendly_name: repeater_2_floor
+advanced:
+  log_level: info

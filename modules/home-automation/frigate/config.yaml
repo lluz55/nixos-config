@@ -1,0 +1,115 @@
+mqtt:
+  enabled: True
+  user: lluz
+  password: "{FRIGATE_MQTT_PASSWORD}"
+  host: 127.0.0.1
+
+detectors: # <---- add detectors
+  coral:
+    type: edgetpu
+    device: usb
+
+ffmpeg:
+  hwaccel_args: preset-vaapi
+
+cameras:
+  frente_esquerda: # <------ Name the camera
+    ffmpeg:
+      inputs:
+        - path: rtsp://10.1.1.12:554/user=admin&password={FRIGATE_PASSWORD}&channel=1&stream=1.sdp
+          roles:
+          - detect
+          - record
+    detect:
+      enabled: True # <---- disable detection until you have a working camera feed
+      width: 1280 # <---- update for your camera's resolution
+      height: 720 # <---- update for your camera's resolution
+      fps: 5
+    snapshots:
+      enabled: True
+      bounding_box: False
+      required_zones:
+       - calcada_direita
+       - calcada_esquerda
+       - portao_fora
+       - portao_dentro
+    rtmp:
+      enabled: False
+    zones:  
+      portao_fora:
+        coordinates: 197,70,732,41,741,234,136,237
+        objects:
+          - person
+      portao_dentro:
+        coordinates: 537,720,65,720,90,451,558,467
+        objects:
+          - person
+      calcada_direita:
+        coordinates: 1280,245,805,237,843,0,1280,0
+        objects:
+          - person
+      calcada_esquerda:
+        coordinates: 229,50,0,62,0,249,202,244
+        objects:
+          - person
+    record:
+      enabled: True
+      events:
+        retain:
+          mode: motion
+          default: 10
+        objects:
+          - person
+  frente_direita:
+    ffmpeg:
+      inputs:
+        - path: rtsp://10.1.1.11:554/user=lluz&password={FRIGATE_PASSWORD}&ch02.264?dev=1/live
+          roles:
+          - detect
+        - path: rtsp://10.1.1.11:554/user=lluz&password={FRIGATE_PASSWORD}&ch01.264?dev=1/live
+          roles:
+          - record
+    detect:
+      enabled: True # <---- disable detection until you have a working camera feed
+      width: 1280 # <---- update for your camera's resolution
+      height: 720 # <---- update for your camera's resolution
+      fps: 5
+    zones:  
+      varanda:
+        coordinates: 1280,720,1280,0,0,0,0,233
+        objects:
+          - person
+          - cat
+        filters:
+          person:
+            min_score: .8
+            threshold: .85
+    motion:
+      mask:
+        - 0,720,0,317,217,305,1070,720,472,720
+    snapshots:
+      enabled: True
+      bounding_box: False
+      #required_zones:
+        #- varanda_d 
+        #- portao_d
+    record:
+      enabled: True
+      events:
+        retain:
+          default: 10
+          mode: motion
+        objects:
+          - person
+          - cat
+objects:
+  track:
+    - person
+    - cat
+    - motorcycle
+  filters:
+    person:
+      min_area: 5000
+      max_area: 100000
+      min_score: 0.75
+      threshold: 0.75

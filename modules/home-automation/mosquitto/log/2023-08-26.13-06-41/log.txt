@@ -1,0 +1,15 @@
+info  2023-08-26 13:06:41: Logging to console and directory: '/app/data/log/2023-08-26.13-06-41' filename: log.txt
+info  2023-08-26 13:06:41: Starting Zigbee2MQTT version 1.32.2 (commit #1ec1e57)
+info  2023-08-26 13:06:41: Starting zigbee-herdsman (0.17.2)
+info  2023-08-26 13:06:42: zigbee-herdsman started (resumed)
+info  2023-08-26 13:06:42: Coordinator firmware version: '{"meta":{"maintrel":1,"majorrel":2,"minorrel":7,"product":1,"revision":20210708,"transportrev":2},"type":"zStack3x0"}'
+info  2023-08-26 13:06:42: Currently 1 devices are joined:
+info  2023-08-26 13:06:42: MonSen_Entrada_Quarto (0x00158d000633b922): RTCGQ11LM - Xiaomi Aqara human body movement and illuminance sensor (EndDevice)
+info  2023-08-26 13:06:42: Zigbee: disabling joining new devices.
+info  2023-08-26 13:06:42: Connecting to MQTT server at mqtt://172.18.0.4
+error 2023-08-26 13:12:11: Not connected to MQTT server!
+error 2023-08-26 13:12:11: Cannot send message: topic: 'zigbee2mqtt/bridge/state', payload: 'offline
+info  2023-08-26 13:12:11: Disconnecting from MQTT server
+info  2023-08-26 13:12:11: Stopping zigbee-herdsman...
+info  2023-08-26 13:12:21: Stopped zigbee-herdsman
+info  2023-08-26 13:12:21: Stopped Zigbee2MQTT

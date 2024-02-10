@@ -1,0 +1,20 @@
+homeassistant:
+  discovery_topic: homeassistant
+  legacy_entity_attributes: true
+  legacy_triggers: true
+permit_join: false
+mqtt:
+  base_topic: zigbee2mqtt
+  server: mqtt://127.0.0.1
+  user: lluz
+  keepalive: 60
+  reject_unauthorized: true
+  version: 4
+serial:
+  port: /dev/ttyUSB1
+frontend: true
+devices:
+  '0x00158d000633b922':
+    friendly_name: MonSen_Entrada_Quarto
+    occupancy_timeout: 1
+    illuminance_calibration: ''
