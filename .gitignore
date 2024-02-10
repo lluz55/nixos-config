@@ -1,0 +1,6 @@
+result
+modules/home-automation/zigbee2mqtt/log
+modules/home-automation/zigbee2mqtt/coordinator_backup.json
+modules/home-automation/homeassistant
+modules/home-automation/node-red
+
