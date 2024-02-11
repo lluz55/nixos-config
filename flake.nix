@@ -27,9 +27,13 @@
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
+    nix-direnv = {
+      url = "github:nix-community/nix-direnv";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = inputs @ { self, nixpkgs, nixpkgs-unstable, home-manager, flake-parts, ... }:
+  outputs = inputs @ { self, nixpkgs, nixpkgs-unstable, home-manager, flake-parts, nix-direnv, ... }:
     let
       users = import ./users.nix;
       masterUser = users.masterUser;
@@ -60,7 +64,7 @@
           {
             inherit system;
             specialArgs = {
-              inherit inputs unstable masterUser secrets;
+              inherit inputs unstable masterUser secrets nix-direnv;
             } // attrsets.optionalAttrs (additionalUserExists) { inherit (cfg) additionalUser; };
             modules = [
               ./modules
@@ -72,7 +76,7 @@
                 home-manager = {
                   useGlobalPkgs = true;
                   useUserPackages = true;
-                  extraSpecialArgs = { inherit pkgs unstable masterUser; };
+                  extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv; };
                   users = {
                     # Load HM configuration for main user
                     "${masterUsername}".imports = [ ./home/${masterUsername}.nix ];
@@ -103,9 +107,15 @@
       {
         systems = [ "x86_64-linux" ];
         flake = {
-          templates.flutter = {
-            path = ./templates/flutter;
-            description = "nix flake new -t github:lluz55/nixos-config#flutter <directory>";
+          templates = {
+            flutter = {
+              path = ./templates/flutter;
+              description = "nix flake new -t github:lluz55/nixos-config#flutter <directory>";
+            };
+            bevy = {
+              path = ./templates/bevy;
+              description = "nix flake new -t github:lluz55/nixos-config#bevy <directory>";
+            };
           };
           nixosConfigurations = lib.mapAttrs mkSystem hosts;
         };
