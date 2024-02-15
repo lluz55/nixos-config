@@ -1,5 +1,9 @@
-{ pkgs, inputs, masterUser, ... }:
 {
+  pkgs,
+  inputs,
+  masterUser,
+  ...
+}: {
   time.timeZone = "America/Recife";
   i18n = {
     defaultLocale = "pt_BR.UTF-8";
@@ -39,7 +43,7 @@
     settings = {
       tarball-ttl = 0;
       auto-optimise-store = true;
-      experimental-features = [ "nix-command" "flakes" ];
+      experimental-features = ["nix-command" "flakes"];
     };
     gc = {
       automatic = true;
@@ -52,5 +56,4 @@
   nixpkgs.config.allowUnfree = true;
 
   system.stateVersion = "23.11";
-
 }

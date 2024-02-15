@@ -1,10 +1,13 @@
-{ pkgs, lib, config, ... }:
+{ unstable
+, lib
+, config
+, pkgs
+, ...
+}:
 with lib; {
   imports = [
     ./hardware-configuration.nix
   ];
-
-  services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
     modesetting.enable = true;
@@ -25,14 +28,12 @@ with lib; {
       "pt_BR.UTF-8/UTF-8"
     ];
   };
-  services.logind.extraConfig = ''
-    IdleAction=suspend
-    IdleActionSec=30min
-  '';
+
   console = {
     font = "Lat2-Terminus16";
     keyMap = "us";
   };
+
   services = {
     openssh = {
       enable = true;
@@ -40,20 +41,25 @@ with lib; {
         PasswordAuthentication = true;
       };
     };
+    xserver.videoDrivers = [ "nvidia" ];
+    logind.extraConfig = ''
+      IdleAction=suspend
+      IdleActionSec=30min
+    '';
   };
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = unstable.linuxPackages_latest;
     loader = {
       grub = {
         enable = true;
         devices = [ "/dev/sda" ];
         useOSProber = true;
         configurationLimit = 2;
-        theme = pkgs.stdenv.mkDerivation {
+        theme = unstable.stdenv.mkDerivation {
           pname = "distro-grub-themes";
           version = "3.1";
-          src = pkgs.fetchFromGitHub {
+          src = unstable.fetchFromGitHub {
             owner = "AdisonCavani";
             repo = "distro-grub-themes";
             rev = "v3.1";
@@ -71,14 +77,14 @@ with lib; {
   #  enable = true;
   #  nix-direnv = {
   #    enable = true;
-  #    package = pkgs.nix-direnv;
+  #    package = unstable.nix-direnv;
   #  };
   #};
 
   #sway.enable = true;
 
   environment = {
-    systemPackages = with pkgs; [
+    systemPackages = with unstable; [
       vscode
       nmap
       remmina
@@ -86,6 +92,7 @@ with lib; {
       turbovnc
       lazygit
       vivaldi
+      rust-analyzer
     ];
   };
 }

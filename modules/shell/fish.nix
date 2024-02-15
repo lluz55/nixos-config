@@ -1,9 +1,10 @@
-{ lib, ... }:
-with lib;{
+{lib, ...}:
+with lib; {
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
       set fish_greeting
+       echo -n (date +%H:%M) (prompt_pwd)
     '';
     shellAliases = mkForce {
       ## Git aliases
@@ -21,7 +22,9 @@ with lib;{
 
       v = "nvim";
 
-      # Power related 
+      nv = "nix run github:notashelf/neovim-flake#maximal -- ";
+
+      # Power related
       sdn = "shutdown now";
       sdr = "shutdown -r now";
 

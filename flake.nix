@@ -31,13 +31,26 @@
       url = "github:nix-community/nix-direnv";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    neovim-flake = {
+      url = "github:NotAShelf/neovim-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    #neovim-flake.url = "github:lluz55/neovim-flake";
   };
 
-  outputs = inputs @ { self, nixpkgs, nixpkgs-unstable, home-manager, flake-parts, nix-direnv, ... }:
+  outputs =
+    inputs @ { nixpkgs
+    , nixpkgs-unstable
+    , home-manager
+    , flake-parts
+    , nix-direnv
+    , neovim-flake
+    , ...
+    }:
     let
       users = import ./users.nix;
-      masterUser = users.masterUser;
-      karolayne = users.karolayne;
+      inherit (users) masterUser;
+      inherit (users) karolayne;
       secrets = import (builtins.fetchGit {
         url = "git+ssh://git@github.com/lluz55/secrets.git";
       });
@@ -48,7 +61,7 @@
         inherit system;
         config.allowUnfree = true;
       };
-      lib = nixpkgs.lib;
+      inherit (nixpkgs) lib;
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
@@ -56,42 +69,50 @@
       mkSystem = name: cfg:
         let
           masterUsername = masterUser.name;
-          additionalUserExists = ((cfg.additionalUser or null) != null); # Variable must be boolean
+          additionalUserExists = (cfg.additionalUser or null) != null; # Variable must be boolean
           additionalUsername = cfg.additionalUser.name;
         in
         with lib;
         nixosSystem
           {
             inherit system;
-            specialArgs = {
-              inherit inputs unstable masterUser secrets nix-direnv;
-            } // attrsets.optionalAttrs (additionalUserExists) { inherit (cfg) additionalUser; };
-            modules = [
-              ./modules
-              ./hosts/configuration.nix
-              ./hosts/${name}
-              masterUser.user
-              home-manager.nixosModules.home-manager
+            specialArgs =
               {
-                home-manager = {
-                  useGlobalPkgs = true;
-                  useUserPackages = true;
-                  extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv; };
-                  users = {
-                    # Load HM configuration for main user
-                    "${masterUsername}".imports = [ ./home/${masterUsername}.nix ];
-                  }
-                  // attrsets.optionalAttrs (additionalUserExists) {
-                    # Load HM configuration for additional user
-                    "${additionalUsername}".imports = [ ./home/${additionalUsername}.nix ];
-                  };
-                };
+                inherit inputs unstable masterUser secrets nix-direnv;
               }
-            ]
-            # In case additional modules was passed
-            ++ (cfg.modules or [ ])
-            # Details from additional user
-            ++ (if additionalUserExists then [ cfg.additionalUser.user ] else [ ]);
+              // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
+            modules =
+              [
+                ./modules
+                ./hosts/configuration.nix
+                ./hosts/${name}
+                masterUser.user
+                home-manager.nixosModules.home-manager
+                {
+                  home-manager = {
+                    useGlobalPkgs = true;
+                    useUserPackages = true;
+                    extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv neovim-flake; };
+                    users =
+                      {
+                        # Load HM configuration for main user
+                        "${masterUsername}".imports = [ ./home/${masterUsername}.nix ];
+                      }
+                      // attrsets.optionalAttrs additionalUserExists {
+                        # Load HM configuration for additional user
+                        "${additionalUsername}".imports = [ ./home/${additionalUsername}.nix ];
+                      };
+                  };
+                }
+              ]
+              # In case additional modules was passed
+              ++ (cfg.modules or [ ])
+              # Details from additional user
+              ++ (
+                if additionalUserExists
+                then [ cfg.additionalUser.user ]
+                else [ ]
+              );
           };
       # All hosts
       hosts = {
@@ -117,6 +138,7 @@
               description = "nix flake new -t github:lluz55/nixos-config#bevy <directory>";
             };
           };
+          packages.${system}.neovim = neovim-flake.packages.${system}.maximal;
           nixosConfigurations = lib.mapAttrs mkSystem hosts;
         };
       };

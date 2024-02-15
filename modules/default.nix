@@ -1,5 +1,7 @@
-{ inputs, pkgs, ... }:
-{
+{ inputs
+, pkgs
+, ...
+}: {
   imports = [
     ./options.nix
     ./desktops
