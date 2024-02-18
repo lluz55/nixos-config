@@ -58,7 +58,6 @@ with lib;
           # Needed for debug
           netcat
           tcpdump
-          tailscale
           nmap
           arp-scan
         ];
