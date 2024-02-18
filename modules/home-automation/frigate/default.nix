@@ -3,7 +3,7 @@ let
   frigate_secret = secrets.hass.frigate;
   frigate_conf = "/home/${masterUser.name}/.nixos-config/modules/home-automation/frigate";
   frigate_media = "/home/${masterUser.name}/.frigate";
-  frigate_usb = "/dev/bus/usb/002/003";
+  frigate_usb = "/dev/bus/usb/002/002";
   mqtt_secret = secrets.hass.mqtt;
 
   containers = import ../../../utils/containers.nix { inherit masterUser; };
@@ -14,17 +14,34 @@ let
     "/dev/dri/renderD128"
   ];
   allowedDevices = containers.mkAllowedDevices { inherit devices; };
-  bindMounts = containers.mkBindMounts {devicesList = devices;};
+  bindMounts = containers.mkBindMounts { devicesList = devices; };
 in
 with lib;
 {
-  config = mkIf (config.frigate.enable ) {
+  
+  config = mkIf (config.frigate.enable && config.hass.enable) {
 
-    systemd.tmpfiles.rules = containers.mkCreateNeededFolders [
-      frigate_media
+    systemd.user.services.fix_frigate = {
+      script = ''
+        ${pkgs.ripgrep}/bin/rg --passthru '002/003' -N -r '002/002' ~/.nixos-config/modules/home-automation/frigate/default.nix > ~/.frigate.tmp && \
+        mv tmp ~/.nixos-config/modules/home-automation/frigate/default.nix \
+        sudo ${pkgs.nixos-rebuild}/bin/nixos-rebuild test --impure --flake ~/.nixos-config#n100 && \
+        ${pkgs.ripgrep}/bin/rg --passthru '002/002' -N -r '002/003' ~/.nixos-config/modules/home-automation/frigate/default.nix > ~/.frigate.tmp && \
+        mv tmp ~/.nixos-config/modules/home-automation/frigate/default.nix \
+        sudo ${pkgs.nixos-rebuild}/bin/nixos-rebuild test --impure --flake ~/.nixos-config#n100
+      '';
+      wantedBy = ["multi-user.target"];
+      standardOutput = "tty";
+      standardError= "tty";
+      after = "container@frigate.service";
+    };
+
+    boot.kernel.sysctl."kernel.perf_event_paranoid" = -1;
+    systemd.tmpfiles.rules = [
+      "d /home/${masterUser.name}/.frigate 0770 ${masterUser.name} users -"
     ];
 
-    containers.frigate= {
+    containers.frigate = {
       inherit allowedDevices;
       inherit bindMounts;
 
@@ -36,21 +53,22 @@ with lib;
       # Needed for containers inside HASS container to work properly
       additionalCapabilities = [
         ''all" --system-call-filter="add_key keyctl bpf" --capability="all''
-      ];
+     ];
 
       config = { ... }: {
-        # boot.isContainer = true;
+        boot. isContainer = true;
         system.stateVersion = "23.11";
 
-        environment.systemPackages = with pkgs; [];
+        environment.systemPackages = with pkgs; [
+        ];
 
         networking = {
           firewall.enable = true;
-          firewall.allowedTCPPorts = [ 5000 8554 8555 ];
-          firewall.allowedUDPPorts = [ 8555 ];
+            allowedTCPPorts = [ 5000 8554 8555 ];
+            allowedUDPPorts = [ 8555 ];
           useHostResolvConf = mkForce false;
           defaultGateway = "10.1.1.1";
-          nameservers = [ "1.1.1.1" "8.8.8.8" ];
+          # nameservers = [ "1.1.1.1" "8.8.8.8" ];
         };
 
         services = {
@@ -59,7 +77,7 @@ with lib;
         };
 
         virtualisation.oci-containers.containers = {
-          frigate_nvr= {
+          frigate = {
             image = "ghcr.io/blakeblackshear/frigate:stable";
             extraOptions = [
               "--shm-size=128mb"
@@ -85,6 +103,7 @@ with lib;
               "8555:8555/tcp"
             ];
           };
+
         };
       };
     };
