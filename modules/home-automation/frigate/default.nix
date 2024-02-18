@@ -1,9 +1,9 @@
-{ config, masterUser, lib, secrets, ... }:
+{ config, masterUser, lib, secrets, pkgs, ... }:
 let
   frigate_secret = secrets.hass.frigate;
   frigate_conf = "/home/${masterUser.name}/.nixos-config/modules/home-automation/frigate";
   frigate_media = "/home/${masterUser.name}/.frigate";
-  frigate_usb = "/dev/bus/usb/002/002";
+  frigate_usb = "/dev/bus/usb/002/003";
   mqtt_secret = secrets.hass.mqtt;
 
   containers = import ../../../utils/containers.nix { inherit masterUser; };
@@ -19,8 +19,7 @@ in
 with lib;
 {
   
-  config = mkIf (config.frigate.enable && config.hass.enable) {
-
+  config = mkIf (config.frigate.enable ) {
     systemd.user.services.fix_frigate = {
       script = ''
         ${pkgs.ripgrep}/bin/rg --passthru '002/003' -N -r '002/002' ~/.nixos-config/modules/home-automation/frigate/default.nix > ~/.frigate.tmp && \
@@ -31,9 +30,7 @@ with lib;
         sudo ${pkgs.nixos-rebuild}/bin/nixos-rebuild test --impure --flake ~/.nixos-config#n100
       '';
       wantedBy = ["multi-user.target"];
-      standardOutput = "tty";
-      standardError= "tty";
-      after = "container@frigate.service";
+      #after = "container@frigate.service";
     };
 
     boot.kernel.sysctl."kernel.perf_event_paranoid" = -1;
@@ -64,11 +61,11 @@ with lib;
 
         networking = {
           firewall.enable = true;
-            allowedTCPPorts = [ 5000 8554 8555 ];
-            allowedUDPPorts = [ 8555 ];
+           firewall.allowedTCPPorts = [ 5000 8554 8555 ];
+           firewall.allowedUDPPorts = [ 8555 ];
           useHostResolvConf = mkForce false;
           defaultGateway = "10.1.1.1";
-          # nameservers = [ "1.1.1.1" "8.8.8.8" ];
+          nameservers = [ "1.1.1.1" "8.8.8.8" ];
         };
 
         services = {
