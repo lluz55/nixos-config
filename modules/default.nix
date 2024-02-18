@@ -28,15 +28,17 @@
       glibc
     ]);
 
-  environment.systemPackages = with pkgs; [
+  environment.systemPackages = with unstable; [
     killall
     nmap
     lazygit
     htop
-    neovim-nightly
     ripgrep
     nil
     lua-language-server
+    sd
+    zoxide
+    helix
     (
       let
         base = pkgs.appimageTools.defaultFhsEnvArgs;
@@ -50,7 +52,7 @@
         extraOutputsToInstall = [ "dev" ];
       })
     )
-  ] ++ (with unstable; [
-    helix
+  ] ++ (with pkgs; [
+    neovim-nightly
   ]);
 }
