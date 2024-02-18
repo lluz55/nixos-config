@@ -23,21 +23,42 @@ with lib;
     systemd.tmpfiles.rules = [
       "d /home/${masterUser.name}/.frigate 0770 ${masterUser.name} users -"
     ];
-    containers.homeAuto = {
+
+    containers.frigate = {
       inherit allowedDevices;
       inherit bindMounts;
 
+      autoStart = true;
+      privateNetwork = true;
+      hostBridge = "br-cams";
+      localAddress = "10.1.1.9/24";
+
+      # Needed for containers inside HASS container to work properly
+      additionalCapabilities = [
+        ''all" --system-call-filter="add_key keyctl bpf" --capability="all''
+     ];
+
       config = { ... }: {
-        boot.isContainer = true;
+        boot. isContainer = true;
+        system.stateVersion = "23.11";
+
+        environment.systemPackages = with pkgs; [
+        ];
+
         networking = {
-          firewall = {
-            enable = true;
+          firewall.enable = true;
             allowedTCPPorts = [ 5000 8554 8555 ];
             allowedUDPPorts = [ 8555 ];
-          };
+          useHostResolvConf = mkForce false;
+          defaultGateway = "10.1.1.1";
+          # nameservers = [ "1.1.1.1" "8.8.8.8" ];
         };
 
-        system.stateVersion = "23.11";
+        services = {
+          resolved.enable = true;
+          tailscale.enable = true;
+        };
+
         virtualisation.oci-containers.containers = {
           frigate = {
             image = "ghcr.io/blakeblackshear/frigate:stable";
