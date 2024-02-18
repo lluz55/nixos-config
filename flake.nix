@@ -54,9 +54,9 @@
     , ...
     }:
     let
-      users = import ./users.nix;
       inherit (users) masterUser;
       inherit (users) karolayne;
+      users = import ./users.nix;
       secrets = import (builtins.fetchGit {
         url = "git+ssh://git@github.com/lluz55/secrets.git";
       });
@@ -68,6 +68,9 @@
         config.allowUnfree = true;
       };
       inherit (nixpkgs) lib;
+      overlays = [
+          inputs.neovim-nightly-overlay.overlay
+        ];
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
@@ -95,11 +98,14 @@
                 masterUser.user
                 home-manager.nixosModules.home-manager
                 nix-ld.nixosModules.nix-ld
+                ({
+                  nixpkgs.overlays = overlays;
+                })
                 {
                   home-manager = {
                     useGlobalPkgs = true;
                     useUserPackages = true;
-                    extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv neovim-flake; };
+                    extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv; };
                     users =
                       {
                         # Load HM configuration for main user

@@ -1,4 +1,4 @@
-{lib, ...}:
+{ lib, ... }:
 with lib; {
   programs.fish = {
     enable = true;
@@ -22,7 +22,7 @@ with lib; {
 
       v = "nvim";
 
-      nv = "nix run github:notashelf/neovim-flake#maximal -- ";
+      nvf = "nix run github:notashelf/neovim-flake#maximal -- ";
 
       # Power related
       sdn = "shutdown now";
