@@ -14,7 +14,7 @@ with lib;
               reverse_proxy 10.1.1.10:8123
           }
           "http://frigate.home" {
-              reverse_proxy 10.1.1.10:5000
+              reverse_proxy 10.1.1.9:5000 
           }
         '';
       };
