@@ -35,7 +35,12 @@
       url = "github:NotAShelf/neovim-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    #neovim-flake.url = "github:lluz55/neovim-flake";
+    nix-ld = {
+      url = "github:Mic92/nix-ld";
+      # this line assume that you also have nixpkgs as an input
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
   };
 
   outputs =
@@ -45,6 +50,7 @@
     , flake-parts
     , nix-direnv
     , neovim-flake
+    , nix-ld
     , ...
     }:
     let
@@ -88,6 +94,7 @@
                 ./hosts/${name}
                 masterUser.user
                 home-manager.nixosModules.home-manager
+                nix-ld.nixosModules.nix-ld
                 {
                   home-manager = {
                     useGlobalPkgs = true;

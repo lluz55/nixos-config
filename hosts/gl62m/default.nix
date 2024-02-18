@@ -92,7 +92,9 @@ with lib; {
       turbovnc
       lazygit
       vivaldi
-      rust-analyzer
+      #rust-analyzer
+      #neovim
+      rustup
     ];
   };
 }
