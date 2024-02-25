@@ -5,7 +5,7 @@ homeassistant:
 permit_join: false
 mqtt:
   base_topic: zigbee2mqtt
-  server: mqtt://127.0.0.1
+  server: mqtt://0.0.0.0
   user: lluz
   keepalive: 60
   reject_unauthorized: true
@@ -34,4 +34,4 @@ devices:
   '0x28dba7fffe60b5d5':
     friendly_name: repeater_2_floor
 advanced:
-  log_level: info
+  log_level: debug
