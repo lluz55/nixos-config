@@ -64,7 +64,7 @@ with lib;
 
         networking = {
           firewall.enable = true;
-          firewall.allowedTCPPorts = [ 8123 8080 1883 1880 ];
+          firewall.allowedTCPPorts = [ 8123 8080 1883 1880 80];
           firewall.allowedUDPPorts = [ 1883 ];
           useHostResolvConf = mkForce false;
           defaultGateway = "10.1.1.1";
