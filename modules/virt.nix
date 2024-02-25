@@ -1,24 +1,32 @@
-{pkgs, ...}: {
-  environment.systemPackages = with pkgs; [
-    virt-manager
-    virt-viwer
-    spice
-    spice-gtk
-    spice-protocol
-    wim-virtio
-    win-spice
-  ];
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
+with lib; {
+  config = mkIf config.virt-tools.enable {
+    environment.systemPackages = with pkgs; [
+      virt-manager
+      virt-viewer
+      spice
+      spice-gtk
+      spice-protocol
+      win-virtio
+      win-spice
+    ];
 
-  virtualisation = {
-    libvirtd = {
-      enable = true;
-      qemu = {
-        swtpm.enable = true;
-        ovmf.enable = true;
-        ovmf.packages = [pkgs.OVMFFull.fd];
+    virtualisation = {
+      libvirtd = {
+        enable = true;
+        qemu = {
+          swtpm.enable = true;
+          ovmf.enable = true;
+          ovmf.packages = [pkgs.OVMFFull.fd];
+        };
       };
+      spiceUSBRedirection.enable = true;
     };
-    spiceUSBRedirection.enable = true;
+    services.spice-vdagentd.enable = true;
   };
-  services.spice-vdagentd.enable = true;
 }

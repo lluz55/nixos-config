@@ -1,5 +1,5 @@
-{ lib, ... }:
-with lib;{
+{lib, ...}:
+with lib; {
   options = {
     wayland = {
       enable = mkOption {
@@ -90,6 +90,15 @@ with lib;{
         default = false;
         description = mkDoc ''
           Enable hyprland connector
+        '';
+      };
+    };
+    virt-tools = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = mkDoc ''
+          Enable virtualization tools
         '';
       };
     };
