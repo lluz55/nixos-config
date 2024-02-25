@@ -88,11 +88,13 @@ in
             iifname {"vl-mgmt", "br-lan", "vl-home"} tcp dport 8123 dnat 10.1.1.10 # Allow forwarding to Home Automation
             iifname {"vl-mgmt"} tcp dport 5000 dnat 10.1.1.9 # Allow forwarding to Frigate
             iifname {"vl-mgmt"} tcp dport 8080 dnat 10.1.1.10 # Allow forwarding to Zigbee2mqtt
+            tcp dport 80 dnat 10.1.1.10 # Allow forwarding to Emulated Hue - HASS
             iifname {"vl-mgmt"} tcp dport 1880 dnat 10.1.1.10 # Allow forwarding to NodeRed
             iifname {"br-lan"} ip saddr 192.168.1.99 tcp dport 8080 dnat 10.1.1.10:8080 # Allow Twingate forwarding to Zigbee2mqtt
             iifname {"br-lan"} ip saddr 192.168.1.99 tcp dport 5000 dnat 10.1.1.9:5000 # Allow Twingate forwarding to Frigate
             iifname {"vl-home"} tcp dport 5000 dnat 10.1.1.9 # Allow forwarding to Frigate
             iifname {"vl-home"} tcp dport 8080 dnat 10.1.1.10 # Allow forwarding to Zigbee2mqtt
+
             iifname {"vl-mgmt"} tcp dport 60014 dnat 10.1.1.14:34567 # Camera 14 XMY config
             iifname {"vl-mgmt"} tcp dport 60013 dnat 10.1.1.13:34567 # Camera 13 XMY config
             iifname {"vl-mgmt"} tcp dport 60012 dnat 10.1.1.12:34567 # Camera 12 XMY config
