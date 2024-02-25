@@ -1,8 +1,8 @@
-{ inputs
-, pkgs
-, unstable
-, options
-, ...
+{
+  inputs,
+  pkgs,
+  unstable,
+  ...
 }: {
   imports = [
     ./options.nix
@@ -11,48 +11,62 @@
     ./home-automation
     ./tools
     ./twingate.nix
-
+    ./virt.nix
     inputs.vscode-server.nixosModules.default
   ];
 
-  programs.nix-ld.enable = true;
+  # programs.nix-ld.enable = true;
+  # programs.nix-ld.libraries = options.programs.nix-ld.libraries.default ++ (with pkgs;
+  #   [
+  #     rust-analyzer
+  #     luajitPackages.luarocks # needed?
+  #     stylua # needed?
+  #     ast-grep
+  #     lua-language-server
+  #     python3
+  #     glibc
+  #   ]);
 
-  programs.nix-ld.libraries = options.programs.nix-ld.libraries.default ++ (with pkgs;
+  environment.systemPackages = with unstable;
     [
-      rust-analyzer
-      luajitPackages.luarocks # needed?
-      stylua # needed?
-      ast-grep
-      lua-language-server
-      python3
-      glibc
-    ]);
+      # PS2 Emulator
+      #pcsx2
 
-  environment.systemPackages = with unstable; [
-    killall
-    nmap
-    lazygit
-    htop
-    ripgrep
-    nil
-    lua-language-server
-    sd
-    zoxide
-    helix
-    (
-      let
-        base = pkgs.appimageTools.defaultFhsEnvArgs;
-      in
-      pkgs.buildFHSUserEnv (base
-        // {
-        name = "fhs";
-        targetPkgs = pkgs: (base.targetPkgs pkgs) ++ [ pkgs.pkg-config ];
-        profile = "export FHS=1";
-        runScript = "bash";
-        extraOutputsToInstall = [ "dev" ];
-      })
-    )
-  ] ++ (with pkgs; [
-    neovim-nightly
-  ]);
+      # Terminal tools
+      p7zip
+      htop
+      killall
+      ripgrep
+      zoxide
+      sd
+      broot
+
+      # Git
+      lazygit
+
+      # Network tools
+      nmap
+
+      # Development tools
+      nil
+      lua-language-server
+      helix
+      (
+        let
+          base = pkgs.appimageTools.defaultFhsEnvArgs;
+        in
+          pkgs.buildFHSUserEnv (base
+            // {
+              name = "fhs";
+              targetPkgs = pkgs: (base.targetPkgs pkgs) ++ [pkgs.pkg-config];
+              profile = "export FHS=1";
+              runScript = "bash";
+              extraOutputsToInstall = ["dev"];
+            })
+      )
+    ]
+    ++ (with pkgs; [
+      # Deveolpment tools
+      neovim-nightly
+    ]);
 }

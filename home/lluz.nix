@@ -8,6 +8,9 @@ with lib;
 {
   imports = [
     ../modules/options.nix
+    ../modules/hyprland
+    ../modules/waybar
+    ../modules/swaylock.nix
   ];
 
   home.stateVersion = "23.11";

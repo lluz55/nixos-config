@@ -14,7 +14,7 @@
     nixvim = {
       url = "github:nix-community/nixvim/nixos-23.05";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
+    };  
     home-manager = {
       url = "github:nix-community/home-manager/release-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -41,6 +41,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+    hyprland = {
+      url = "github:hyprwm/Hyprland";
+      url = "github:hyprwm/Hyprland/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    hyprland-nix.url = "github:spikespaz/hyprland-nix";    # hyprland-git.url = "github:hyprwm/hyprland/master";
+    hyprland-xdph-git.url = "github:hyprwm/xdg-desktop-portal-hyprland";
+    hyprland-protocols-git.url = "github:hyprwm/xdg-desktop-portal-hyprland";
+    hypr-contrib.url = "github:hyprwm/contrib";
+    hyprpicker.url = "github:hyprwm/hyprpicker";
+    
   };
 
   outputs =
@@ -106,6 +117,7 @@
                     useGlobalPkgs = true;
                     useUserPackages = true;
                     extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv; };
+                    extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs; };
                     users =
                       {
                         # Load HM configuration for main user

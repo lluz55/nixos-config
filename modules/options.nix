@@ -84,5 +84,14 @@ with lib;{
         '';
       };
     };
+    hyprland = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = mkDoc ''
+          Enable hyprland connector
+        '';
+      };
+    };
   };
 }

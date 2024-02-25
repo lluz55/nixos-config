@@ -1,8 +1,8 @@
-{ unstable
-, lib
-, config
-, pkgs
-, ...
+{
+  unstable,
+  lib,
+  config,
+  ...
 }:
 with lib; {
   imports = [
@@ -18,15 +18,33 @@ with lib; {
     prime = {
       intelBusId = "PCI:0:2:0";
       nvidiaBusId = "PCI:0:1:0";
+      sync.enable = true; # Disable NVIDIA GPU
+      #offload.enable = true;
+    };
+    powerManagement = {
+      enable = true;
+      #finegrained = true;
     };
   };
 
+  virt-tools.enable = true;
   gnome.enable = true;
+  hyprland.enable = true;
+  
   i18n = {
     supportedLocales = lib.mkDefault [
       "en_US.UTF-8/UTF-8"
       "pt_BR.UTF-8/UTF-8"
     ];
+  };
+
+  hardware.opengl = {
+    extraPackages = with unstable; [intel-media-driver];
+    # extraPackages32 = with unstable.pkgsi686Linux; [nvidia-vaapi-driver intel-media-driver];
+
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
   };
 
   console = {
@@ -41,10 +59,10 @@ with lib; {
         PasswordAuthentication = true;
       };
     };
-    xserver.videoDrivers = [ "nvidia" ];
+    xserver.videoDrivers = ["nvidia"];
     logind.extraConfig = ''
-      IdleAction=suspend
-      IdleActionSec=30min
+      IeAction=suspend
+      I#dleActionSec=30min
     '';
   };
 
@@ -53,9 +71,9 @@ with lib; {
     loader = {
       grub = {
         enable = true;
-        devices = [ "/dev/sda" ];
+        devices = ["/dev/sda"];
         useOSProber = true;
-        configurationLimit = 2;
+        configurationLimit = 4;
         theme = unstable.stdenv.mkDerivation {
           pname = "distro-grub-themes";
           version = "3.1";
