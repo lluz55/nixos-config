@@ -4,7 +4,8 @@ with lib; {
     enable = true;
     interactiveShellInit = ''
       set fish_greeting
-       echo -n (date +%H:%M) (prompt_pwd)
+      echo -n (date +%H:%M) (prompt_pwd)
+      zoxide init fish | source
     '';
     shellAliases = mkForce {
       ## Git aliases
@@ -30,6 +31,7 @@ with lib; {
 
       c = "clear";
 
+      
       # Changing "ls" to "exa"
       ls = "exa --icons --color=always --group-directories-first";
       lll = "exa -lF --icons --color=always --group-directories-first";
