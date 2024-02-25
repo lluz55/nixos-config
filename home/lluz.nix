@@ -39,13 +39,13 @@ with lib;
     };
   };
 
-  home.packages = with pkgs; [
+  home.packages = (with unstable; [
+      wget
       # Terminal
       eza
       fd
       git
       wget
-      ripgrep
       kitty
       starship
 
@@ -76,13 +76,25 @@ with lib;
       gnumake
       nodejs
       gcc
-    ]
-    ++ (with unstable; [
+
       # Terminal
       rustup
       zellij
-    ]);
+      nmap
+      lazygit
+      ripgrep
+      nil
+      lua-language-server
+      broot
+      sd
+      zoxide
+      neofetch
 
+      # Emulation - Windows VM
+      qemu
+      quickgui
+      quickemu 
+    ]);
 }
 # dev
 # nodejs
