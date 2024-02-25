@@ -93,6 +93,10 @@ in
             iifname {"br-lan"} ip saddr 192.168.1.99 tcp dport 5000 dnat 10.1.1.9:5000 # Allow Twingate forwarding to Frigate
             iifname {"vl-home"} tcp dport 5000 dnat 10.1.1.9 # Allow forwarding to Frigate
             iifname {"vl-home"} tcp dport 8080 dnat 10.1.1.10 # Allow forwarding to Zigbee2mqtt
+            iifname {"vl-mgmt"} tcp dport 60014 dnat 10.1.1.14:34567 # Camera 14 XMY config
+            iifname {"vl-mgmt"} tcp dport 60013 dnat 10.1.1.13:34567 # Camera 13 XMY config
+            iifname {"vl-mgmt"} tcp dport 60012 dnat 10.1.1.12:34567 # Camera 12 XMY config
+            iifname {"vl-mgmt"} tcp dport 60011 dnat 10.1.1.11:34567 # Camera 11 XMY config
           }
           chain postrouting {
             type nat hook postrouting priority srcnat; policy accept;
