@@ -89,6 +89,7 @@ with lib;
       sd
       zoxide
       neofetch
+      bat
 
       # Emulation - Windows VM
       qemu
