@@ -2,7 +2,7 @@
   masterUser = {
     name = "lluz";
     terminal = "kitty";
-    editor = "nvim";
+    editor = "hx";
     wallpaper = "./wallpapers/landscape.png";
     is_router = true;
     user = {
