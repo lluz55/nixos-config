@@ -42,7 +42,6 @@
     };
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     hyprland = {
-      url = "github:hyprwm/Hyprland";
       url = "github:hyprwm/Hyprland/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -116,7 +115,6 @@
                   home-manager = {
                     useGlobalPkgs = true;
                     useUserPackages = true;
-                    extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv; };
                     extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs; };
                     users =
                       {
@@ -157,6 +155,10 @@
             flutter = {
               path = ./templates/flutter;
               description = "nix flake new -t github:lluz55/nixos-config#flutter <directory>";
+            };
+            zig = {
+              path = ./templates/zig;
+              description = "nix flake new -t github:lluz55/nixos-config#zig <directory>";
             };
             bevy = {
               path = ./templates/bevy;
