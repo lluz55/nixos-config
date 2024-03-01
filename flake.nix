@@ -41,6 +41,7 @@
       url = "github:nix-community/nixvim/nixos-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    rust-overlay.url = "github:oxalica/rust-overlay";
     hyprland = {
       url = "github:hyprwm/Hyprland/main";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -62,6 +63,7 @@
     , neovim-flake
     , nix-ld
     , nixvim
+    , rust-overlay
     , ...
     }:
     let
@@ -81,6 +83,7 @@
       inherit (nixpkgs) lib;
       overlays = [
           inputs.neovim-nightly-overlay.overlay
+          rust-overlay.overlays.default
         ];
       pkgs = import nixpkgs {
         inherit system;
