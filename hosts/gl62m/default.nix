@@ -29,7 +29,7 @@ with lib; {
 
   virt-tools.enable = true;
   gnome.enable = true;
-  hyprland.enable = true;
+  #hyprland.enable = true;
   
   i18n = {
     supportedLocales = lib.mkDefault [
@@ -113,6 +113,7 @@ with lib; {
       #rust-analyzer
       #neovim
       rustup
+
     ];
   };
 }
