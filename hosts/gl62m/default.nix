@@ -114,6 +114,7 @@ with lib; {
       #neovim
       rustup
 
+      blender
     ];
   };
 }
