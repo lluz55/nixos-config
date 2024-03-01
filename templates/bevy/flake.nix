@@ -46,6 +46,7 @@
       xorg.libXi
       xorg.libX11
       xorg.libXrandr
+      libxkbcommon
     ];
   in {
     devShells.${system}.${app} = unstable.mkShell {
