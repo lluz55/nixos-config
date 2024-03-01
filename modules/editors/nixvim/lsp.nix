@@ -20,14 +20,8 @@
 						numThreads = 8;						
 					};
 				};
-
-				neo-tree = {
-					enable = true;
-					
-				}
-;
+				
 				nil_ls.enable = true;
-				treesitter.enable = true;
 
 			};
 		};

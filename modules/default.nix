@@ -12,6 +12,7 @@
     ./tools
     ./twingate.nix
     ./virt.nix
+    ./editors/nixvim
     inputs.vscode-server.nixosModules.default
   ];
 

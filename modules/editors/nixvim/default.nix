@@ -1,4 +1,4 @@
-{ }:
+{ pkgs, ... }:
 {
 	imports = [
 		./nvim-cmp.nix
@@ -8,7 +8,8 @@
 	];
 	programs.nixvim = {
 		enable = true;
-    colorschemes.gruvbox.enable = true;
+    # colorschemes.gruvbox.enable = true;
+		colorschemes.catppuccin.enable = true;
 
 		options = {
 			number = true;
@@ -26,5 +27,21 @@
 		plugins.bufferline = {
 			enable = true;
 		};
+
+		plugins.lightline = {
+			enable = true;
+			  active = {
+          left = [
+            ["mode" "paste"]
+            ["redaonly" "filename" "modified" ]
+          ];
+        };
+		};
+		plugins.treesitter.enable = true;
+
+		extraPlugins = with pkgs;[
+			vimPlugins.lazygit-nvim			
+			vimPlugins.which-key-nvim
+		];
 	};
 }
