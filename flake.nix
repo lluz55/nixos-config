@@ -11,10 +11,6 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixvim = {
-      url = "github:nix-community/nixvim/nixos-23.05";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };  
     home-manager = {
       url = "github:nix-community/home-manager/release-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -41,6 +37,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+    nixvim = {
+      url = "github:nix-community/nixvim/nixos-23.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     hyprland = {
       url = "github:hyprwm/Hyprland/main";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -61,6 +61,7 @@
     , nix-direnv
     , neovim-flake
     , nix-ld
+    , nixvim
     , ...
     }:
     let
@@ -97,7 +98,7 @@
             inherit system;
             specialArgs =
               {
-                inherit inputs unstable masterUser secrets nix-direnv;
+                inherit inputs unstable masterUser secrets nix-direnv ;
               }
               // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
             modules =
@@ -105,6 +106,7 @@
                 ./modules
                 ./hosts/configuration.nix
                 ./hosts/${name}
+                nixvim.nixosModules.nixvim
                 masterUser.user
                 home-manager.nixosModules.home-manager
                 nix-ld.nixosModules.nix-ld
