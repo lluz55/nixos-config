@@ -48,6 +48,7 @@
       xorg.libXrandr
       libxkbcommon
       udev
+      alsaLib
     ];
   in {
     devShells.${system}.${app} = unstable.mkShell {
