@@ -6,6 +6,7 @@ with lib; {
       set fish_greeting
       echo -n (date +%H:%M) (prompt_pwd)
       zoxide init fish | source
+      starship init fish | source
     '';
     shellAliases = mkForce {
       ## Git aliases
