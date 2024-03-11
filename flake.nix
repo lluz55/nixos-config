@@ -169,6 +169,10 @@
               path = ./templates/bevy;
               description = "nix flake new -t github:lluz55/nixos-config#bevy <directory>";
             };
+            godot_rust = {
+              path = ./templates/godot_rust;
+              description = "nix flake new -t github:lluz55/nixos-config#godot_rust <directory>";
+            };
           };
           packages.${system}.neovim = neovim-flake.packages.${system}.maximal;
           nixosConfigurations = lib.mapAttrs mkSystem hosts;
