@@ -127,6 +127,7 @@ with lib; {
       rustup
 
       blender
+      nvidia-vaapi-driver
     ];
   };
 }
