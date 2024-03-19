@@ -1,10 +1,10 @@
-{ ... }: 
-let 
+{ ... }:
+let
   custom = {
     font = "JetBrainsMono Nerd Font";
     fontsize = "12";
     primary_accent = "cba6f7";
-    secondary_accent= "89b4fa";
+    secondary_accent = "89b4fa";
     tertiary_accent = "f5f5f5";
     background = "11111B";
     opacity = "0.98";
@@ -30,7 +30,5 @@ let
 in
 {
   _module.args = { inherit custom; };
-  imports =  [ (import ./waybar.nix)   ]
-          ++ [ (import ./settings.nix) ]
-          ++ [ (import ./style.nix)    ];
+  imports = [ (import ./waybar.nix) ];
 }

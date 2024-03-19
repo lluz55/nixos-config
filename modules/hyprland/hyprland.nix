@@ -25,29 +25,6 @@ with lib; {
         XDG_SESSION_DESKTOP = "Hyprland";
         XDG_SESSION_TYPE = "wayland";
       };
-
-      packages = with unstable; [
-        # swww
-        swaybg
-        inputs.hypr-contrib.packages.${unstable.system}.grimblast
-        hyprpicker
-        wofi
-        grim
-        slurp
-        wl-clipboard
-        # cliphist
-        wf-recorder
-        glib
-        wayland
-        hyprland
-        (inputs.hyprland.packages."x86_64-linux".hyprland.override {
-          enableNvidiaPatches = true;
-        })
-
-        playerctl
-        acpi
-        brightnessctl
-      ];
     };
     systemd.user.targets.hyprland-session.Unit.Wants = [ "xdg-desktop-autostart.target" ];
     wayland.windowManager.hyprland = {
