@@ -1,8 +1,7 @@
-{
-  unstable,
-  lib,
-  config,
-  ...
+{ unstable
+, lib
+, config
+, ...
 }:
 with lib; {
   imports = [
@@ -27,10 +26,17 @@ with lib; {
     };
   };
 
+
+
+  zramSwap = {
+    enable = true;
+    algorithm = "lz4";
+  };
+
   virt-tools.enable = true;
   gnome.enable = true;
-  #hyprland.enable = true;
-  
+  hyprland.enable = true;
+
   i18n = {
     supportedLocales = lib.mkDefault [
       "en_US.UTF-8/UTF-8"
@@ -39,7 +45,7 @@ with lib; {
   };
 
   hardware.opengl = {
-    extraPackages = with unstable; [intel-media-driver];
+    extraPackages = with unstable; [ intel-media-driver ];
     # extraPackages32 = with unstable.pkgsi686Linux; [nvidia-vaapi-driver intel-media-driver];
 
     enable = true;
@@ -59,7 +65,7 @@ with lib; {
         PasswordAuthentication = true;
       };
     };
-    xserver.videoDrivers = ["nvidia"];
+    xserver.videoDrivers = [ "nvidia" ];
     logind.extraConfig = ''
       IeAction=suspend
       I#dleActionSec=30min
@@ -71,7 +77,7 @@ with lib; {
     loader = {
       grub = {
         enable = true;
-        devices = ["/dev/sda"];
+        devices = [ "/dev/sda" ];
         useOSProber = true;
         configurationLimit = 4;
         theme = unstable.stdenv.mkDerivation {
@@ -100,6 +106,13 @@ with lib; {
   #};
 
   #sway.enable = true;
+  hardware.pulseaudio.enable = false;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
 
   environment = {
     systemPackages = with unstable; [
@@ -110,11 +123,13 @@ with lib; {
       turbovnc
       lazygit
       vivaldi
-      #rust-analyzer
       #neovim
       rustup
 
       blender
+
+      font-awesome_4
+      nvidia-vaapi-driver
     ];
   };
 }

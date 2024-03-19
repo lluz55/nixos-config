@@ -1,12 +1,11 @@
-{ unstable, lib, config, ... }:
+{ unstable, lib, config, inputs, ... }:
 with lib;{
   config = mkIf config.hyprland.enable {
     programs.hyprland = {
       enable = true;
       package = unstable.hyprland;
       portalPackage = unstable.xdg-desktop-portal-hyprland;
-     enableNvidiaPatches = true;
-     xwayland.enable = true;
+      xwayland.enable = true;
     };
     xdg.portal = {
       enable = true;
@@ -14,25 +13,36 @@ with lib;{
       xdgOpenUsePortal = true;
       extraPortals = [
         unstable.xdg-desktop-portal-hyprland
-        unstable.xdg-desktop-portal-gtk
       ];
     };
-     systemd.user.services = {
-       xwaylandvideobridge = {
-         Unit = {
-           Description = "Tool to make it easy to stream wayland windows and screens to existing applications running under Xwayland";
-         };
 
-         Service = {
-           Type = "simple";
-           ExecStart = "${unstable.xwaylandvideobridge}/bin/xwaylandvideobridge";
-           Restart = "on-failure";
-         };
+    environment.systemPackages = (with unstable; [
+      # swww
+      swaybg
+      swaylock
+      inputs.hypr-contrib.packages.${unstable.system}.grimblast
+      hyprpicker
+      wofi
+      grim
+      slurp
+      wl-clipboard
+      # cliphist
+      wf-recorder
+      glib
+      python3
+      pipx
+      wlogout
+      wttrbar
 
-         Install = {
-           WantedBy = ["default.target"];
-         };
-       };
-     };
+      # wayland
+      # hyprland
+      #(inputs.hyprland.packages."x86_64-linux".hyprland.override {
+      #  # enableNvidiaPatches = true;
+      #})
+
+      playerctl
+      acpi
+      brightnessctl
+    ]);
   };
 }

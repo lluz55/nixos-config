@@ -1,8 +1,7 @@
-{
-  inputs,
-  pkgs,
-  unstable,
-  ...
+{ inputs
+, pkgs
+, unstable
+, ...
 }: {
   imports = [
     ./options.nix
@@ -12,7 +11,9 @@
     ./tools
     ./twingate.nix
     ./virt.nix
-    ./editors/nixvim
+    ./hyprland/core.nix
+    ./waybar/waybar.nix
+    #./editors/nixvim
     inputs.vscode-server.nixosModules.default
   ];
 
@@ -32,6 +33,8 @@
     [
       # PS2 Emulator
       #pcsx2
+
+      neovim
 
       # Terminal tools
       p7zip
@@ -56,18 +59,18 @@
         let
           base = pkgs.appimageTools.defaultFhsEnvArgs;
         in
-          pkgs.buildFHSUserEnv (base
-            // {
-              name = "fhs";
-              targetPkgs = pkgs: (base.targetPkgs pkgs) ++ [pkgs.pkg-config];
-              profile = "export FHS=1";
-              runScript = "bash";
-              extraOutputsToInstall = ["dev"];
-            })
+        pkgs.buildFHSUserEnv (base
+        // {
+          name = "fhs";
+          targetPkgs = pkgs: (base.targetPkgs pkgs) ++ [ pkgs.pkg-config ];
+          profile = "export FHS=1";
+          runScript = "bash";
+          extraOutputsToInstall = [ "dev" ];
+        })
       )
     ]
     ++ (with pkgs; [
       # Deveolpment tools
-      neovim-nightly
+      #neovim-nightly
     ]);
 }
