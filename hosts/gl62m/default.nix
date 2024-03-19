@@ -127,6 +127,8 @@ with lib; {
       rustup
 
       blender
+
+      font-awesome_4
       nvidia-vaapi-driver
     ];
   };
