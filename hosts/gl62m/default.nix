@@ -26,6 +26,13 @@ with lib; {
     };
   };
 
+
+
+  zramSwap = {
+    enable = true;
+    algorithm = "lz4";
+  };
+
   virt-tools.enable = true;
   gnome.enable = true;
   hyprland.enable = true;
