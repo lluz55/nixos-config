@@ -8,9 +8,6 @@ with lib;
 {
   imports = [
     ../modules/options.nix
-    ../modules/hyprland
-    ../modules/waybar
-    ../modules/swaylock.nix
   ];
 
   home.stateVersion = "23.11";
@@ -40,62 +37,62 @@ with lib;
   };
 
   home.packages = (with unstable; [
-      wget
-      # Terminal
-      eza
-      fd
-      git
-      wget
-      kitty
-      starship
+    wget
+    # Terminal
+    eza
+    fd
+    git
+    wget
+    kitty
+    starship
 
-      # Audio
-      pamixer
-      playerctl
+    # Audio
+    pamixer
+    playerctl
 
-      # Files
-      unzip
-      unrar
-      zip
+    # Files
+    unzip
+    unrar
+    zip
 
-      # browser
-      firefox
-      chromium
+    # browser
+    firefox
+    chromium
 
-      # social
-      discord
-      telegram-desktop
+    # social
+    discord
+    telegram-desktop
 
-      # dev
-      distrobox
-      docker
-      gh
+    # dev
+    distrobox
+    docker
+    gh
 
-      # TODO: DELETE AFTER INSTALL NEOVIM AS NIX PACKAGE
-      cmake
-      gnumake
-      nodejs
-      gcc
+    # TODO: DELETE AFTER INSTALL NEOVIM AS NIX PACKAGE
+    cmake
+    gnumake
+    nodejs
+    gcc
 
-      # Terminal
-      rustup
-      zellij
-      nmap
-      lazygit
-      ripgrep
-      nil
-      lua-language-server
-      broot
-      sd
-      zoxide
-      neofetch
-      bat
+    # Terminal
+    rustup
+    zellij
+    nmap
+    lazygit
+    ripgrep
+    nil
+    lua-language-server
+    broot
+    sd
+    zoxide
+    neofetch
+    bat
 
-      # Emulation - Windows VM
-      qemu
-      quickgui
-      quickemu 
-    ]);
+    # Emulation - Windows VM
+    qemu
+    quickgui
+    quickemu
+  ]);
 }
 # dev
 # nodejs

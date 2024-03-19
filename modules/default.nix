@@ -12,7 +12,7 @@
     ./tools
     ./twingate.nix
     ./virt.nix
-    ./editors/nixvim
+    #./editors/nixvim
     inputs.vscode-server.nixosModules.default
   ];
 
@@ -32,6 +32,8 @@
     [
       # PS2 Emulator
       #pcsx2
+
+			neovim
 
       # Terminal tools
       p7zip
@@ -68,6 +70,6 @@
     ]
     ++ (with pkgs; [
       # Deveolpment tools
-      neovim-nightly
+      #neovim-nightly
     ]);
 }

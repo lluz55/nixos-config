@@ -27,31 +27,31 @@
       url = "github:nix-community/nix-direnv";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    neovim-flake = {
-      url = "github:NotAShelf/neovim-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    #neovim-flake = {
+    #  url = "github:NotAShelf/neovim-flake";
+    #  inputs.nixpkgs.follows = "nixpkgs";
+    #};
     nix-ld = {
       url = "github:Mic92/nix-ld";
       # this line assume that you also have nixpkgs as an input
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
-    nixvim = {
-      url = "github:nix-community/nixvim/nixos-23.11";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    #neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+    #nixvim = {
+    #  url = "github:nix-community/nixvim/nixos-23.11";
+    #  inputs.nixpkgs.follows = "nixpkgs";
+    #};
     rust-overlay.url = "github:oxalica/rust-overlay";
     hyprland = {
       url = "github:hyprwm/Hyprland/main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hyprland-nix.url = "github:spikespaz/hyprland-nix";    # hyprland-git.url = "github:hyprwm/hyprland/master";
+    hyprland-nix.url = "github:spikespaz/hyprland-nix"; # hyprland-git.url = "github:hyprwm/hyprland/master";
     hyprland-xdph-git.url = "github:hyprwm/xdg-desktop-portal-hyprland";
     hyprland-protocols-git.url = "github:hyprwm/xdg-desktop-portal-hyprland";
     hypr-contrib.url = "github:hyprwm/contrib";
     hyprpicker.url = "github:hyprwm/hyprpicker";
-    
+
   };
 
   outputs =
@@ -60,9 +60,9 @@
     , home-manager
     , flake-parts
     , nix-direnv
-    , neovim-flake
+      #, neovim-flake
     , nix-ld
-    , nixvim
+      #, nixvim
     , rust-overlay
     , ...
     }:
@@ -82,9 +82,9 @@
       };
       inherit (nixpkgs) lib;
       overlays = [
-          inputs.neovim-nightly-overlay.overlay
-          rust-overlay.overlays.default
-        ];
+        #inputs.neovim-nightly-overlay.overlay
+        rust-overlay.overlays.default
+      ];
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
@@ -101,7 +101,7 @@
             inherit system;
             specialArgs =
               {
-                inherit inputs unstable masterUser secrets nix-direnv ;
+                inherit inputs unstable masterUser secrets nix-direnv;
               }
               // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
             modules =
@@ -109,7 +109,7 @@
                 ./modules
                 ./hosts/configuration.nix
                 ./hosts/${name}
-                nixvim.nixosModules.nixvim
+                #nixvim.nixosModules.nixvim
                 masterUser.user
                 home-manager.nixosModules.home-manager
                 nix-ld.nixosModules.nix-ld
@@ -174,7 +174,7 @@
               description = "nix flake new -t github:lluz55/nixos-config#godot_rust <directory>";
             };
           };
-          packages.${system}.neovim = neovim-flake.packages.${system}.maximal;
+          #packages.${system}.neovim = neovim-flake.packages.${system}.maximal;
           nixosConfigurations = lib.mapAttrs mkSystem hosts;
         };
       };
