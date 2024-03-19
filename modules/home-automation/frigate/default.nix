@@ -93,6 +93,7 @@ with lib;
             environment = {
               FRIGATE_PASSWORD = frigate_secret;
               FRIGATE_MQTT_PASSWORD = mqtt_secret;
+              TZ = "America/Recife";
             };
             ports = [
               "5000:5000"
