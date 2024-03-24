@@ -19,7 +19,7 @@
       system = "x86_64-linux";
       app = "game";
 
-      rust = unstable.rust-bin.beta.latest.default.override { extensions = [ "rust-src" ]; };
+      rust = unstable.rust-bin.nightly.latest.default.override { extensions = [ "rust-src" ]; };
       rustPlatform = unstable.makeRustPlatform {
         cargo = rust;
         rustc = rust;
@@ -51,6 +51,7 @@
         libxkbcommon
         udev
         alsaLib
+        rust-analyzer
       ];
     in
     {
@@ -58,10 +59,8 @@
         nativeBuildInputs = appNativeBuildInputs;
         buildInputs = shellInputs ++ appBuildInputs;
 
-        packages = with unstable; [ fish ];
         shellHook = ''
-          fish
-          export LD_LIBRARY_PATH = "$LD_LIBRARY_PATH:${unstable.lib.makeLibraryPath appRuntimeInputs}"
+          export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${unstable.lib.makeLibraryPath appRuntimeInputs}"
         '';
       };
       devShell.${system} = self.devShells.${system}.${app};
@@ -77,7 +76,7 @@
         buildInputs = appBuildInputs;
 
         postInstall = ''
-          cp - r assets $out/bin/
+          cp -r assets $out/bin/
         '';
       };
       defaultPackage.${system} = self.packages.${system}.${app};
@@ -91,4 +90,3 @@
       checks.${system}.build = self.packages.${system}.${app};
     };
 }
-
