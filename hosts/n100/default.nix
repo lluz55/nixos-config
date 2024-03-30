@@ -1,5 +1,5 @@
 { pkgs, config, lib, unstable, ... }:
-let
+  let
   gasketRev = "09385d485812088e04a98a6e1227bf92663e0b59";
   gasketPkg = (pkgs.gasket.overrideAttrs (final: prev: {
     version = builtins.substring 0 6 gasketRev;
@@ -86,7 +86,8 @@ with lib;{
   ];
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
+		# Must use 6.7 until find fix for Gasket kernel module
+    kernelPackages = pkgs.linuxPackages_6_7;
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
