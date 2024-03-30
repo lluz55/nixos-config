@@ -1,15 +1,17 @@
-{ pkgs, lib, config, masterUser, ... }:
-let
-  launch_vnc = (pkgs.writeScriptBin "launch_vnc" ''
-    #!${pkgs.stdenv.shell}
-    ${pkgs.turbovnc}/bin/Xvnc -iglx -depth 24 -rfbwait 120000 -deferupdate 1 -securitytypes none & DISPLAY=:0 ${pkgs.i3}/bin/i3 -c /home/${masterUser.name}/.config/i3/config 
-  ''
-  );
-in
+{ unstable
+, lib
+, config
+, ...
+}:
 with lib; {
   imports = [
     ./hardware-configuration.nix
   ];
+
+  virt-tools.enable = true;
+  gnome.enable = true;
+  hyprland.enable = true;
+  glances.enable = true;
 
   hardware.nvidia = {
     modesetting.enable = true;
@@ -19,71 +21,51 @@ with lib; {
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
-  hardware.opengl.enable = true;
-
-  gnome.enable = false;
-  vscode-server.enable = false;
-
-  networking.interfaces.eno1.wakeOnLan.enable = true;
-  services.openssh = {
+  networking.interfaces.eno1.wakeOnLan = {
     enable = true;
-    settings = {
-      PasswordAuthentication = true;
-    };
   };
-  networking.firewall.enable = false;
-  networking.firewall.allowedTCPPorts = [ 3389 ];
-  networking.hostName = "b450";
 
-  # HOW TO RUN TURBOVNC SERVER 
-  # Xvnc -iglx -depth 24 -rfbwait 120000 -deferupdate 1 -securitytypes none & DISPLAY=:0 i3 
-  programs.turbovnc.ensureHeadlessSoftwareOpenGL = true;
-
-  environment.pathsToLink = [ "/libexec" ];
-  services = {
-    xserver = {
-      enable = false;
-      videoDrivers = [ "nvidia" ];
-
-      desktopManager = {
-        xterm.enable = false;
-        xfce.enable = false;
-      };
-      displayManager = {
-        lightdm.enable = false;
-        autoLogin = {
-          enable = true;
-          user = "lluz";
-        };
-      };
-      windowManager.i3 = {
-        enable = true;
-        extraPackages = with pkgs; [
-          i3status # gives you the default i3 status bar
-          i3lock #default i3 screen locker
-          i3blocks #if you are planning on using i3blocks over i3status
-          picom-next
-          rofi
-          dmenu #application launcher most people use
-        ];
-      };
-    };
+  zramSwap = {
+    enable = true;
+    algorithm = "lz4";
   };
-  # Automatic start Xvnc
-  systemd.services.xvnc = {
-    script = ''
-      echo "Launch VNC"
-      #${pkgs.turbovnc}/bin/Xvnc -iglx -depth 24 -rfbwait 120000 -deferupdate 1 -securitytypes none & DISPLAY=:0 ${pkgs.i3}/bin/i3 -c /home/${masterUser.name}/.config/i3/config 
-    '';
-    wantedBy = [ "multi-user.target" ];
+
+  i18n = {
+    supportedLocales = lib.mkDefault [
+      "en_US.UTF-8/UTF-8"
+      "pt_BR.UTF-8/UTF-8"
+    ];
   };
+
+  hardware.opengl = {
+    # extraPackages = with unstable; [ intel-media-driver ];
+
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+  };
+
   console = {
     font = "Lat2-Terminus16";
-    keyMap = "br-abnt2";
+    keyMap = "us";
+  };
+
+  services = {
+    openssh = {
+      enable = true;
+      settings = {
+        PasswordAuthentication = true;
+      };
+    };
+    xserver.videoDrivers = [ "nvidia" ];
+    logind.extraConfig = ''
+      IeAction=suspend
+      I#dleActionSec=30min
+    '';
   };
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = unstable.linuxPackages_latest;
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
@@ -92,16 +74,39 @@ with lib; {
   };
 
   programs.light.enable = true;
+  #programs.direnv = {
+  #  enable = true;
+  #  nix-direnv = {
+  #    enable = true;
+  #    package = unstable.nix-direnv;
+  #  };
+  #};
 
   #sway.enable = true;
-
-  environment = {
-    systemPackages = with pkgs; [
-      turbovnc
-      vscode
-      vivaldi
-      launch_vnc
-    ];
+  hardware.pulseaudio.enable = false;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
   };
 
+  environment = {
+    systemPackages = with unstable; [
+      vscode
+      nmap
+      remmina
+      x2goclient
+      turbovnc
+      lazygit
+      vivaldi
+      neovim
+      rustup
+
+      blender
+
+      font-awesome_4
+      nvidia-vaapi-driver
+    ];
+  };
 }
