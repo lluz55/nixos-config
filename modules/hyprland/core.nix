@@ -30,7 +30,7 @@ with lib;{
       wf-recorder
       glib
       python3
-      pipx
+      # pipx
       wlogout
       wttrbar
 

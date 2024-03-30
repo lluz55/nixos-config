@@ -66,7 +66,6 @@ with lib;
     # dev
     distrobox
     docker
-    gh
 
     # TODO: DELETE AFTER INSTALL NEOVIM AS NIX PACKAGE
     cmake

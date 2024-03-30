@@ -46,6 +46,7 @@
       broot
 
       # Git
+      gh
       lazygit
 
       # Network tools
