@@ -10,6 +10,8 @@ with lib;{
     environment.systemPackages = with unstable; [
       # waybar icons
       font-awesome_4
+      jq
     ];
+
   };
 }
