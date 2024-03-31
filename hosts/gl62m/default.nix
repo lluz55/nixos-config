@@ -25,7 +25,10 @@ with lib; {
       intelBusId = "PCI:0:2:0";
       nvidiaBusId = "PCI:0:1:0";
       sync.enable = true; # Disable NVIDIA GPU
-      #offload.enable = true;
+      #offload = {
+      #  enable = true;
+      #  enableOffloadCmd = true;
+      #};
     };
     powerManagement = {
       enable = true;
