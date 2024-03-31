@@ -15,7 +15,7 @@ with lib;
 
   dconf.settings = mkIf config.gnome.enable {
     "org/gnome/desktop/peripherals/keyboard" = {
-      numlock-state = false;
+      numlock-state = true;
     };
 
     "org/gnome/shell" = {
