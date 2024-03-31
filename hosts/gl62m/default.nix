@@ -1,8 +1,15 @@
 { unstable
 , lib
 , config
+, pkgs-aarch64
+, self
 , ...
 }:
+let
+  pkgs-x86_64 = import unstable { system = "x86_64-linux"; };
+  # pkgs-aarch64 = import unstable { system = "aarch64-linux"; };
+  drive-flags = "format=raw,readonly=on";
+in
 with lib; {
   imports = [
     ./hardware-configuration.nix
@@ -114,22 +121,48 @@ with lib; {
     pulse.enable = true;
   };
 
-  environment = {
-    systemPackages = with unstable; [
-      vscode
-      nmap
-      remmina
-      x2goclient
-      turbovnc
-      lazygit
-      vivaldi
-      #neovim
-      rustup
+  environment =
+    let
+      aarch64-linux-vm =
+        unstable.writeScriptBin "run-nixos-vm-aarch64" ''
 
-      blender
+            #!${unstable.runtimeShell} \
+            ${unstable.qemu_full}/bin/qemu-system-aarch64 \
+            -machine virt \
+            -cpu cortex-a57 \
+            -m 2G \
+            -nographic \
+            -drive if=pflash,file=${pkgs-aarch64.OVMF.fd}/AAVMF/QEMU_EFI-pflash.raw,${drive-flags} \
+            -drive file=${self.packages."x86_64-linux".aarch64-linux-iso}/iso/nixos.iso,${drive-flags}
+            '';
+    in
+    {
+      systemPackages = with unstable;
+        [
+          aarch64-linux-vm
+          (unstable.writeShellScriptBin "nof" ''
+            export __NV_PRIME_RENDER_OFFLOAD=1
+            export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
+            export __GLX_VENDOR_LIBRARY_NAME=nvidia
+            export __VK_LAYER_NV_optimus=NVIDIA_only
+            exec "$@"
+          '')
+          vscode
+          nmap
+          remmina
+          x2goclient
+          turbovnc
+          lazygit
+          vivaldi
+          #neovim
+          rustup
 
-      font-awesome_4
-      nvidia-vaapi-driver
-    ];
-  };
+          blender
+
+          font-awesome_4
+          nvidia-vaapi-driver
+
+          wineWowPackages.stableFull
+        ];
+    };
 }
