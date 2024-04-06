@@ -9,7 +9,14 @@
       users.users.lluz = {
         isNormalUser = true;
         hashedPassword = "$6$JogEHvo2duy/W0Wa$6cFqRMbSTcry5v8kkfsXna61/TsWH0F5q0HsbXP.tMZvfvXydQX8EanJdiIcMijuLhyqj5Deg8HL/cerMuEO7/";
-        extraGroups = [ "audio" "camera" "networkmanager" "video" "wheel" "docker" ];
+        extraGroups = [
+          "audio"
+          "camera"
+          "networkmanager"
+          "video"
+          "wheel"
+          "docker"
+        ];
       };
     };
   };
