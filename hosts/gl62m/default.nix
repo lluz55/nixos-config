@@ -1,7 +1,7 @@
 { unstable
 , lib
 , config
-, pkgs-aarch64
+  #, pkgs-aarch64
 , self
 , ...
 }:
@@ -125,24 +125,24 @@ with lib; {
   };
 
   environment =
-    let
-      aarch64-linux-vm =
-        unstable.writeScriptBin "run-nixos-vm-aarch64" ''
+    #let
+    #  aarch64-linux-vm =
+    #    unstable.writeScriptBin "run-nixos-vm-aarch64" ''
 
-            #!${unstable.runtimeShell} \
-            ${unstable.qemu_full}/bin/qemu-system-aarch64 \
-            -machine virt \
-            -cpu cortex-a57 \
-            -m 2G \
-            -nographic \
-            -drive if=pflash,file=${pkgs-aarch64.OVMF.fd}/AAVMF/QEMU_EFI-pflash.raw,${drive-flags} \
-            -drive file=${self.packages."x86_64-linux".aarch64-linux-iso}/iso/nixos.iso,${drive-flags}
-            '';
-    in
+    #        #!${unstable.runtimeShell} \
+    #        ${unstable.qemu_full}/bin/qemu-system-aarch64 \
+    #        -machine virt \
+    #        -cpu cortex-a57 \
+    #        -m 2G \
+    #        -nographic \
+    #        -drive if=pflash,file=${pkgs-aarch64.OVMF.fd}/AAVMF/QEMU_EFI-pflash.raw,${drive-flags} \
+    #        -drive file=${self.packages."x86_64-linux".aarch64-linux-iso}/iso/nixos.iso,${drive-flags}
+    #        '';
+    #in
     {
       systemPackages = with unstable;
         [
-          aarch64-linux-vm
+          # aarch64-linux-vm
           (unstable.writeShellScriptBin "nof" ''
             export __NV_PRIME_RENDER_OFFLOAD=1
             export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
