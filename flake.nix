@@ -47,10 +47,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nixos-generators = {
-      url = "github:nix-community/nixos-generators";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    #nixos-generators = {
+    #  url = "github:nix-community/nixos-generators";
+    #  inputs.nixpkgs.follows = "nixpkgs";
+    #};
     hyprland-nix.url = "github:spikespaz/hyprland-nix"; # hyprland-git.url = "github:hyprwm/hyprland/master";
     hyprland-xdph-git.url = "github:hyprwm/xdg-desktop-portal-hyprland";
     hyprland-protocols-git.url = "github:hyprwm/xdg-desktop-portal-hyprland";
@@ -61,7 +61,7 @@
 
   outputs =
     inputs @ { nixpkgs
-    , self
+      # , self
     , nixpkgs-unstable
     , home-manager
     , flake-parts
@@ -70,7 +70,7 @@
     , nix-ld
       #, nixvim
     , rust-overlay
-    , nixos-generators
+      # , nixos-generators
     , ...
     }:
     let
@@ -82,16 +82,16 @@
       });
       #secrets = import ./secrets/default.nix;
       system = "x86_64-linux";
-      system-aarch64 = "aarch64-linux";
+      # system-aarch64 = "aarch64-linux";
 
       unstable = import nixpkgs-unstable {
         inherit system;
         config.allowUnfree = true;
       };
-      pkgs-aarch64 = import nixpkgs-unstable {
-        system = system-aarch64;
-        config.allowUnfree = true;
-      };
+      #pkgs-aarch64 = import nixpkgs-unstable {
+      #  system = system-aarch64;
+      #  config.allowUnfree = true;
+      #};
       inherit (nixpkgs) lib;
       overlays = [
         #inputs.neovim-nightly-overlay.overlay
@@ -113,7 +113,8 @@
             inherit system;
             specialArgs =
               {
-                inherit inputs unstable masterUser secrets nix-direnv pkgs-aarch64 self;
+                inherit inputs unstable masterUser secrets nix-direnv;
+                # inherit inputs unstable masterUser secrets nix-direnv pkgs-aarch64 self;
               }
               // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
             modules =
@@ -186,13 +187,13 @@
               description = "nix flake new -t github:lluz55/nixos-config#godot_rust <directory>";
             };
           };
-          packages."x86_64-linux" = {
-            aarch64-linux-iso = nixos-generators.nixosGenerate {
-              system = "x86_64-linux";
-              format = "iso";
-              modules = [ ./modules/aarch64-linux-base.nix ];
-            };
-          };
+          #packages."x86_64-linux" = {
+          #  aarch64-linux-iso = nixos-generators.nixosGenerate {
+          #    system = "x86_64-linux";
+          #    format = "iso";
+          #    modules = [ ./modules/aarch64-linux-base.nix ];
+          #  };
+          #};
           #packages.${system}.neovim = neovim-flake.packages.${system}.maximal;
           nixosConfigurations = lib.mapAttrs mkSystem hosts;
         };

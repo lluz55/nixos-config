@@ -1,8 +1,12 @@
 { unstable
 , lib
 , config
+  # , pkgs-aarch64
 , ...
 }:
+let
+  drive-flags = "format=raw,readonly=on";
+in
 with lib; {
   imports = [
     ./hardware-configuration.nix
@@ -18,7 +22,7 @@ with lib; {
     open = false;
 
     nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    package = config.boot.kernelPackages.nvidiaPackages.latest;
   };
 
   networking.interfaces.eno1.wakeOnLan = {
@@ -91,22 +95,38 @@ with lib; {
     pulse.enable = true;
   };
 
-  environment = {
-    systemPackages = with unstable; [
-      vscode
-      nmap
-      remmina
-      x2goclient
-      turbovnc
-      lazygit
-      vivaldi
-      neovim
-      rustup
+  environment =
+    #    let
+    #      aarch64-linux-vm =
+    #        unstable.writeScriptBin "run-nixos-vm-aarch64" ''
+    #
+    #            #!${unstable.runtimeShell} \
+    #            ${unstable.qemu_full}/bin/qemu-system-aarch64 \
+    #            -machine virt \
+    #            -cpu cortex-a57 \
+    #            -m 2G \
+    #            -nographic \
+    #            -drive if=pflash,file=${pkgs-aarch64.OVMF.fd}/AAVMF/QEMU_EFI-pflash.raw,${drive-flags} \
+    #            -drive file=/home/lluz/Downloads/nixos-aarch64-linux.iso,${drive-flags}
+    #            '';
+    #    in
+    {
+      systemPackages = with unstable; [
+        # aarch64-linux-vm
+        vscode
+        nmap
+        remmina
+        x2goclient
+        turbovnc
+        lazygit
+        vivaldi
+        neovim
+        rustup
 
-      blender
+        blender
 
-      font-awesome_4
-      nvidia-vaapi-driver
-    ];
-  };
+        font-awesome_4
+        nvidia-vaapi-driver
+      ];
+    };
 }
