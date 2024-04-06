@@ -37,6 +37,7 @@
         appRuntimeInputs
         ++ (with unstable; [
           udev
+          perl
           alsaLib
           vulkan-tools
           vulkan-headers
@@ -52,6 +53,7 @@
         udev
         alsaLib
         rust-analyzer
+        wayland
       ];
     in
     {
