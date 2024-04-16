@@ -15,6 +15,11 @@ with lib; {
     ./hardware-configuration.nix
   ];
 
+  virt-tools.enable = true;
+  gnome.enable = true;
+  hyprland.enable = true;
+  arduino.enable = true;
+
   hardware.nvidia = {
     modesetting.enable = true;
     open = false;
@@ -43,9 +48,6 @@ with lib; {
     algorithm = "lz4";
   };
 
-  virt-tools.enable = true;
-  gnome.enable = true;
-  hyprland.enable = true;
 
   i18n = {
     supportedLocales = lib.mkDefault [

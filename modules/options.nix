@@ -1,4 +1,4 @@
-{lib, ...}:
+{ lib, ... }:
 with lib; {
   options = {
     wayland = {
@@ -81,6 +81,15 @@ with lib; {
         default = false;
         description = mkDoc ''
           Enable twingate connector
+        '';
+      };
+    };
+    arduino = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = mkDoc ''
+          Enable use of Arduino IDE
         '';
       };
     };
