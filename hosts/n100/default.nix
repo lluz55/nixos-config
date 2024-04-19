@@ -86,8 +86,7 @@ with lib;{
   ];
 
   boot = {
-		# Must use 6.7 until find fix for Gasket kernel module
-    kernelPackages = pkgs.linuxPackages_6_7;
+    kernelPackages = pkgs.linuxPackages_6_6;
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
