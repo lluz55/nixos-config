@@ -26,6 +26,7 @@ in
               ${config.macs.honor},
               ${config.macs.mibox2},
               ${config.macs.tabs5e},
+              ${config.macs.a55},
             }
           }
           set authorized_mgmt {
@@ -35,6 +36,7 @@ in
               ${config.macs.poco},
               ${config.macs.gl62m},
               ${config.macs.b450},
+              ${config.macs.a55},
             }
           }
           limit slow {
