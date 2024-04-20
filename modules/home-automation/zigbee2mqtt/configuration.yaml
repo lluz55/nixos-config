@@ -33,5 +33,7 @@ devices:
     friendly_name: switch.parents_main_entry
   '0x28dba7fffe60b5d5':
     friendly_name: repeater_2_floor
+  '0xa4c138da0ccc3e82':
+    friendly_name: button_1_2nd_floor
 advanced:
   log_level: debug
