@@ -56,7 +56,15 @@ with lib;
         boot. isContainer = true;
         system.stateVersion = "23.11";
 
+        nix = {
+          settings = {
+            experimental-features = [ "nix-command" "flakes" ];
+          };
+        };
+
         environment.systemPackages = with pkgs; [
+          iptables
+          ripgrep
         ];
 
         networking = {
@@ -70,7 +78,6 @@ with lib;
 
         services = {
           resolved.enable = true;
-          tailscale.enable = true;
         };
 
         virtualisation.oci-containers.containers = {
@@ -101,7 +108,6 @@ with lib;
               "8555:8555/tcp"
             ];
           };
-
         };
       };
     };
