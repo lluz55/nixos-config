@@ -1,13 +1,5 @@
 {
   description = "Pers system flake";
-  # nixConfig = {
-  #   extra-substituters = [
-  #     "https://nix-community.cachix.org"
-  #   ];
-  #   extra-trusted-public-keys = [
-  #     "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-  #   ];
-  # };
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -27,49 +19,37 @@
       url = "github:nix-community/nix-direnv";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    #neovim-flake = {
-    #  url = "github:NotAShelf/neovim-flake";
-    #  inputs.nixpkgs.follows = "nixpkgs";
-    #};
-    nix-ld = {
-      url = "github:Mic92/nix-ld";
-      # this line assume that you also have nixpkgs as an input
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    #neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
-    #nixvim = {
-    #  url = "github:nix-community/nixvim/nixos-23.11";
-    #  inputs.nixpkgs.follows = "nixpkgs";
-    #};
     rust-overlay.url = "github:oxalica/rust-overlay";
-    hyprland = {
-      url = "github:hyprwm/Hyprland/main";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    hyprland-nix.url = "github:spikespaz/hyprland-nix"; # hyprland-git.url = "github:hyprwm/hyprland/master";
+    #hyprland-xdph-git.url = "github:hyprwm/xdg-desktop-portal-hyprland";
+    #hyprland-protocols-git.url = "github:hyprwm/xdg-desktop-portal-hyprland";
+    #hypr-contrib.url = "github:hyprwm/contrib";
+    #hyprpicker.url = "github:hyprwm/hyprpicker";
 
-    #nixos-generators = {
-    #  url = "github:nix-community/nixos-generators";
+    #nix-ld = {
+    #  url = "github:Mic92/nix-ld";
+    #  # this line assume that you also have nixpkgs as an input
     #  inputs.nixpkgs.follows = "nixpkgs";
     #};
-    hyprland-nix.url = "github:spikespaz/hyprland-nix"; # hyprland-git.url = "github:hyprwm/hyprland/master";
-    hyprland-xdph-git.url = "github:hyprwm/xdg-desktop-portal-hyprland";
-    hyprland-protocols-git.url = "github:hyprwm/xdg-desktop-portal-hyprland";
-    hypr-contrib.url = "github:hyprwm/contrib";
-    hyprpicker.url = "github:hyprwm/hyprpicker";
 
+    # nixConfig = {
+    #   extra-substituters = [
+    #     "https://nix-community.cachix.org"
+    #   ];
+    #   extra-trusted-public-keys = [
+    #     "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    #   ];
+    # };
   };
 
   outputs =
     inputs @ { nixpkgs
-      # , self
     , nixpkgs-unstable
     , home-manager
     , flake-parts
     , nix-direnv
-      #, neovim-flake
-    , nix-ld
-      #, nixvim
     , rust-overlay
+      # , nix-ld
       # , nixos-generators
     , ...
     }:
@@ -80,8 +60,8 @@
       secrets = import (builtins.fetchGit {
         url = "git+ssh://git@github.com/lluz55/secrets.git";
       });
-      #secrets = import ./secrets/default.nix;
       system = "x86_64-linux";
+      #secrets = import ./secrets/default.nix;
       # system-aarch64 = "aarch64-linux";
 
       unstable = import nixpkgs-unstable {
@@ -94,7 +74,6 @@
       #};
       inherit (nixpkgs) lib;
       overlays = [
-        #inputs.neovim-nightly-overlay.overlay
         rust-overlay.overlays.default
       ];
       pkgs = import nixpkgs {
@@ -114,7 +93,6 @@
             specialArgs =
               {
                 inherit inputs unstable masterUser secrets nix-direnv;
-                # inherit inputs unstable masterUser secrets nix-direnv pkgs-aarch64 self;
               }
               // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
             modules =
@@ -122,10 +100,9 @@
                 ./modules
                 ./hosts/configuration.nix
                 ./hosts/${name}
-                #nixvim.nixosModules.nixvim
                 masterUser.user
                 home-manager.nixosModules.home-manager
-                nix-ld.nixosModules.nix-ld
+                # nix-ld.nixosModules.nix-ld
                 ({
                   nixpkgs.overlays = overlays;
                 })

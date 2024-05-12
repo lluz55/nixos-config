@@ -15,10 +15,10 @@ with lib; {
     ./hardware-configuration.nix
   ];
 
-  virt-tools.enable = true;
+  virt-tools.enable = false;
   gnome.enable = true;
   hyprland.enable = true;
-  arduino.enable = true;
+  arduino.enable = false;
 
   hardware.nvidia = {
     modesetting.enable = true;

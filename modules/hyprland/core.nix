@@ -20,7 +20,7 @@ with lib;{
       # swww
       swaybg
       swaylock
-      inputs.hypr-contrib.packages.${unstable.system}.grimblast
+      # inputs.hypr-contrib.packages.${unstable.system}.grimblast
       hyprpicker
       wofi
       grim
