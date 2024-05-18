@@ -32,7 +32,9 @@ with lib; {
 
       c = "clear";
 
-      
+      # Zig
+      zbr = "zig build run";
+
       # Changing "ls" to "exa"
       ls = "exa --icons --color=always --group-directories-first";
       lll = "exa -lF --icons --color=always --group-directories-first";
