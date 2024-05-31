@@ -1,5 +1,5 @@
 { pkgs, config, lib, unstable, ... }:
-  let
+let
   gasketRev = "09385d485812088e04a98a6e1227bf92663e0b59";
   gasketPkg = (pkgs.gasket.overrideAttrs (final: prev: {
     version = builtins.substring 0 6 gasketRev;
@@ -27,7 +27,7 @@ with lib;{
   gnome.enable = false;
   hass.enable = true;
   frigate.enable = true;
-  vscode-server.enable = true;
+  vscode-server.enable = false;
   glances.enable = true;
   twingate.enable = true;
 

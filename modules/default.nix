@@ -14,7 +14,7 @@
     ./hyprland/core.nix
     ./waybar/waybar.nix
     #./editors/nixvim
-    inputs.vscode-server.nixosModules.default
+    # inputs.vscode-server.nixosModules.default
   ];
 
   # programs.nix-ld.enable = true;

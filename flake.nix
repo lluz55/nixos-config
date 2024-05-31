@@ -7,10 +7,10 @@
       url = "github:nix-community/home-manager/release-23.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    vscode-server = {
-      url = "github:nix-community/nixos-vscode-server";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    #vscode-server = {
+    #  url = "github:nix-community/nixos-vscode-server";
+    #  inputs.nixpkgs.follows = "nixpkgs";
+    #};
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
