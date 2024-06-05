@@ -4,9 +4,10 @@ with lib;{
     programs.waybar = {
       enable = true;
     };
-    programs.waybar.package = unstable.waybar.overrideAttrs (oa: {
-      mesonFlags = (oa.mesonFlags or [ ]) ++ [ "-Dexperimental=true" ];
-    });
+    programs.waybar.package = unstable.waybar;
+    #programs.waybar.package = unstable.waybar.overrideAttrs (oa: {
+    #  mesonFlags = (oa.mesonFlags or [ ]) ++ [ "-Dexperimental=true" ];
+    #});
     environment.systemPackages = with unstable; [
       # waybar icons
       font-awesome_4
