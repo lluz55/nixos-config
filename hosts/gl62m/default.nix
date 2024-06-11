@@ -159,6 +159,7 @@ with lib; {
           turbovnc
           lazygit
           vivaldi
+          vivaldi-ffmpeg-codecs
           #neovim
           rustup
 
