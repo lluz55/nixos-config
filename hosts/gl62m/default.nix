@@ -160,6 +160,7 @@ with lib; {
           lazygit
           vivaldi
           vivaldi-ffmpeg-codecs
+          helix
           #neovim
           rustup
 
