@@ -71,6 +71,7 @@ with lib; {
   };
 
   services = {
+    flatpak.enable = true;
     openssh = {
       enable = true;
       settings = {
@@ -158,8 +159,10 @@ with lib; {
           x2goclient
           turbovnc
           lazygit
-          vivaldi
-          vivaldi-ffmpeg-codecs
+          #(vivaldi.override {
+          #  proprietaryCodecs = true;
+          #})
+          #vivaldi-ffmpeg-codecs
           helix
           #neovim
           rustup
