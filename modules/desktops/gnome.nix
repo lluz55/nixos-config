@@ -6,13 +6,11 @@ with lib;
 {
   config = mkIf (config.gnome.enable) {
     services = {
+      libinput.enable = true;
       xserver = {
         enable = true;
-
-        layout = "us";
-        libinput.enable = true;
+        xkb.layout = "us";
         modules = [ ];
-
         displayManager.gdm.enable = true;
         desktopManager.gnome.enable = true;
       };

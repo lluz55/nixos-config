@@ -1,10 +1,10 @@
 {
   description = "Pers system flake";
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
-      url = "github:nix-community/home-manager/release-23.11";
+      url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     #vscode-server = {
@@ -20,7 +20,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     rust-overlay.url = "github:oxalica/rust-overlay";
-    hyprland-nix.url = "github:spikespaz/hyprland-nix"; # hyprland-git.url = "github:hyprwm/hyprland/master";
+    nixos-cosmic = {
+      url = "github:lilyinstarlight/nixos-cosmic";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    # hyprland-nix.url = "github:spikespaz/hyprland-nix"; # hyprland-git.url = "github:hyprwm/hyprland/master";
     #hyprland-xdph-git.url = "github:hyprwm/xdg-desktop-portal-hyprland";
     #hyprland-protocols-git.url = "github:hyprwm/xdg-desktop-portal-hyprland";
     #hypr-contrib.url = "github:hyprwm/contrib";
@@ -49,6 +53,7 @@
     , flake-parts
     , nix-direnv
     , rust-overlay
+    , nixos-cosmic
       # , nix-ld
       # , nixos-generators
     , ...
@@ -106,6 +111,13 @@
                 ({
                   nixpkgs.overlays = overlays;
                 })
+                {
+                  nix.settings = {
+                    substituters = [ "https://cosmic.cachix.org/" ];
+                    trusted-public-keys = [ "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE=" ];
+                  };
+                }
+                nixos-cosmic.nixosModules.default
                 {
                   home-manager = {
                     useGlobalPkgs = true;

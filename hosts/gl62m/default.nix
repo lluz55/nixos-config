@@ -17,8 +17,11 @@ with lib; {
 
   virt-tools.enable = false;
   gnome.enable = true;
-  hyprland.enable = true;
+  hyprland.enable = false;
   arduino.enable = false;
+
+  # services.desktopManager.cosmic.enable = true;
+  # services.displayManager.cosmic-greeter.enable = true;
 
   hardware.nvidia = {
     modesetting.enable = true;
@@ -88,22 +91,25 @@ with lib; {
   boot = {
     kernelPackages = unstable.linuxPackages_latest;
     loader = {
+        efi.canTouchEfiVariables = true;
       grub = {
         enable = true;
-        devices = [ "/dev/sda" ];
+        # devices = [ "/dev/sda" ];
+        device = "/dev/sdb";
         useOSProber = true;
         configurationLimit = 4;
-        theme = unstable.stdenv.mkDerivation {
-          pname = "distro-grub-themes";
-          version = "3.1";
-          src = unstable.fetchFromGitHub {
-            owner = "AdisonCavani";
-            repo = "distro-grub-themes";
-            rev = "v3.1";
-            hash = "sha256-ZcoGbbOMDDwjLhsvs77C7G7vINQnprdfI37a9ccrmPs=";
-          };
-          installPhase = "cp -r customize/nixos $out";
-        };
+        efiSupport = true;
+        #theme = unstable.stdenv.mkDerivation {
+        #  pname = "distro-grub-themes";
+        #  version = "3.1";
+        #  src = unstable.fetchFromGitHub {
+        #    owner = "AdisonCavani";
+        #    repo = "distro-grub-themes";
+        #    rev = "v3.1";
+        #    hash = "sha256-ZcoGbbOMDDwjLhsvs77C7G7vINQnprdfI37a9ccrmPs=";
+        #  };
+        #  installPhase = "cp -r customize/nixos $out";
+        #};
       };
       timeout = 3;
     };
