@@ -16,12 +16,12 @@ with lib; {
   ];
 
   virt-tools.enable = false;
-  gnome.enable = true;
+  gnome.enable = false;
   hyprland.enable = false;
   arduino.enable = false;
 
-  # services.desktopManager.cosmic.enable = true;
-  # services.displayManager.cosmic-greeter.enable = true;
+   services.desktopManager.cosmic.enable = true;
+   services.displayManager.cosmic-greeter.enable = true;
 
   hardware.nvidia = {
     modesetting.enable = true;
@@ -179,6 +179,8 @@ with lib; {
           nvidia-vaapi-driver
 
           wineWowPackages.stableFull
+          cosmic-applets
+          dust
         ];
     };
 }
