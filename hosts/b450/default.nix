@@ -13,9 +13,12 @@ with lib; {
   ];
 
   virt-tools.enable = true;
-  gnome.enable = true;
-  hyprland.enable = true;
+  gnome.enable = false;
+  hyprland.enable = false;
   glances.enable = true;
+
+   services.desktopManager.cosmic.enable = true;
+   services.displayManager.cosmic-greeter.enable = true;
 
   hardware.nvidia = {
     modesetting.enable = true;
@@ -45,7 +48,7 @@ with lib; {
     # extraPackages = with unstable; [ intel-media-driver ];
 
     enable = true;
-    driSupport = true;
+    # driSupport = true;
     driSupport32Bit = true;
   };
 
