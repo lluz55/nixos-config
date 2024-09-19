@@ -60,6 +60,7 @@ with lib;
     chromium
 
     # social
+
     discord
     telegram-desktop
 
@@ -88,9 +89,10 @@ with lib;
     bat
 
     # Emulation - Windows VM
-    qemu
-    quickgui
-    quickemu
+    # qemu     !!! FLUTTER ERROR 19/09
+    # quickgui !!! FLUTTER ERROR 19/09
+    # quickemu !!! FLUTTER ERROR 19/09
+    # https://github.com/NixOS/nixpkgs/issues/341893
   ]);
 }
 # dev
