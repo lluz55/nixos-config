@@ -18,8 +18,8 @@ let
 in
 with lib;
 {
-  
-  config = mkIf (config.frigate.enable ) {
+
+  config = mkIf (config.frigate.enable) {
     systemd.user.services.fix_frigate = {
       script = ''
         ${pkgs.ripgrep}/bin/rg --passthru '002/003' -N -r '002/002' ~/.nixos-config/modules/home-automation/frigate/default.nix > ~/.frigate.tmp && \
@@ -29,7 +29,7 @@ with lib;
         mv tmp ~/.nixos-config/modules/home-automation/frigate/default.nix \
         sudo ${pkgs.nixos-rebuild}/bin/nixos-rebuild test --impure --flake ~/.nixos-config#n100
       '';
-      wantedBy = ["multi-user.target"];
+      wantedBy = [ "multi-user.target" ];
       #after = "container@frigate.service";
     };
 
@@ -50,7 +50,7 @@ with lib;
       # Needed for containers inside HASS container to work properly
       additionalCapabilities = [
         ''all" --system-call-filter="add_key keyctl bpf" --capability="all''
-     ];
+      ];
 
       config = { ... }: {
         boot. isContainer = true;
@@ -69,8 +69,8 @@ with lib;
 
         networking = {
           firewall.enable = true;
-           firewall.allowedTCPPorts = [ 5000 8554 8555 ];
-           firewall.allowedUDPPorts = [ 8555 ];
+          firewall.allowedTCPPorts = [ 5000 8554 8555 ];
+          firewall.allowedUDPPorts = [ 8555 ];
           useHostResolvConf = mkForce false;
           defaultGateway = "10.1.1.1";
           nameservers = [ "1.1.1.1" "8.8.8.8" ];
