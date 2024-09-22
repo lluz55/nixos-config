@@ -79,9 +79,7 @@
       #  config.allowUnfree = true;
       #};
       inherit (nixpkgs) lib;
-      overlays = [
-        rust-overlay.overlays.default
-      ];
+      overlays = [ rust-overlay.overlays.default ];
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
@@ -89,7 +87,8 @@
       mkSystem = name: cfg:
         let
           masterUsername = masterUser.name;
-          additionalUserExists = (cfg.additionalUser or null) != null; # Variable must be boolean
+          additionalUserExists = (cfg.additionalUser or null)
+            != null; # Variable must be boolean
           additionalUsername = cfg.additionalUser.name;
         in
         with lib;
@@ -154,38 +153,40 @@
           additionalUser = karolayne;
         };
       };
-    in
-    flake-parts.lib.mkFlake { inherit inputs; }
-      {
-        systems = [ "x86_64-linux" ];
-        flake = {
-          templates = {
-            flutter = {
-              path = ./templates/flutter;
-              description = "nix flake new -t github:lluz55/nixos-config#flutter <directory>";
-            };
-            zig = {
-              path = ./templates/zig;
-              description = "nix flake new -t github:lluz55/nixos-config#zig <directory>";
-            };
-            bevy = {
-              path = ./templates/bevy;
-              description = "nix flake new -t github:lluz55/nixos-config#bevy <directory>";
-            };
-            godot_rust = {
-              path = ./templates/godot_rust;
-              description = "nix flake new -t github:lluz55/nixos-config#godot_rust <directory>";
-            };
+    in flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [ "x86_64-linux" ];
+      flake = {
+        templates = {
+          flutter = {
+            path = ./templates/flutter;
+            description =
+              "nix flake new -t github:lluz55/nixos-config#flutter <directory>";
           };
-          #packages."x86_64-linux" = {
-          #  aarch64-linux-iso = nixos-generators.nixosGenerate {
-          #    system = "x86_64-linux";
-          #    format = "iso";
-          #    modules = [ ./modules/aarch64-linux-base.nix ];
-          #  };
-          #};
-          #packages.${system}.neovim = neovim-flake.packages.${system}.maximal;
-          nixosConfigurations = lib.mapAttrs mkSystem hosts;
+          zig = {
+            path = ./templates/zig;
+            description =
+              "nix flake new -t github:lluz55/nixos-config#zig <directory>";
+          };
+          bevy = {
+            path = ./templates/bevy;
+            description =
+              "nix flake new -t github:lluz55/nixos-config#bevy <directory>";
+          };
+          godot_rust = {
+            path = ./templates/godot_rust;
+            description =
+              "nix flake new -t github:lluz55/nixos-config#godot_rust <directory>";
+          };
         };
+        #packages."x86_64-linux" = {
+        #  aarch64-linux-iso = nixos-generators.nixosGenerate {
+        #    system = "x86_64-linux";
+        #    format = "iso";
+        #    modules = [ ./modules/aarch64-linux-base.nix ];
+        #  };
+        #};
+        #packages.${system}.neovim = neovim-flake.packages.${system}.maximal;
+        nixosConfigurations = lib.mapAttrs mkSystem hosts;
       };
+    };
 }
