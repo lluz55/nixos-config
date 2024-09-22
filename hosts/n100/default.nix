@@ -83,6 +83,8 @@ with lib;{
     btop
     nmap
     usbutils
+
+    nixfmt-classic
   ];
 
   boot = {
