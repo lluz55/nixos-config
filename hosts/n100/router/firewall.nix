@@ -55,6 +55,7 @@ in
 
             # Guests and Home networks
             iifname {"vl-guests", "vl-home"} udp dport 67-68 accept
+            iifname {"vl-guests", "vl-home"} meta l4proto { udp, tcp} th dport { 4244, 5222, 5223, 5228, 50318, 59234, 5242 } accept
             iifname {"vl-guests", "vl-home"} meta l4proto { udp, tcp} th dport 53 accept
             iifname "vl-guests" oifname { "vl-guests", "vl-home", "vl-mgmt", "br-cams", "br-lan"} drop comment "Block access to other networks"
             iifname "vl-home" oifname { "vl-guests", "vl-mgmt", "br-cams"} drop comment "Block access to other networks"
