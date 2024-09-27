@@ -89,7 +89,8 @@ in
             type nat hook prerouting priority dstnat; policy accept;
 
             iifname {"vl-mgmt", "br-lan", "vl-home"} tcp dport { 8123, 8080 } dnat 10.1.1.10 # Allow forwarding to Home Automation
-            iifname {"vl-mgmt", "br-lan", "vl-home"} tcp dport { 5000 } dnat 10.1.1.9 # Allow forwarding to Home Automation
+             # iifname {"vl-mgmt", "br-lan", "vl-home"} tcp dport { 5000 } dnat 10.1.1.9 # Allow forwarding to Home Automation
+            iifname {"vl-mgmt", "br-lan", "vl-home"} tcp dport { 5000 } dnat 10.1.1.1 # Allow forwarding to Home Automation
             iifname {"vl-mgmt"} tcp dport 5000 dnat 10.1.1.9 # Allow forwarding to Frigate
             iifname {"vl-mgmt"} tcp dport 8080 dnat 10.1.1.10 # Allow forwarding to Zigbee2mqtt
             iifname {"vl-mgmt"} tcp dport 48899 dnat 10.1.1.14:8899 # Allow forwarding to CAM 14
