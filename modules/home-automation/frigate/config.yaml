@@ -38,12 +38,12 @@ cameras:
       bounding_box: false
     record:
       enabled: true
-      events:
+      alerts:
         retain:
-          mode: motion
-          default: 10
-        objects:
-          - person
+          days: 10
+      detections:
+        retain:
+          days: 10
   frente_esquerda: # <------ Name the camera
     ffmpeg:
       inputs:
@@ -90,13 +90,12 @@ cameras:
       mask: 0,0.147,0.046,0.143,0.075,0.276,0,0.621
     record:
       enabled: true
-      events:
+      alerts:
         retain:
-          mode: motion
-          default: 10
-        objects:
-          - person
-          - car
+          days: 10
+      detections:
+        retain:
+          days: 10
   casa:
     ffmpeg:
       inputs:
@@ -128,14 +127,12 @@ cameras:
         #- portao_d
     record:
       enabled: true
-      events:
+      alerts:
         retain:
-          default: 7
-          mode: motion
-        objects:
-          - person
-          - cat
-          - dog
+          days: 7
+      detections:
+        retain:
+          days: 7
 objects:
   track:
     - person
@@ -147,4 +144,11 @@ objects:
       max_area: 100000
       min_score: 0.75
       threshold: 0.75
-version: 0.14
+version: 0.15-0
+camera_groups:
+  Parent:
+    order: 1
+    icon: LuBus
+    cameras:
+      - frente_esquerda
+      - garagem
