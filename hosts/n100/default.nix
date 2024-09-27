@@ -88,13 +88,14 @@ with lib;{
   ];
 
   boot = {
-    kernelPackages = pkgs.linuxPackages_6_6;
+    kernelPackages = unstable.linuxKernel.packages.linux_zen;
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
       timeout = 2;
     };
-    extraModulePackages = [ gasketPkg ];
+    extraModulePackages = [ pkgs.linuxKernel.packages.linux_zen.gasket];
+    #extraModulePackages = [ gasketPkg ];
     tmp = {
       useTmpfs = true;
       tmpfsSize = "30%";
