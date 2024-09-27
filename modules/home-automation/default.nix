@@ -77,7 +77,7 @@ with lib;
         };
 
         virtualisation.oci-containers.containers."homeassistant" = {
-          image = "ghcr.io/home-assistant/home-assistant:stable";
+          image = "ghcr.io/home-assistant/home-assistant:2024.9";
           volumes = [
             "/etc/localtime:/etc/localtime:ro"
             "${hassPath}:/config:rw"
