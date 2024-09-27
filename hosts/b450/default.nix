@@ -46,7 +46,7 @@ with lib; {
     ];
   };
 
-  hardware.opengl = {
+  hardware.graphics = {
     # extraPackages = with unstable; [ intel-media-driver ];
 
     enable = true;
@@ -74,7 +74,7 @@ with lib; {
   };
 
   boot = {
-    kernelPackages = unstable.linuxPackages_latest;
+      kernelPackages = unstable.linuxPackages_latest;
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
@@ -100,6 +100,15 @@ with lib; {
     pulse.enable = true;
   };
 
+  # Gaming
+  programs = {
+    steam = { 
+      enable = true;
+      gamescopeSession.enable = true;
+    };
+    gamemode.enable = true;
+  };
+
   environment =
     #    let
     #      aarch64-linux-vm =
@@ -116,7 +125,14 @@ with lib; {
     #            '';
     #    in
     {
+      sessionVariables = {
+        STEAM_EXTRA_COMPAT_TOOLS_PATHS = "/home/lluz/.steam/root/compatibilitytools.d";
+      };
       systemPackages = with unstable; [
+        # Gaming
+        mangohud
+        protonup
+        
         # aarch64-linux-vm
         vscode
         nmap
