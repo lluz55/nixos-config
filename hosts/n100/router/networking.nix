@@ -11,6 +11,7 @@
   };
 
   systemd.network = {
+    enable = true;
     wait-online.anyInterface = true;
     netdevs = {
       # Create the bridge interface
@@ -52,14 +53,14 @@
       "10-${config.WAN}" = {
         matchConfig.Name = "${config.WAN}";
         networkConfig = {
-          # start a DHCP Client for IPv4 Addressing/Routing
-          DHCP = "ipv4";
-          # accept Router Advertisements for Stateless IPv6 Autoconfiguraton (SLAAC)
-          IPv6AcceptRA = true;
-          DNSOverTLS = true;
-          DNSSEC = true;
-          IPv6PrivacyExtensions = false;
-          IPForward = true;
+         # start a DHCP Client for IPv4 Addressing/Routing
+         DHCP = "ipv4";
+         # accept Router Advertisements for Stateless IPv6 Autoconfiguraton (SLAAC)
+         IPv6AcceptRA = true;
+         DNSOverTLS = true;
+         DNSSEC = true;
+         IPv6PrivacyExtensions = false;
+         IPv4Forwarding = true;
         };
         # make routing on this interface a dependency for network-online.target
         linkConfig.RequiredForOnline = "routable";
