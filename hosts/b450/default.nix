@@ -20,6 +20,8 @@ with lib; {
    services.desktopManager.cosmic.enable = true;
    services.displayManager.cosmic-greeter.enable = true;
 
+  boot.kernelParams = [ "nvidia_drm.fbdev=1" ];
+
   hardware.nvidia = {
     modesetting.enable = true;
     open = false;
@@ -130,6 +132,8 @@ with lib; {
 
         font-awesome_4
         nvidia-vaapi-driver
+
+        cosmic-applets
       ];
     };
 }
