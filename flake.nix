@@ -1,5 +1,14 @@
 {
   description = "Pers system flake";
+     nixConfig = {
+       extra-substituters = [
+         "https://nix-community.cachix.org"
+       ];
+       extra-trusted-public-keys = [
+         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+       ];  
+      accept-flake-config = true;
+     };
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
@@ -36,15 +45,6 @@
     #  # this line assume that you also have nixpkgs as an input
     #  inputs.nixpkgs.follows = "nixpkgs";
     #};
-
-    # nixConfig = {
-    #   extra-substituters = [
-    #     "https://nix-community.cachix.org"
-    #   ];
-    #   extra-trusted-public-keys = [
-    #     "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-    #   ];
-    # };
   };
 
   outputs =
