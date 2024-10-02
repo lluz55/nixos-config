@@ -34,6 +34,7 @@
       url = "github:lilyinstarlight/nixos-cosmic";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    zen-browser.url = "github:MarceColl/zen-browser-flake";
     # hyprland-nix.url = "github:spikespaz/hyprland-nix"; # hyprland-git.url = "github:hyprwm/hyprland/master";
     #hyprland-xdph-git.url = "github:hyprwm/xdg-desktop-portal-hyprland";
     #hyprland-protocols-git.url = "github:hyprwm/xdg-desktop-portal-hyprland";
@@ -55,6 +56,7 @@
     , nix-direnv
     , rust-overlay
     , nixos-cosmic
+    , zen-browser
       # , nix-ld
       # , nixos-generators
     , ...
@@ -67,6 +69,7 @@
         url = "git+ssh://git@github.com/lluz55/secrets.git";
       });
       system = "x86_64-linux";
+      zen-browser = inputs.zen-browser.packages."${system}".default;
       #secrets = import ./secrets/default.nix;
       # system-aarch64 = "aarch64-linux";
 
@@ -97,7 +100,7 @@
             inherit system;
             specialArgs =
               {
-                inherit inputs unstable masterUser secrets nix-direnv;
+                inherit inputs unstable masterUser secrets nix-direnv zen-browser;
               }
               // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
             modules =

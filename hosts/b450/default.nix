@@ -1,6 +1,7 @@
 { unstable
 , lib
 , config
+, zen-browser
   # , pkgs-aarch64
 , ...
 }:
@@ -150,6 +151,7 @@ with lib; {
         nvidia-vaapi-driver
 
         cosmic-applets
+        zen-browser
       ];
     };
 }
