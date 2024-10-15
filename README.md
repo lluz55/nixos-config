@@ -10,7 +10,7 @@ cd ~/.nixos-config
 sudo cp /etc/nixos/hardware-configuration.nix .
 sudo nixos-rebuild switch --impure --flake .#<host>
 ```
-## Install NixOS on any VPS server
+## Install NixOS on any VPS
 
 1. Generate ssh key
 ```bash
@@ -26,11 +26,11 @@ sudo nixos-rebuild switch --impure --flake .#<host>
 ```
 4. Log into vps server
 ```bash
-  ssh -i path_to_server_private_key root@192.168.0.199
+  ssh -i path_to_server_private_key lluz@192.168.0.199
 ```
 5. After config update
 ```bash
-  nixos-rebuild switch --flake .#vps-server --target-host "root@192.168.0.199"
+  nixos-rebuild switch --flake .#vps-server --target-host lluz@192.168.0.199
 ```
 
 # References
