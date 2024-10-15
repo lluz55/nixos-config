@@ -79,6 +79,7 @@ with lib; {
       IeAction=suspend
       I#dleActionSec=30min
     '';
+    twingate.enable = true;
   };
 
   boot = {
