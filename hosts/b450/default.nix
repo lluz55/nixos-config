@@ -18,10 +18,12 @@ with lib; {
   hyprland.enable = false;
   glances.enable = true;
 
-   services.desktopManager.cosmic.enable = true;
-   services.displayManager.cosmic-greeter.enable = true;
+  services.desktopManager.cosmic.enable = true;
+  services.displayManager.cosmic-greeter.enable = true;
 
-  boot.kernelParams = [ "nvidia_drm.fbdev=1" ];
+  boot = {
+    kernelParams = [ "nvidia_drm.fbdev=1" ];
+  };
 
   hardware.nvidia = {
     modesetting.enable = true;
@@ -47,13 +49,15 @@ with lib; {
     ];
   };
 
-  hardware.graphics = {
+  hardware.opengl= {
     # extraPackages = with unstable; [ intel-media-driver ];
 
     enable = true;
     # driSupport = true;
     driSupport32Bit = true;
   };
+
+  # TODO: change opengl to hardware.graphics.enable32Bit
 
   console = {
     font = "Lat2-Terminus16";
@@ -75,7 +79,7 @@ with lib; {
   };
 
   boot = {
-      kernelPackages = unstable.linuxPackages_latest;
+    kernelPackages = unstable.linuxPackages_latest;
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
@@ -84,13 +88,6 @@ with lib; {
   };
 
   programs.light.enable = true;
-  #programs.direnv = {
-  #  enable = true;
-  #  nix-direnv = {
-  #    enable = true;
-  #    package = unstable.nix-direnv;
-  #  };
-  #};
 
   #sway.enable = true;
   hardware.pulseaudio.enable = false;
@@ -133,25 +130,42 @@ with lib; {
         # Gaming
         mangohud
         protonup
+
+        # Shells
+        nushell
         
-        # aarch64-linux-vm
-        vscode
+        # Remote
+        twingate
+        #x2goclient
+        #turbovnc
+        #remmina
+
+        # Networking tools
         nmap
-        remmina
-        x2goclient
-        turbovnc
+
+        # Dev tools
         lazygit
-        vivaldi
-        neovim
         rustup
 
+        # Editors
+        neovim
+        vscode
+
+        # 3D tools
         blender
 
         font-awesome_4
+
+        # Nvidia drivers
         nvidia-vaapi-driver
 
-        cosmic-applets
+        # Browsers
+        vivaldi
         zen-browser
+
+        # Others
+        cosmic-applets
+        xboxdrv # xbox controller drivers
       ];
     };
 }
