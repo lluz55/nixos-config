@@ -23,6 +23,11 @@ with lib; {
 
   boot = {
     kernelParams = [ "nvidia_drm.fbdev=1" ];
+    extraModulePackages = with config.boot.kernelPackages; [ xpadneo ];
+    extraModprobeConfig = ''
+      options bluetooth disable_ertm=Y
+    '';
+  };
 
   users.users.lluz = {
     shell = mkForce unstable.nushell;
@@ -109,6 +114,20 @@ with lib; {
       gamescopeSession.enable = true;
     };
     gamemode.enable = true;
+  };
+
+  # Enable xbox controller
+  hardware.xpadneo.enable = true;
+  hardware.bluetooth = { 
+    enable = true;
+    settings = {
+      General = {
+        Privacy = "device";
+        JustWorksRepairing = "always";
+        Class = "0x000100";
+        FastConnectable = true;
+      };
+    };
   };
 
   environment =
