@@ -1,14 +1,16 @@
 {
   description = "Pers system flake";
-     nixConfig = {
-       extra-substituters = [
-         "https://nix-community.cachix.org"
-       ];
-       extra-trusted-public-keys = [
-         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-       ];  
-      accept-flake-config = true;
-     };
+    nixConfig = {
+    accept-flake-config = true;
+    extra-substituters = [
+      "https://cosmic.cachix.org/" 
+      "https://nix-community.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
+  };
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
@@ -199,6 +201,7 @@
         #};
         #packages.${system}.neovim = neovim-flake.packages.${system}.maximal;
         nixosConfigurations = lib.mapAttrs mkSystem hosts;
+
       };
     };
 }
