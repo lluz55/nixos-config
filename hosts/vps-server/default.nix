@@ -39,10 +39,22 @@ with lib;{
     efiSupport = true;
     efiInstallAsRemovable = true;        
   };
+  
+  services.openssh.settings.PermitRootLogin = "no";
 
-  users.users.root.openssh.authorizedKeys.keys = [
-    # TODO: Create new ssh key and paste public key here
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGEuQb+luFJEkBjPJxhQe27+Uo63aVFJs5sQi/N+bgmw lluz@nixos"
-  ];
+  users.users = {
+    lluz = {
+      isNormalUser = true;    
+       extraGroups = [
+         "networkmanager"
+         "wheel"
+         "docker"
+      ];
+      hashedPassword = "$6$SKLBnqu6hd8FGqYp$CDuT/tWNleZEqYNbyvAsnm9SB/R3IQdRVg5PJBrzXE0cmPxw9xSUYigOIjea6URtAXc6Ok62RGmUVbjjEaceo0";
+      openssh.authorizedKeys.keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGEuQb+luFJEkBjPJxhQe27+Uo63aVFJs5sQi/N+bgmw lluz@nixos"
+      ];
+    };
+  };
 
 }
