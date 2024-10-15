@@ -23,6 +23,9 @@ with lib; {
 
   boot = {
     kernelParams = [ "nvidia_drm.fbdev=1" ];
+
+  users.users.lluz = {
+    shell = mkForce unstable.nushell;
   };
 
   hardware.nvidia = {
