@@ -35,6 +35,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     zen-browser.url = "github:MarceColl/zen-browser-flake";
+
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # hyprland-nix.url = "github:spikespaz/hyprland-nix"; # hyprland-git.url = "github:hyprwm/hyprland/master";
     #hyprland-xdph-git.url = "github:hyprwm/xdg-desktop-portal-hyprland";
     #hyprland-protocols-git.url = "github:hyprwm/xdg-desktop-portal-hyprland";
@@ -57,6 +62,7 @@
     , rust-overlay
     , nixos-cosmic
     , zen-browser
+    , disko
       # , nix-ld
       # , nixos-generators
     , ...
@@ -104,7 +110,11 @@
               }
               // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
             modules =
-              [
+              (if cfg.isVPS then [
+                ./hosts/vps-server
+              ]
+                else
+             [
                 ./modules
                 ./hosts/configuration.nix
                 ./hosts/${name}
@@ -114,12 +124,6 @@
                 ({
                   nixpkgs.overlays = overlays;
                 })
-                #{
-                #  nix.settings = {
-                #    substituters = [ "https://cosmic.cachix.org/" ];
-                #    trusted-public-keys = [ "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE=" ];
-                #  };
-                #}
                 nixos-cosmic.nixosModules.default
                 {
                   home-manager = {
@@ -137,7 +141,8 @@
                       };
                   };
                 }
-              ]
+              ])
+              
               # In case additional modules was passed
               ++ (cfg.modules or [ ])
               # Details from additional user
@@ -154,6 +159,10 @@
         gl62m = {
           # TODO: Maybe convert to a List
           additionalUser = karolayne;
+        };
+        vps-server = {
+          modules = [ disko.nixosModules.disko ];
+          isVPS = true;
         };
       };
     in flake-parts.lib.mkFlake { inherit inputs; } {
