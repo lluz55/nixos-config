@@ -1,15 +1,19 @@
 {
   description = "Pers system flake";
     nixConfig = {
-    accept-flake-config = true;
-    extra-substituters = [
-      "https://cosmic.cachix.org/" 
-      "https://nix-community.cachix.org"
-    ];
-    extra-trusted-public-keys = [
-      "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-    ];
+      accept-flake-config = true;
+      extra-substituters = [
+        "https://cosmic.cachix.org/" 
+        "https://nix-community.cachix.org"
+      ];
+      extra-trusted-substituters = [
+        "https://cosmic.cachix.org/" 
+        "https://nix-community.cachix.org"
+      ];
+      extra-trusted-public-keys = [
+        "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
   };
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -112,7 +116,7 @@
               }
               // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
             modules =
-              (if cfg.isVPS then [
+              (if (builtins.hasAttr "isVPS" cfg && cfg.isVPS) then [
                 ./hosts/vps-server
               ]
                 else
