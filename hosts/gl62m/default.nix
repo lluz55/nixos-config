@@ -65,7 +65,6 @@ with lib; {
     # extraPackages32 = with unstable.pkgsi686Linux; [nvidia-vaapi-driver intel-media-driver];
 
     enable = true;
-    driSupport = true;
     driSupport32Bit = true;
   };
 
