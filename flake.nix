@@ -112,7 +112,7 @@
               }
               // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
             modules =
-              (if cfg.isVPS then [
+              (if (builtins.hasAttr "isVPS" cfg && cfg.isVPS) then [
                 ./hosts/vps-server
               ]
                 else
