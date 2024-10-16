@@ -2,6 +2,7 @@
 , lib
 , config
   #, pkgs-aarch64
+, zen-browser
 , self
 , ...
 }:
@@ -165,15 +166,15 @@ with lib; {
           x2goclient
           turbovnc
           lazygit
-          #(vivaldi.override {
-          #  proprietaryCodecs = true;
-          #})
-          #vivaldi-ffmpeg-codecs
+          (vivaldi.override {
+            proprietaryCodecs = true;
+          })
+          vivaldi-ffmpeg-codecs
           helix
           #neovim
           rustup
 
-          blender
+          #blender
 
           font-awesome_4
           nvidia-vaapi-driver
@@ -181,6 +182,8 @@ with lib; {
           wineWowPackages.stableFull
           cosmic-applets
           dust
+          zen-browser
+          vivaldi
         ];
     };
 }
