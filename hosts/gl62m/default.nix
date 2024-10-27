@@ -2,6 +2,7 @@
 , lib
 , config
   #, pkgs-aarch64
+, zen-browser
 , self
 , ...
 }:
@@ -64,7 +65,6 @@ with lib; {
     # extraPackages32 = with unstable.pkgsi686Linux; [nvidia-vaapi-driver intel-media-driver];
 
     enable = true;
-    driSupport = true;
     driSupport32Bit = true;
   };
 
@@ -92,27 +92,30 @@ with lib; {
     kernelPackages = unstable.linuxPackages_latest;
     loader = {
         efi.canTouchEfiVariables = true;
-      grub = {
-        enable = true;
-        # devices = [ "/dev/sda" ];
-        device = "/dev/sdb";
-        useOSProber = true;
-        configurationLimit = 4;
-        efiSupport = true;
-        #theme = unstable.stdenv.mkDerivation {
-        #  pname = "distro-grub-themes";
-        #  version = "3.1";
-        #  src = unstable.fetchFromGitHub {
-        #    owner = "AdisonCavani";
-        #    repo = "distro-grub-themes";
-        #    rev = "v3.1";
-        #    hash = "sha256-ZcoGbbOMDDwjLhsvs77C7G7vINQnprdfI37a9ccrmPs=";
+        # system-boot.enable = true;
+        timeout = 2;
+        systemd-boot.enable = true;
+        # grub = {
+        #   enable = true;
+        #   devices = ["/dev/sda"];
+        #    # devices = [ "/dev/sda" ];
+        #    # device = "/dev/sdb";
+        #    useOSProber = true;
+        #    configurationLimit = 4;
+        #    efiSupport = true;
+        #    #theme = unstable.stdenv.mkDerivation {
+        #    #  pname = "distro-grub-themes";
+        #    #  version = "3.1";
+        #    #  src = unstable.fetchFromGitHub {
+        #    #    owner = "AdisonCavani";
+        #    #    repo = "distro-grub-themes";
+        #    #    rev = "v3.1";
+        #    #    hash = "sha256-ZcoGbbOMDDwjLhsvs77C7G7vINQnprdfI37a9ccrmPs=";
+        #    #  };
+        #    #  installPhase = "cp -r customize/nixos $out";
+        #    #};
         #  };
-        #  installPhase = "cp -r customize/nixos $out";
-        #};
       };
-      timeout = 3;
-    };
   };
 
   programs.light.enable = true;
@@ -165,15 +168,15 @@ with lib; {
           x2goclient
           turbovnc
           lazygit
-          #(vivaldi.override {
-          #  proprietaryCodecs = true;
-          #})
-          #vivaldi-ffmpeg-codecs
+          (vivaldi.override {
+            proprietaryCodecs = true;
+          })
+          vivaldi-ffmpeg-codecs
           helix
           #neovim
           rustup
 
-          blender
+          #blender
 
           font-awesome_4
           nvidia-vaapi-driver
@@ -181,6 +184,8 @@ with lib; {
           wineWowPackages.stableFull
           cosmic-applets
           dust
+          zen-browser
+          vivaldi
         ];
     };
 }

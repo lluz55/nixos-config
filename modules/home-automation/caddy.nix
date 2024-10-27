@@ -4,7 +4,7 @@ with lib;
   config = mkIf (config.hass.enable)
     {
       services.caddy = {
-        enable = true;
+        enable = false;
 
         extraConfig = ''
           "http://z2m.home" {
