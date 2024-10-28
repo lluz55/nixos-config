@@ -103,4 +103,11 @@ with lib;{
   };
 
   programs.light.enable = true;
+
+  services.vaultwarden = {
+    enable = true;
+    config = {
+      ROCKET_ADDRESS = "10.0.66.1";
+      ROCKET_PORT = 8222;
+    };
 }
