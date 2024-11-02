@@ -32,6 +32,7 @@ with lib;{
   twingate.enable = true;
 
   services.tailscale.enable = true;
+  services.netbird.enable = true;
   programs.mosh.enable = true;
 
   services.openssh = {
@@ -85,6 +86,8 @@ with lib;{
     usbutils
 
     nixfmt-classic
+
+    netbird
   ];
 
   boot = {
@@ -103,4 +106,11 @@ with lib;{
   };
 
   programs.light.enable = true;
+
+  services.vaultwarden = {
+    enable = true;
+    config = {
+      ROCKET_ADDRESS = "10.0.66.1";
+      ROCKET_PORT = 8222;
+    };
 }
