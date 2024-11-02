@@ -2,7 +2,7 @@
 let
   _containers = import ../utils/containers.nix { inherit masterUser; };
   allowedDevices = _containers.mkAllowedDevices { };
-  bindMounts = _containers.mkBindMounts { };
+  bindMounts = _containers.mkBindMounts { devicesList = [ config.sops.secrets."twingate.env".path ]; };
 
   # network = secrets.twingate.network;
   # access_token = secrets.twingate.access_token;
@@ -57,7 +57,7 @@ with lib;
             "--network=host"
             "--privileged"
             "--pull=always"
-            "--env_file=${config.sops.secrets."twingate.env".path}"
+            "--env-file=${config.sops.secrets."twingate.env".path}"
           ];
         };
       };
