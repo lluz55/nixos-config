@@ -2,6 +2,7 @@
   pkgs,
   inputs,
   masterUser,
+  sops,
   ...
 }: {
   time.timeZone = "America/Recife";
@@ -12,6 +13,12 @@
       LC_MONETARY = "pt_BR.UTF-8";
     };
   };
+
+  sops.defaultSopsFile = ../secrets/secrets.yaml;
+  sops.defaultSopsFormat = "yaml";
+
+  sops.age.keyFile = "/home/${masterUser.name}/.config/sops/age/keys.txt";
+  sops.secrets."twingate.env" = {};
 
   security = {
     polkit = {
