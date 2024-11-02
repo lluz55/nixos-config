@@ -38,8 +38,8 @@ with lib;{
     efiSupport = true;
     efiInstallAsRemovable = true;        
   };
-  
-  services.openssh.settings.PermitRootLogin = "no";
+  # services.openssh.settings.PermitRootLogin = "no";
+  nixpkgs.config.allowUnfree = true;
 
   users.users = {
     lluz = {
