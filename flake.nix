@@ -166,7 +166,9 @@
           };
       # All hosts
       hosts = {
-        n100 = { };
+        n100 = { 
+          modules = [ sops-nix.nixosModules.sops ];
+          };
         b450 = {
           modules = [ sops-nix.nixosModules.sops ];
         };
