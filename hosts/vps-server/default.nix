@@ -49,7 +49,7 @@ with lib;{
          "wheel"
          "docker"
       ];
-      hashedPassword = "$6$SKLBnqu6hd8FGqYp$CDuT/tWNleZEqYNbyvAsnm9SB/R3IQdRVg5PJBrzXE0cmPxw9xSUYigOIjea6URtAXc6Ok62RGmUVbjjEaceo$6$QxQnbbXttFJKrfIo$Dg4gHDqoz2HJWVD.eqxFUI4M7b5SsIovhc4Y.7zWIdN3c5zJTCWC4o8GeCR/8jQe1bOD262yIOkds5HMIqw6y.";
+      hashedPassword = "$y$j9T$nrOY4ikYU3Fsa5e1lKQ47/$MKmDUG2OZmIhNtlpOf4sx7RH2IHVZnZhIoLzAQOvqT0";
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGEuQb+luFJEkBjPJxhQe27+Uo63aVFJs5sQi/N+bgmw lluz@nixos"
       ];
