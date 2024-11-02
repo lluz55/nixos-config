@@ -29,7 +29,6 @@ with lib;{
     nixfmt-classic
 
     helix
-    nushell
     neovim
 
     fastfetch
