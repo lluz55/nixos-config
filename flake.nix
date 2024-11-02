@@ -23,6 +23,10 @@
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     #vscode-server = {
     #  url = "github:nix-community/nixos-vscode-server";
     #  inputs.nixpkgs.follows = "nixpkgs";
@@ -69,6 +73,7 @@
     , nixos-cosmic
     , zen-browser
     , disko
+    , sops-nix
       # , nix-ld
       # , nixos-generators
     , ...
@@ -117,6 +122,7 @@
               // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
             modules =
               (if (builtins.hasAttr "isVPS" cfg && cfg.isVPS) then [
+                # VPS only configuration
                 ./hosts/vps-server
               ]
                 else
@@ -161,7 +167,9 @@
       # All hosts
       hosts = {
         n100 = { };
-        b450 = { };
+        b450 = {
+          modules = [ sops-nix.nixosModules.sops ];
+        };
         gl62m = {
           # TODO: Maybe convert to a List
           additionalUser = karolayne;
@@ -202,10 +210,9 @@
         #    format = "iso";
         #    modules = [ ./modules/aarch64-linux-base.nix ];
         #  };
-        #};
+          #};
         #packages.${system}.neovim = neovim-flake.packages.${system}.maximal;
         nixosConfigurations = lib.mapAttrs mkSystem hosts;
-
       };
     };
 }
