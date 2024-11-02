@@ -1,12 +1,12 @@
-{ lib, config, masterUser, secrets, ... }:
+{ lib, config, masterUser, ... }:
 let
   _containers = import ../utils/containers.nix { inherit masterUser; };
   allowedDevices = _containers.mkAllowedDevices { };
   bindMounts = _containers.mkBindMounts { };
 
-  network = secrets.twingate.network;
-  access_token = secrets.twingate.access_token;
-  refresh_token = secrets.twingate.refresh_token;
+  # network = secrets.twingate.network;
+  # access_token = secrets.twingate.access_token;
+  # refresh_token = secrets.twingate.refresh_token;
 in
 with lib;
 {
@@ -29,8 +29,7 @@ with lib;
         boot.isContainer = true;
         system.stateVersion = "23.11";
 
-        environment.systemPackages = with pkgs; [
-        ];
+        environment.systemPackages = with pkgs; [];
 
         networking = {
           firewall.enable = true;
@@ -49,15 +48,16 @@ with lib;
         virtualisation.oci-containers.containers."twingate" = {
           image = "twingate/connector:1";
           environment = {
-            TWINGATE_NETWORK = network;
-            TWINGATE_ACCESS_TOKEN = access_token;
-            TWINGATE_REFRESH_TOKEN = refresh_token;
+            # TWINGATE_NETWORK = network;
+            # TWINGATE_ACCESS_TOKEN = access_token;
+            # TWINGATE_REFRESH_TOKEN = refresh_token;
             TWINGATE_LABEL_HOSTNAME = "`hostname`";
           };
           extraOptions = [
             "--network=host"
             "--privileged"
             "--pull=always"
+            "--env_file=${config.sops.secrets."twingate.env".path}"
           ];
         };
       };
