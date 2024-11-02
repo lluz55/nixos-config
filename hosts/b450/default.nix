@@ -29,10 +29,6 @@ with lib; {
     '';
   };
 
-  users.users.lluz = {
-    shell = mkForce unstable.nushell;
-  };
-
   hardware.nvidia = {
     modesetting.enable = true;
     open = false;
