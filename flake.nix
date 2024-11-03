@@ -82,12 +82,8 @@
       inherit (users) masterUser;
       inherit (users) karolayne;
       users = import ./users.nix;
-      secrets = import (builtins.fetchGit {
-        url = "git+ssh://git@github.com/lluz55/secrets.git";
-      });
       system = "x86_64-linux";
       zen-browser = inputs.zen-browser.packages."${system}".default;
-      #secrets = import ./secrets/default.nix;
       # system-aarch64 = "aarch64-linux";
 
       unstable = import nixpkgs-unstable {
@@ -117,7 +113,7 @@
             inherit system;
             specialArgs =
               {
-                inherit inputs unstable masterUser secrets nix-direnv zen-browser;
+                inherit inputs unstable masterUser  nix-direnv zen-browser;
               }
               // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
             modules =
