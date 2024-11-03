@@ -1,8 +1,8 @@
 { lib, config, masterUser, ... }:
 let
   _containers = import ../utils/containers.nix { inherit masterUser; };
-  allowedDevices = _containers.mkAllowedDevices { };
   bindMounts = _containers.mkBindMounts { devicesList = [ config.sops.secrets."twingate.env".path ]; };
+  allowedDevices = _containers.mkAllowedDevices { devices = [ "/dev/fuse" ]; };
 
 in
 with lib;
@@ -43,8 +43,9 @@ with lib;
         };
 
         virtualisation.oci-containers.containers."twingate" = {
-          image = "twingate/connector:1";
+          image = "twingate/connector:1.70";
           environment = {
+            DNS_SERVER="8.8.8.8,1.1.1.1";
             TWINGATE_LABEL_HOSTNAME = "`hostname`";
           };
           extraOptions = [
