@@ -1,10 +1,13 @@
-{ config, masterUser, lib, secrets, pkgs, ... }:
+{ 
+  config
+  ,masterUser
+  ,lib
+  ,...
+}:
 let
-  frigate_secret = secrets.hass.frigate;
   frigate_conf = "/home/${masterUser.name}/.nixos-config/modules/home-automation/frigate";
   frigate_media = "/home/${masterUser.name}/.frigate";
   frigate_usb = "/dev/bus/usb/002/002";
-  mqtt_secret = secrets.hass.mqtt;
 
   containers = import ../../../utils/containers.nix { inherit masterUser; };
   devices = [
@@ -49,6 +52,7 @@ with lib;
               "--privileged"
               "--mount=type=tmpfs,target=/tmp/cache,tmpfs-size=1000000000"
               "--cap-add=ALL"
+              "--env-file=${config.sops.secrets."frigate.env".path}"
             ];
             volumes = [
               "/etc/localtime:/etc/localtime:ro"
@@ -56,8 +60,6 @@ with lib;
               "${frigate_media}:/media/frigate"
             ];
             environment = {
-              FRIGATE_PASSWORD = frigate_secret;
-              FRIGATE_MQTT_PASSWORD = mqtt_secret;
               TZ = "America/Recife";
             };
             ports = [

@@ -4,9 +4,6 @@ let
   allowedDevices = _containers.mkAllowedDevices { };
   bindMounts = _containers.mkBindMounts { devicesList = [ config.sops.secrets."twingate.env".path ]; };
 
-  # network = secrets.twingate.network;
-  # access_token = secrets.twingate.access_token;
-  # refresh_token = secrets.twingate.refresh_token;
 in
 with lib;
 {
@@ -48,9 +45,6 @@ with lib;
         virtualisation.oci-containers.containers."twingate" = {
           image = "twingate/connector:1";
           environment = {
-            # TWINGATE_NETWORK = network;
-            # TWINGATE_ACCESS_TOKEN = access_token;
-            # TWINGATE_REFRESH_TOKEN = refresh_token;
             TWINGATE_LABEL_HOSTNAME = "`hostname`";
           };
           extraOptions = [

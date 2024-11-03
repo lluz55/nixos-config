@@ -2,7 +2,6 @@
   pkgs,
   inputs,
   masterUser,
-  sops,
   ...
 }: {
   time.timeZone = "America/Recife";
@@ -19,6 +18,16 @@
 
   sops.age.keyFile = "/home/${masterUser.name}/.config/sops/age/keys.txt";
   sops.secrets."twingate.env" = {};
+  sops.secrets."frigate.env" = {};
+  sops.secrets."mqtt.env" = {};
+  sops.secrets."macs/poco" = {};
+  sops.secrets."macs/gl62m" = {};
+  sops.secrets."macs/b450" = {};
+  sops.secrets."macs/rn10c" = {};
+  sops.secrets."macs/honor" = {};
+  sops.secrets."macs/mibox2" = {};
+  sops.secrets."macs/tabs5e" = {};
+  sops.secrets."macs/a55" = {};
 
   security = {
     polkit = {

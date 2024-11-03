@@ -1,4 +1,4 @@
-{ config, lib, secrets, ... }:
+{ config, lib, ... }:
 let
   tailscale_port = toString config.services.tailscale.port;
   ssh_port = "22";

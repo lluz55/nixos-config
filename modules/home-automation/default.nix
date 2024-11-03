@@ -1,4 +1,4 @@
-{ pkgs, config, lib, masterUser, secrets, ... }:
+{ pkgs, config, lib, masterUser, ... }:
 let
   containers = import ../../utils/containers.nix { inherit masterUser; };
 
@@ -9,11 +9,11 @@ let
   nodeRedPath = "${homeAutoPath}/node-red";
 
   zigbeeDongleById = "/dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_86eda3e37f45ed11bdbac68f0a86e0b4-if00-port0";
-  mqtt = secrets.hass.mqtt;
+  mqtt_env = config.sops.secrets."mqtt.env".path;
 
   allowedDevices = containers.mkAllowedDevices { devices = [ zigbeeDongleById ]; };
   bindMounts = containers.mkBindMounts {
-    devicesList = [ zigbee2mqttPath mosquittoPath nodeRedPath ];
+    devicesList = [ zigbee2mqttPath mosquittoPath nodeRedPath mqtt_env ];
     mountDevices = [
       { hostPath = homeAutoPath; isReadOnly = false; }
       { hostPath = zigbeeDongleById; }
@@ -110,7 +110,7 @@ with lib;
             "--network=host"
           ];
           environment = {
-            ZIGBEE2MQTT_CONFIG_PASSWORD = mqtt;
+            ZIGBEE2MQTT_CONFIG_PASSWORD = mqtt_env;
           };
         };
 
@@ -123,10 +123,8 @@ with lib;
           extraOptions = [
             "--network=host"
             "--device=/dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_86eda3e37f45ed11bdbac68f0a86e0b4-if00-port0:/dev/ttyACM0"
+            "--env-file=${mqtt_env}"
           ];
-          environment = {
-            ZIGBEE2MQTT_CONFIG_PASSWORD = mqtt;
-          };
         };
       };
     };
