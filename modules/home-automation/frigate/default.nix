@@ -5,37 +5,23 @@
   ,...
 }:
 let
+  # frigate_usb = "/dev/bus/usb/002/002";
+  # containers = import ../../../utils/containers.nix { inherit masterUser; };
+  # devices = [
+    # frigate_conf
+    # frigate_media
+    # frigate_usb
+    # "/dev/dri/renderD128"
+  # ];
+  # allowedDevices = containers.mkAllowedDevices { inherit devices; };
+  # bindMounts = containers.mkBindMounts { devicesList = devices; };
+  
   frigate_conf = "/home/${masterUser.name}/.nixos-config/modules/home-automation/frigate";
   frigate_media = "/home/${masterUser.name}/.frigate";
-  frigate_usb = "/dev/bus/usb/002/002";
-
-  containers = import ../../../utils/containers.nix { inherit masterUser; };
-  devices = [
-    frigate_conf
-    frigate_media
-    frigate_usb
-    "/dev/dri/renderD128"
-  ];
-  allowedDevices = containers.mkAllowedDevices { inherit devices; };
-  bindMounts = containers.mkBindMounts { devicesList = devices; };
 in
 with lib;
 {
-
   config = mkIf (config.frigate.enable) {
-    systemd.user.services.fix_frigate = {
-      script = ''
-        ${pkgs.ripgrep}/bin/rg --passthru '002/003' -N -r '002/002' ~/.nixos-config/modules/home-automation/frigate/default.nix > ~/.frigate.tmp && \
-        mv tmp ~/.nixos-config/modules/home-automation/frigate/default.nix \
-        sudo ${pkgs.nixos-rebuild}/bin/nixos-rebuild test --impure --flake ~/.nixos-config#n100 && \
-        ${pkgs.ripgrep}/bin/rg --passthru '002/002' -N -r '002/003' ~/.nixos-config/modules/home-automation/frigate/default.nix > ~/.frigate.tmp && \
-        mv tmp ~/.nixos-config/modules/home-automation/frigate/default.nix \
-        sudo ${pkgs.nixos-rebuild}/bin/nixos-rebuild test --impure --flake ~/.nixos-config#n100
-      '';
-      wantedBy = [ "multi-user.target" ];
-      #after = "container@frigate.service";
-    };
-
     boot.kernel.sysctl."kernel.perf_event_paranoid" = -1;
     systemd.tmpfiles.rules = [
       "d /home/${masterUser.name}/.frigate 0770 ${masterUser.name} users -"
@@ -70,6 +56,18 @@ with lib;
           };
         };
 
+    # systemd.user.services.fix_frigate = {
+      # script = ''
+        # ${pkgs.ripgrep}/bin/rg --passthru '002/003' -N -r '002/002' ~/.nixos-config/modules/home-automation/frigate/default.nix > ~/.frigate.tmp && \
+        # mv tmp ~/.nixos-config/modules/home-automation/frigate/default.nix \
+        # sudo ${pkgs.nixos-rebuild}/bin/nixos-rebuild test --impure --flake ~/.nixos-config#n100 && \
+        # ${pkgs.ripgrep}/bin/rg --passthru '002/002' -N -r '002/003' ~/.nixos-config/modules/home-automation/frigate/default.nix > ~/.frigate.tmp && \
+        # mv tmp ~/.nixos-config/modules/home-automation/frigate/default.nix \
+        # sudo ${pkgs.nixos-rebuild}/bin/nixos-rebuild test --impure --flake ~/.nixos-config#n100
+      # '';
+      # wantedBy = [ "multi-user.target" ];
+      # after = "container@frigate.service";
+    # };
     #containers.frigate = {
     #  allowedDevices = allowedDevices ++ [
     #    { node = "/dev/fuse"; modifier = "rwm"; }
