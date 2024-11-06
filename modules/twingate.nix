@@ -45,14 +45,11 @@ with lib;
         virtualisation.oci-containers.containers."twingate" = {
           image = "twingate/connector:1.70";
           environment = {
-            # DNS_SERVER="8.8.8.8,1.1.1.1";
             TWINGATE_LABEL_HOSTNAME = "`hostname`";
           };
           extraOptions = [
+            "--dns=8.8.8.8,1.1.1.1"
             "--network=host"
-            "--privileged"
-            "--cap-add=ALL"
-            "--pull=always"
             "--env-file=${config.sops.secrets."twingate.env".path}"
           ];
         };
