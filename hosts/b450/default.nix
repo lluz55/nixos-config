@@ -1,190 +1,197 @@
-{ unstable
-, lib
-, config
-, zen-browser
+{
+  unstable,
+  lib,
+  config,
+  zen-browser,
   # , pkgs-aarch64
-, ...
-}:
-let
+  ...
+}: let
   drive-flags = "format=raw,readonly=on";
 in
-with lib; {
-  imports = [
-    ./hardware-configuration.nix
-  ];
-
-  virt-tools.enable = true;
-  gnome.enable = false;
-  hyprland.enable = false;
-  glances.enable = true;
-
-  services.desktopManager.cosmic.enable = true;
-  services.displayManager.cosmic-greeter.enable = true;
-
-  boot = {
-    kernelParams = [ "nvidia_drm.fbdev=1" ];
-    extraModulePackages = with config.boot.kernelPackages; [ xpadneo ];
-    extraModprobeConfig = ''
-      options bluetooth disable_ertm=Y
-    '';
-  };
-
-  hardware.nvidia = {
-    modesetting.enable = true;
-    open = false;
-
-    nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.latest;
-  };
-
-  networking.interfaces.eno1.wakeOnLan = {
-    enable = true;
-  };
-
-  zramSwap = {
-    enable = true;
-    algorithm = "lz4";
-  };
-
-  i18n = {
-    supportedLocales = lib.mkDefault [
-      "en_US.UTF-8/UTF-8"
-      "pt_BR.UTF-8/UTF-8"
+  with lib; {
+    imports = [
+      ./hardware-configuration.nix
     ];
-  };
 
-  hardware.opengl= {
-    # extraPackages = with unstable; [ intel-media-driver ];
+    # My services
+    virt-tools.enable = true;
+    gnome.enable = false;
+    hyprland.enable = false;
+    glances.enable = true;
 
-    enable = true;
-    # driSupport = true;
-    driSupport32Bit = true;
-  };
+    services.desktopManager.cosmic.enable = true;
+    services.displayManager.cosmic-greeter.enable = true;
 
-  # TODO: change opengl to hardware.graphics.enable32Bit
+    boot = {
+      kernelParams = ["nvidia_drm.fbdev=1"];
+      extraModulePackages = with config.boot.kernelPackages; [xpadneo];
+      extraModprobeConfig = ''
+        options bluetooth disable_ertm=Y
+      '';
+    };
 
-  console = {
-    font = "Lat2-Terminus16";
-    keyMap = "us";
-  };
-
-  services = {
-    openssh = {
+    networking.firewall = {
       enable = true;
-      settings = {
-        PasswordAuthentication = true;
-      };
+      allowedTCPPorts = [ 3000 11434 ];
     };
-    xserver.videoDrivers = [ "nvidia" ];
-    logind.extraConfig = ''
-      IeAction=suspend
-      I#dleActionSec=30min
-    '';
-    twingate.enable = true;
-  };
 
-  boot = {
-    kernelPackages = unstable.linuxPackages_latest;
-    loader = {
-      systemd-boot.enable = true;
-      efi.canTouchEfiVariables = true;
-      timeout = 2;
+    hardware.nvidia-container-toolkit.enable = true;
+    hardware.nvidia = {
+      modesetting.enable = true;
+      open = false;
+      nvidiaSettings = true;
+      package = config.boot.kernelPackages.nvidiaPackages.latest;
     };
-  };
 
-  programs.light.enable = true;
-
-  #sway.enable = true;
-  hardware.pulseaudio.enable = false;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
-
-  # Gaming
-  programs = {
-    steam = { 
+    networking.interfaces.eno1.wakeOnLan = {
       enable = true;
-      gamescopeSession.enable = true;
     };
-    gamemode.enable = true;
-  };
 
-  # Enable xbox controller
-  hardware.xpadneo.enable = true;
-  hardware.bluetooth = { 
-    enable = true;
-    settings = {
-      General = {
-        Privacy = "device";
-        JustWorksRepairing = "always";
-        Class = "0x000100";
-        FastConnectable = true;
-      };
+    zramSwap = {
+      enable = true;
+      algorithm = "lz4";
     };
-  };
 
-  environment =
-    #    let
-    #      aarch64-linux-vm =
-    #        unstable.writeScriptBin "run-nixos-vm-aarch64" ''
-    #
-    #            #!${unstable.runtimeShell} \
-    #            ${unstable.qemu_full}/bin/qemu-system-aarch64 \
-    #            -machine virt \
-    #            -cpu cortex-a57 \
-    #            -m 2G \
-    #            -nographic \
-    #            -drive if=pflash,file=${pkgs-aarch64.OVMF.fd}/AAVMF/QEMU_EFI-pflash.raw,${drive-flags} \
-    #            -drive file=/home/lluz/Downloads/nixos-aarch64-linux.iso,${drive-flags}
-    #            '';
-    #    in
-    {
-      sessionVariables = {
-        STEAM_EXTRA_COMPAT_TOOLS_PATHS = "/home/lluz/.steam/root/compatibilitytools.d";
-      };
-      systemPackages = with unstable; [
-        # Gaming
-        mangohud
-        protonup
-
-        # Shells
-        nushell
-        
-        # Remote
-        twingate
-        #x2goclient
-        #turbovnc
-        #remmina
-
-        # Networking tools
-        nmap
-
-        # Dev tools
-        lazygit
-        rustup
-
-        # Editors
-        neovim
-        vscode
-
-        # 3D tools
-        blender
-
-        font-awesome_4
-
-        # Nvidia drivers
-        nvidia-vaapi-driver
-
-        # Browsers
-        vivaldi
-        zen-browser
-
-        # Others
-        cosmic-applets
-        xboxdrv # xbox controller drivers
+    i18n = {
+      supportedLocales = lib.mkDefault [
+        "en_US.UTF-8/UTF-8"
+        "pt_BR.UTF-8/UTF-8"
       ];
     };
-}
+
+    hardware.opengl = {
+      # extraPackages = with unstable; [ intel-media-driver ];
+
+      enable = true;
+      # driSupport = true;
+      driSupport32Bit = true;
+    };
+
+    # TODO: change opengl to hardware.graphics.enable32Bit
+
+    console = {
+      font = "Lat2-Terminus16";
+      keyMap = "us";
+    };
+
+    services = {
+      openssh = {
+        enable = true;
+        settings = {
+          PasswordAuthentication = true;
+        };
+      };
+      xserver.videoDrivers = ["nvidia"];
+      logind.extraConfig = ''
+        IeAction=suspend
+        I#dleActionSec=30min
+      '';
+      twingate.enable = true;
+    };
+
+    boot = {
+      kernelPackages = unstable.linuxPackages_latest;
+      loader = {
+        systemd-boot.enable = true;
+        efi.canTouchEfiVariables = true;
+        timeout = 2;
+      };
+    };
+
+    programs.light.enable = true;
+
+    #sway.enable = true;
+    hardware.pulseaudio.enable = false;
+    services.pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+    };
+
+    # Gaming
+    programs = {
+      steam = {
+        enable = true;
+        gamescopeSession.enable = true;
+      };
+      gamemode.enable = true;
+    };
+
+    # Enable xbox controller
+    hardware.xpadneo.enable = true;
+    hardware.bluetooth = {
+      enable = true;
+      settings = {
+        General = {
+          Privacy = "device";
+          JustWorksRepairing = "always";
+          Class = "0x000100";
+          FastConnectable = true;
+        };
+      };
+    };
+
+    environment =
+      #    let
+      #      aarch64-linux-vm =
+      #        unstable.writeScriptBin "run-nixos-vm-aarch64" ''
+      #
+      #            #!${unstable.runtimeShell} \
+      #            ${unstable.qemu_full}/bin/qemu-system-aarch64 \
+      #            -machine virt \
+      #            -cpu cortex-a57 \
+      #            -m 2G \
+      #            -nographic \
+      #            -drive if=pflash,file=${pkgs-aarch64.OVMF.fd}/AAVMF/QEMU_EFI-pflash.raw,${drive-flags} \
+      #            -drive file=/home/lluz/Downloads/nixos-aarch64-linux.iso,${drive-flags}
+      #            '';
+      #    in
+      {
+        sessionVariables = {
+          STEAM_EXTRA_COMPAT_TOOLS_PATHS = "/home/lluz/.steam/root/compatibilitytools.d";
+          COSMIC_DATA_CONTROL_ENABLED = 1;
+        };
+        systemPackages = with unstable; [
+          # Gaming
+          mangohud
+          protonup
+
+          # Shells
+          nushell
+
+          # Remote
+          twingate
+          #x2goclient
+          #turbovnc
+          #remmina
+
+          # Networking tools
+          nmap
+
+          # Dev tools
+          lazygit
+          rustup
+
+          # Editors
+          neovim
+          vscode
+
+          # 3D tools
+          blender
+
+          font-awesome_4
+
+          # Nvidia drivers
+          nvidia-vaapi-driver
+
+          # Browsers
+          vivaldi
+          zen-browser
+
+          # Others
+          cosmic-applets
+          xboxdrv # xbox controller drivers
+        ];
+      };
+  }
