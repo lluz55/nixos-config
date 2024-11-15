@@ -10,6 +10,13 @@ cd ~/.nixos-config
 sudo cp /etc/nixos/hardware-configuration.nix .
 sudo nixos-rebuild switch --impure --flake .#<host>
 ```
+
+### How to generate keys to use with SOPS-NIX
+```
+mkdir -p ~/.config/sops/age
+nix-shell -p ssh-to-age --run "ssh-to-age -private-key -i ~/.ssh/id_ed25519 > ~/.config/sops/age/keys.txt"
+```
+
 ## Install NixOS on any VPS
 
 1. Generate ssh key
