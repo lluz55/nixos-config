@@ -172,7 +172,6 @@ with lib; {
             proprietaryCodecs = true;
           })
           vivaldi-ffmpeg-codecs
-          helix
           #neovim
           rustup
 
