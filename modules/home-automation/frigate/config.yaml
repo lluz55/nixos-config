@@ -17,6 +17,18 @@ ui:
 ffmpeg:
   hwaccel_args: preset-vaapi
 
+go2rtc:
+  streams:
+    garagem:
+      - ffmpeg:rtsp://10.1.1.14:554/user=lluz&password={FRIGATE_PASSWORD}&channel=1&stream=1.sdp
+      - "ffmpeg:back#video=h264#audio=aac#hardware"
+    frente_esquerda:
+      - ffmpeg:rtsp://10.1.1.11:554/user=lluz&password={FRIGATE_PASSWORD}&ch02.264?dev=1/live
+      - "ffmpeg:back#video=h264#audio=copy#audio=aac#hardware"
+    casa:
+      - ffmpeg:rtsp://10.1.1.12:554/user=admin&password={FRIGATE_PASSWORD}&channel=1&stream=1.sdp
+      - "ffmpeg:casa#video=h264#audio=copy#audio=aac#hardware"
+
 cameras:
   garagem: # <------ Name the camera
     ffmpeg:
@@ -47,10 +59,12 @@ cameras:
   frente_esquerda: # <------ Name the camera
     ffmpeg:
       inputs:
-        - path: rtsp://10.1.1.11:554/user=lluz&password={FRIGATE_PASSWORD}&ch02.264?dev=1/live
+        - path:
+            rtsp://10.1.1.11:554/user=lluz&password={FRIGATE_PASSWORD}&ch02.264?dev=1/live
           roles:
             - detect
-        - path: rtsp://10.1.1.11:554/user=lluz&password={FRIGATE_PASSWORD}&ch01.264?dev=1/live
+        - path:
+            rtsp://10.1.1.11:554/user=lluz&password={FRIGATE_PASSWORD}&ch01.264?dev=1/live
           roles:
             - record
     detect:
