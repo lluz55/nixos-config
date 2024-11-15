@@ -41,5 +41,9 @@ devices:
     friendly_name: switch.bedroom
   '0x8c65a3fffec0e05f':
     friendly_name: button_4_tiles
+  '0xa4c138efb97a0977':
+    friendly_name: outlet_washer
+  '0xa4c138d41764dd15':
+    friendly_name: outlet_master_pc
 advanced:
   log_level: debug
