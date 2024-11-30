@@ -84,7 +84,7 @@
 
   nix = {
     settings = {
-      tarball-ttl = 0;
+      # tarball-ttl = 0;
       auto-optimise-store = true;
       experimental-features = ["nix-command" "flakes"];
       extra-substituters = [ "https://cosmic.cachix.org/" "https://nix-community.cachix.org"];
