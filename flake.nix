@@ -128,6 +128,7 @@
                 ./hosts/configuration.nix
                 ./hosts/${name}
                 masterUser.user
+                sops-nix.nixosModules.sops
                 home-manager.nixosModules.home-manager
                 # nix-ld.nixosModules.nix-ld
                 {
@@ -164,10 +165,10 @@
     # All hosts
     hosts = {
       n100 = {
-        modules = [sops-nix.nixosModules.sops];
+        modules = [];
       };
       b450 = {
-        modules = [sops-nix.nixosModules.sops];
+        modules = [];
       };
       gl62m = {
         # TODO: Maybe convert to a List
