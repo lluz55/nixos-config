@@ -174,6 +174,7 @@
         # TODO: Maybe convert to a List
         additionalUser = karolayne;
       };
+      thinkpad = {};
       vps-server = {
         modules = [disko.nixosModules.disko];
         isVPS = true;
