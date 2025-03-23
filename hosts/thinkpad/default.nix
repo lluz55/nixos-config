@@ -2,7 +2,6 @@
 , lib
 , config
   #, pkgs-aarch64
-, zen-browser
 , self
 , ...
 }:
@@ -151,7 +150,6 @@ with lib; {
           wineWowPackages.stableFull
           cosmic-applets
           dust
-          zen-browser
           vivaldi
         ];
     };
