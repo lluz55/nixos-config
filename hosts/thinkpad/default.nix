@@ -36,12 +36,11 @@ with lib; {
     ];
   };
 
-  hardware.opengl = {
-    extraPackages = with unstable; [  ];
+  hardware.graphics= {
     # extraPackages32 = with unstable.pkgsi686Linux; [nvidia-vaapi-driver intel-media-driver];
 
     enable = true;
-    driSupport32Bit = true;
+    enable32Bit = true;
   };
 
   console = {
@@ -104,13 +103,6 @@ with lib; {
   #};
 
   #sway.enable = true;
-  hardware.pulseaudio.enable = false;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
 
   environment =
     #let
