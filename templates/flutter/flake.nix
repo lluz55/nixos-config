@@ -1,11 +1,11 @@
 {
   description = "Flutter";
   inputs = {
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/master";
+      # nixpkgs-unstable.url = "github:NixOS/nixpkgs/master";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
-   flutter-nix.url = "github:maximoffua/flutter.nix/stable";
   };
-  outputs = { self, nixpkgs-unstable, flake-utils, flutter-nix, }:
+  outputs = { self, nixpkgs-unstable, flake-utils,  }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs-unstable {
@@ -14,9 +14,6 @@
             android_sdk.accept_license = true;
             allowUnfree = true;
           };
-         overlays = [
-           flutter-nix.overlays.default
-         ];
         };
         buildToolsVersion = "34.0.0";
         androidComposition = pkgs.androidenv.composeAndroidPackages {
@@ -40,7 +37,8 @@
         devShell =
           with pkgs; mkShell rec {
             ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
-            FLUTER_SDK = "${flutter}/bin/flutter";
+            FLUTTER_SDK = "${pkgs.flutter}/bin/flutter";
+            # FLUTER_SDK = "${flutter}/bin/flutter";
             shellHook = ''
               export CHROME_EXECUTABLE=/run/current-system/sw/bin/google-chrome-stable
               export PATH="$PATH":"$HOME/.pub-cache/bin:$HOME/.cargo/bin"
@@ -48,6 +46,7 @@
             '';
             buildInputs = [
               flutter
+              dart
               androidSdk
               jdk17
             ];
