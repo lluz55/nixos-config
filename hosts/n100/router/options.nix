@@ -9,6 +9,8 @@ let
     mibox2 = builtins.readFile config.sops.secrets."macs/mibox2".path;
     tabs5e = builtins.readFile config.sops.secrets."macs/tabs5e".path;
     a55 = builtins.readFile config.sops.secrets."macs/a55".path;
+    s23u = builtins.readFile config.sops.secrets."macs/s23u".path;
+
   };
 in
 with lib;{

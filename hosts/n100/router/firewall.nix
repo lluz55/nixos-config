@@ -27,16 +27,16 @@ in
               ${config.macs.mibox2},
               ${config.macs.tabs5e},
               ${config.macs.a55},
+              ${config.macs.s23u},
             }
           }
           set authorized_mgmt {
             typeof ether saddr
             flags constant
             elements = {
-              ${config.macs.poco},
               ${config.macs.gl62m},
               ${config.macs.b450},
-              ${config.macs.a55},
+              ${config.macs.s23u},
             }
           }
           limit slow {
