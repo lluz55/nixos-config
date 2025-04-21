@@ -45,7 +45,7 @@
       url = "github:lilyinstarlight/nixos-cosmic";
       # inputs.nixpkgs.follows = "nixos-cosmic/nixpkgs";
     };
-    zen-browser.url = "github:0xc000022070/zen-browser-flake";
+    # zen-browser.url = "github:0xc000022070/zen-browser-flake";
 
     disko = {
       url = "github:nix-community/disko";
@@ -72,7 +72,7 @@
     nix-direnv,
     rust-overlay,
     nixos-cosmic,
-    zen-browser,
+    # zen-browser,
     disko,
     sops-nix,
     # , nix-ld
@@ -83,7 +83,7 @@
     inherit (users) karolayne;
     users = import ./users.nix;
     system = "x86_64-linux";
-    zen-browser = inputs.zen-browser.packages."${system}".specific;
+    # zen-browser = inputs.zen-browser.packages."${system}".specific;
     # system-aarch64 = "aarch64-linux";
 
     unstable = import nixpkgs-unstable {
@@ -113,7 +113,7 @@
           inherit system;
           specialArgs =
             {
-              inherit inputs unstable masterUser nix-direnv zen-browser;
+              inherit inputs unstable masterUser nix-direnv ;
             }
             // attrsets.optionalAttrs additionalUserExists {inherit (cfg) additionalUser;};
           modules =
@@ -128,6 +128,7 @@
                 ./hosts/configuration.nix
                 ./hosts/${name}
                 masterUser.user
+                sops-nix.nixosModules.sops
                 home-manager.nixosModules.home-manager
                 # nix-ld.nixosModules.nix-ld
                 {
@@ -164,15 +165,16 @@
     # All hosts
     hosts = {
       n100 = {
-        modules = [sops-nix.nixosModules.sops];
+        modules = [];
       };
       b450 = {
-        modules = [sops-nix.nixosModules.sops];
+        modules = [];
       };
       gl62m = {
         # TODO: Maybe convert to a List
         additionalUser = karolayne;
       };
+      thinkpad = {};
       vps-server = {
         modules = [disko.nixosModules.disko];
         isVPS = true;

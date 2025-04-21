@@ -60,15 +60,21 @@
     podman-compose # start group of containers for dev
   ];
 
+  services = {
+    twingate.enable = true;
+    pulseaudio.enable = false;
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+    };
+  };
 
   fonts.packages = with pkgs; [
     fira-code
     font-awesome
-    (nerdfonts.override {
-      fonts = [
-        "JetBrainsMono"
-      ];
-    })
+    nerd-fonts.jetbrains-mono 
   ];
 
   environment = {
@@ -84,7 +90,7 @@
 
   nix = {
     settings = {
-      tarball-ttl = 0;
+      # tarball-ttl = 0;
       auto-optimise-store = true;
       experimental-features = ["nix-command" "flakes"];
       extra-substituters = [ "https://cosmic.cachix.org/" "https://nix-community.cachix.org"];
