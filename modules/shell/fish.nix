@@ -22,9 +22,16 @@ with lib; {
       gamend = "git commit --amend";
       gamendn = "git commit --amend --no-edit";
 
+      # flutter aliases
+      frn = "flutter run";
+      fcr = "flutter clean && flutter run";
+
       v = "nvim";
 
       nvf = "nix run github:notashelf/neovim-flake#maximal -- ";
+
+      nrn = "nix run nixpkgs#";
+      nsn = "nix shell nixpkgs#";
 
       # Power related
       sdn = "shutdown now";
