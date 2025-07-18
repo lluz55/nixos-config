@@ -1,8 +1,7 @@
-{
-  pkgs,
-  inputs,
-  masterUser,
-  ...
+{ pkgs
+, inputs
+, masterUser
+, ...
 }: {
   time.timeZone = "America/Recife";
   i18n = {
@@ -17,17 +16,17 @@
   sops.defaultSopsFormat = "yaml";
 
   sops.age.keyFile = "/home/${masterUser.name}/.config/sops/age/keys.txt";
-  sops.secrets."twingate.env" = {};
-  sops.secrets."frigate.env" = {};
-  sops.secrets."mqtt.env" = {};
-  sops.secrets."macs/poco" = {};
-  sops.secrets."macs/gl62m" = {};
-  sops.secrets."macs/b450" = {};
-  sops.secrets."macs/rn10c" = {};
-  sops.secrets."macs/honor" = {};
-  sops.secrets."macs/mibox2" = {};
-  sops.secrets."macs/tabs5e" = {};
-  sops.secrets."macs/a55" = {};
+  sops.secrets."twingate.env" = { };
+  sops.secrets."frigate.env" = { };
+  sops.secrets."mqtt.env" = { };
+  sops.secrets."macs/poco" = { };
+  sops.secrets."macs/gl62m" = { };
+  sops.secrets."macs/b450" = { };
+  sops.secrets."macs/rn10c" = { };
+  sops.secrets."macs/honor" = { };
+  sops.secrets."macs/mibox2" = { };
+  sops.secrets."macs/tabs5e" = { };
+  sops.secrets."macs/a55" = { };
 
   security = {
     polkit = {
@@ -38,7 +37,7 @@
             return polkit.Result.YES;
           }
         });
-        '';
+      '';
     };
     rtkit.enable = true;
   };
@@ -56,8 +55,10 @@
 
   # Useful other development tools
   environment.systemPackages = with pkgs; [
-    podman 
+    podman
     podman-compose # start group of containers for dev
+    nixpkgs-fmt
+    noto-fonts-color-emoji
   ];
 
   services = {
@@ -74,7 +75,7 @@
   fonts.packages = with pkgs; [
     fira-code
     font-awesome
-    nerd-fonts.jetbrains-mono 
+    nerd-fonts.jetbrains-mono
   ];
 
   environment = {
@@ -89,16 +90,21 @@
   users.defaultUserShell = pkgs.fish;
 
   nix = {
+    extraOptions =
+      ''
+        trusted-users = root lluz
+        keep-outputs = true
+        keep-derivations = true
+      '';
     settings = {
       # tarball-ttl = 0;
       auto-optimise-store = true;
-      experimental-features = ["nix-command" "flakes"];
-      extra-substituters = [ "https://cosmic.cachix.org/" "https://nix-community.cachix.org"];
-      extra-trusted-substituters = [ "https://cosmic.cachix.org/" "https://nix-community.cachix.org"];
+      experimental-features = [ "nix-command" "flakes" ];
+      extra-substituters = [ "https://nix-community.cachix.org" ];
+      extra-trusted-substituters = [ "https://nix-community.cachix.org" ];
       trusted-public-keys = [
-         "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
-         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-        ];
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
     };
     gc = {
       automatic = true;

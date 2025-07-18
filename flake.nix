@@ -56,125 +56,125 @@
     #};
   };
 
-  outputs = inputs @ {
-    nixpkgs,
-    nixpkgs-unstable,
-    home-manager,
-    flake-parts,
-    nix-direnv,
-    rust-overlay,
-    disko,
-    sops-nix,
-    # , nix-ld
-    # , nixos-generators
-    ...
-  }: let
-    inherit (users) masterUser;
-    inherit (users) karolayne;
-    users = import ./users.nix;
-    system = "x86_64-linux";
-    # zen-browser = inputs.zen-browser.packages."${system}".specific;
-    # system-aarch64 = "aarch64-linux";
+  outputs =
+    inputs @ { nixpkgs
+    , nixpkgs-unstable
+    , home-manager
+    , flake-parts
+    , nix-direnv
+    , rust-overlay
     , # zen-browser,
+      disko
+    , sops-nix
+    , # , nix-ld
+      # , nixos-generators
+      ...
+    }:
+    let
+      inherit (users) masterUser;
+      inherit (users) karolayne;
+      users = import ./users.nix;
+      system = "x86_64-linux";
       # zen-browser = inputs.zen-browser.packages."${system}".specific;
+      # system-aarch64 = "aarch64-linux";
 
-    unstable = import nixpkgs-unstable {
-      inherit system;
-      config.allowUnfree = true;
-    };
-    #pkgs-aarch64 = import nixpkgs-unstable {
-    #  system = system-aarch64;
-    #  config.allowUnfree = true;
-    #};
-    inherit (nixpkgs) lib;
-    overlays = [rust-overlay.overlays.default];
-    pkgs = import nixpkgs {
-      inherit system;
-      config.allowUnfree = true;
-    };
-    mkSystem = name: cfg: let
-      masterUsername = masterUser.name;
-      additionalUserExists =
-        (cfg.additionalUser or null)
-        != null; # Variable must be boolean
-      additionalUsername = cfg.additionalUser.name;
-    in
-      with lib;
+      unstable = import nixpkgs-unstable {
+        inherit system;
+        config.allowUnfree = true;
+      };
+      #pkgs-aarch64 = import nixpkgs-unstable {
+      #  system = system-aarch64;
+      #  config.allowUnfree = true;
+      #};
+      inherit (nixpkgs) lib;
+      overlays = [ rust-overlay.overlays.default ];
+      pkgs = import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      };
+      mkSystem = name: cfg:
+        let
+          masterUsername = masterUser.name;
+          additionalUserExists =
+            (cfg.additionalUser or null)
+            != null; # Variable must be boolean
+          additionalUsername = cfg.additionalUser.name;
+        in
+        with lib;
         nixosSystem
-        {
-          inherit system;
-          specialArgs =
-            {
-              inherit inputs unstable masterUser nix-direnv ;
-            }
-            // attrsets.optionalAttrs additionalUserExists {inherit (cfg) additionalUser;};
-          modules =
-            (
-              if (builtins.hasAttr "isVPS" cfg && cfg.isVPS)
-              then [
-                # VPS only configuration
-                ./hosts/vps-server
-              ]
-              else [
-                ./modules
-                ./hosts/configuration.nix
-                ./hosts/${name}
-                masterUser.user
-                sops-nix.nixosModules.sops
-                home-manager.nixosModules.home-manager
-                # nix-ld.nixosModules.nix-ld
-                {
-                  nixpkgs.overlays = overlays;
-                }
-                nixos-cosmic.nixosModules.default
-                {
-                  home-manager = {
-                    useGlobalPkgs = true;
-                    useUserPackages = true;
-                    extraSpecialArgs = {inherit pkgs unstable masterUser nix-direnv inputs;};
-                    users =
-                      {
-                        # Load HM configuration for main user
-                        "${masterUsername}".imports = [./home/${masterUsername}.nix];
-                      }
-                      // attrsets.optionalAttrs additionalUserExists {
-                        # Load HM configuration for additional user
-                        "${additionalUsername}".imports = [./home/${additionalUsername}.nix];
-                      };
-                  };
-                }
-              ]
-            )
-            # In case additional modules was passed
-            ++ (cfg.modules or [])
-            # Details from additional user
-            ++ (
-              if additionalUserExists
-              then [cfg.additionalUser.user]
-              else []
-            );
+          {
+            inherit system;
+            specialArgs =
+              {
+                inherit inputs unstable masterUser nix-direnv;
+              }
+              // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
+            modules =
+              (
+                if (builtins.hasAttr "isVPS" cfg && cfg.isVPS)
+                then [
+                  # VPS only configuration
+                  ./hosts/vps-server
+                ]
+                else [
+                  ./modules
+                  ./hosts/configuration.nix
+                  ./hosts/${name}
+                  masterUser.user
+                  sops-nix.nixosModules.sops
+                  home-manager.nixosModules.home-manager
+                  # nix-ld.nixosModules.nix-ld
+                  {
+                    nixpkgs.overlays = overlays;
+                  }
+                  {
+                    home-manager = {
+                      useGlobalPkgs = true;
+                      useUserPackages = true;
+                      extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs; };
+                      users =
+                        {
+                          # Load HM configuration for main user
+                          "${masterUsername}".imports = [ ./home/${masterUsername}.nix ];
+                        }
+                        // attrsets.optionalAttrs additionalUserExists {
+                          # Load HM configuration for additional user
+                          "${additionalUsername}".imports = [ ./home/${additionalUsername}.nix ];
+                        };
+                    };
+                  }
+                ]
+              )
+              # In case additional modules was passed
+              ++ (cfg.modules or [ ])
+              # Details from additional user
+              ++ (
+                if additionalUserExists
+                then [ cfg.additionalUser.user ]
+                else [ ]
+              );
+          };
+      # All hosts
+      hosts = {
+        n100 = {
+          modules = [ ];
         };
-    # All hosts
-    hosts = {
-      n100 = {
-        modules = [];
+        b450 = {
+          modules = [ ];
+        };
+        gl62m = {
+          # TODO: Maybe convert to a List
+          additionalUser = karolayne;
+        };
+        thinkpad = { };
+        vps-server = {
+          modules = [ disko.nixosModules.disko ];
+          isVPS = true;
+        };
       };
-      b450 = {
-        modules = [];
-      };
-      gl62m = {
-        # TODO: Maybe convert to a List
-        additionalUser = karolayne;
-      };
-      thinkpad = {};
-      vps-server = {
-        modules = [disko.nixosModules.disko];
-        isVPS = true;
-      };
-    };
-  in
-    flake-parts.lib.mkFlake {inherit inputs;} {
-      systems = ["x86_64-linux"];
+    in
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [ "x86_64-linux" ];
       flake = {
         templates = {
           flutter = {
