@@ -2,7 +2,7 @@
 , lib
 , config
   #, pkgs-aarch64
-, zen-browser
+  # , zen-browser
 , self
 , ...
 }:

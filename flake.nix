@@ -3,21 +3,17 @@
   nixConfig = {
     accept-flake-config = true;
     extra-substituters = [
-      "https://cosmic.cachix.org/"
       "https://nix-community.cachix.org"
     ];
     extra-trusted-substituters = [
-      "https://cosmic.cachix.org/"
       "https://nix-community.cachix.org"
     ];
     extra-trusted-public-keys = [
-      "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
     ];
   };
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs.follows = "nixos-cosmic/nixpkgs"; # NOTE: change "nixpkgs" to "nixpkgs-stable" to use stable NixOS release
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
@@ -41,10 +37,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     rust-overlay.url = "github:oxalica/rust-overlay";
-    nixos-cosmic = {
-      url = "github:lilyinstarlight/nixos-cosmic";
-      # inputs.nixpkgs.follows = "nixos-cosmic/nixpkgs";
-    };
     # zen-browser.url = "github:0xc000022070/zen-browser-flake";
 
     disko = {
@@ -71,8 +63,6 @@
     flake-parts,
     nix-direnv,
     rust-overlay,
-    nixos-cosmic,
-    # zen-browser,
     disko,
     sops-nix,
     # , nix-ld
@@ -85,6 +75,8 @@
     system = "x86_64-linux";
     # zen-browser = inputs.zen-browser.packages."${system}".specific;
     # system-aarch64 = "aarch64-linux";
+    , # zen-browser,
+      # zen-browser = inputs.zen-browser.packages."${system}".specific;
 
     unstable = import nixpkgs-unstable {
       inherit system;
