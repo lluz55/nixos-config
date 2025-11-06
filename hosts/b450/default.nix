@@ -259,6 +259,8 @@ with lib; {
         # Others
         cosmic-applets
 
+        # AI
+        lmstudio
 
       ];
     };
