@@ -237,6 +237,8 @@ with lib; {
         lazygit
         rustup
         devenv
+        dust
+        dysk
 
         # Editors
         neovim
