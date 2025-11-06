@@ -83,6 +83,7 @@ with lib; {
   gnome.enable = false;
   hyprland.enable = false;
   glances.enable = true;
+  # twingate.enable = true;
 
   services.desktopManager.cosmic.enable = true;
   services.displayManager.cosmic-greeter.enable = true;
