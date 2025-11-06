@@ -1,8 +1,7 @@
-{
-  pkgs,
-  lib,
-  config,
-  ...
+{ pkgs
+, lib
+, config
+, ...
 }:
 with lib; {
   config = mkIf config.virt-tools.enable {
@@ -12,7 +11,7 @@ with lib; {
       spice
       spice-gtk
       spice-protocol
-      win-virtio
+      virtio-win
       win-spice
     ];
 
@@ -21,8 +20,8 @@ with lib; {
         enable = true;
         qemu = {
           swtpm.enable = true;
-          ovmf.enable = true;
-          ovmf.packages = [pkgs.OVMFFull.fd];
+          # ovmf.enable = true;
+          # ovmf.packages = [pkgs.OVMFFull.fd];
         };
       };
       spiceUSBRedirection.enable = true;
