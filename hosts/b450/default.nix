@@ -35,7 +35,6 @@ with lib; {
     allowedTCPPorts = [ 3000 11434 ];
   };
 
-  hardware.nvidia-container-toolkit.enable = true;
   hardware.nvidia = {
     modesetting.enable = true;
     open = false;
@@ -46,6 +45,12 @@ with lib; {
   networking.interfaces.eno1.wakeOnLan = {
     enable = true;
   };
+
+  # services.rustdesk-server = {
+  #   enable = true;
+  #   openFirewall = true;
+  #   relay.enable = false;
+  # };
 
   zramSwap = {
     enable = true;
@@ -59,14 +64,7 @@ with lib; {
     ];
   };
 
-  hardware.opengl = {
-    # extraPackages = with unstable; [ intel-media-driver ];
-
-    enable = true;
-    # driSupport = true;
-    driSupport32Bit = true;
-  };
-
+  hardware.graphics.enable32Bit = true;
   # TODO: change opengl to hardware.graphics.enable32Bit
 
   console = {
@@ -82,11 +80,11 @@ with lib; {
       };
     };
     xserver.videoDrivers = [ "nvidia" ];
-    logind.extraConfig = ''
-      IeAction=suspend
-      I#dleActionSec=30min
-    '';
-    twingate.enable = true;
+    logind.settings.Login = {
+      IeAction = "suspend";
+      IdleActionSec = "30min";
+    };
+    # twingate.enable = true;
   };
 
   boot = {
@@ -101,7 +99,7 @@ with lib; {
   programs.light.enable = true;
 
   #sway.enable = true;
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   services.pipewire = {
     enable = true;
     alsa.enable = true;
