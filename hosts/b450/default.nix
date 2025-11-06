@@ -217,9 +217,10 @@ with lib; {
         COSMIC_DATA_CONTROL_ENABLED = 1;
       };
       systemPackages = with unstable; [
+        docker-compose
         # Gaming
         mangohud
-        protonup
+        protonup-ng
 
         # Shells
         nushell
@@ -259,9 +260,14 @@ with lib; {
         # Others
         cosmic-applets
 
+        brave
         # AI
         lmstudio
+        nvitop
+        opencode
+        appimage-run
 
+        davinci-resolve
       ];
     };
 }
