@@ -42,19 +42,18 @@ with lib;
     #       tailscale.enable = true;
     #     };
 
-        virtualisation.oci-containers.containers."twingate" = {
-          image = "twingate/connector:1.70";
-          environment = {
-            TWINGATE_LABEL_HOSTNAME = "`hostname`";
-          };
-          extraOptions = [
-            "--dns=8.8.8.8,1.1.1.1"
-            "--network=host"
-            "--env-file=${config.sops.secrets."twingate.env".path}"
-          ];
-        };
+    virtualisation.oci-containers.containers."twingate-server" = {
+      image = "twingate/connector:1.78";
+      environment = {
+        TWINGATE_LABEL_HOSTNAME = "`hostname`";
       };
-#     };
-#   };
- }
+      extraOptions = [
+        "--network=host"
+        "--env-file=${config.sops.secrets."twingate.env".path}"
+      ];
+    };
+  };
+  #     };
+  #   };
+}
 

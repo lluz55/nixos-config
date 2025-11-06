@@ -11,6 +11,7 @@ in
 with lib; {
   imports = [
     ./hardware-configuration.nix
+    ./twingate-desktop-service.nix
   ];
   # systemd.services.NetworkManager-wait-online.enable = false;
 
@@ -83,6 +84,7 @@ with lib; {
   gnome.enable = false;
   hyprland.enable = false;
   glances.enable = true;
+  # twingate.enable = true;
 
   services.desktopManager.cosmic.enable = true;
   services.displayManager.cosmic-greeter.enable = true;
@@ -217,6 +219,9 @@ with lib; {
         COSMIC_DATA_CONTROL_ENABLED = 1;
       };
       systemPackages = with unstable; [
+
+        docker-compose
+
         # Gaming
         mangohud
         protonup
@@ -237,6 +242,8 @@ with lib; {
         lazygit
         rustup
         devenv
+        dust
+        dysk
 
         # Editors
         neovim
@@ -257,7 +264,28 @@ with lib; {
         # Others
         cosmic-applets
 
+        brave
 
+        # AI
+        lmstudio
+        nvitop
+        opencode
+        appimage-run
       ];
     };
+
+
+  # 1. Habilitar o Caddy
+  services.caddy.enable = true;
+
+  # 2. Configurar o proxy reverso para o servidor Node.js
+  services.caddy.virtualHosts."192.168.100.157:80" = {
+
+    # Substitua "192.168.1.100" pelo seu endereço IP local
+    extraConfig = ''
+      # Encaminha todo o tráfego para a porta onde seu app Node.js está rodando
+      reverse_proxy localhost:4009
+    '';
+  };
+
 }

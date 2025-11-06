@@ -17,6 +17,7 @@
 
   sops.age.keyFile = "/home/${masterUser.name}/.config/sops/age/keys.txt";
   sops.secrets."twingate.env" = { };
+  sops.secrets."twingate_2.env" = { };
   sops.secrets."frigate.env" = { };
   sops.secrets."mqtt.env" = { };
   sops.secrets."macs/poco" = { };
