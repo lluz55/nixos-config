@@ -20,8 +20,8 @@ with lib; {
   hyprland.enable = false;
   arduino.enable = false;
 
-   services.desktopManager.cosmic.enable = false;
-   services.displayManager.cosmic-greeter.enable = false;
+   services.desktopManager.cosmic.enable = true;
+   services.displayManager.cosmic-greeter.enable = true;
 
   zramSwap = {
     enable = true;
@@ -35,6 +35,16 @@ with lib; {
       "pt_BR.UTF-8/UTF-8"
     ];
   };
+
+  networking = {
+    useNetworkd = true;
+    interfaces.enp2s0.useDHCP = true;
+  };
+
+  # systemd.network.networks."10-lan" = {
+  #   matchConfig.Name = "enp2s0";
+  #   networkConfig.DHCP = "ipv4";
+  # };
 
   hardware.graphics= {
     # extraPackages32 = with unstable.pkgsi686Linux; [nvidia-vaapi-driver intel-media-driver];
@@ -57,10 +67,10 @@ with lib; {
       };
     };
     xserver.videoDrivers = [ "amd" ];
-    logind.extraConfig = ''
-      IeAction=suspend
-      I#dleActionSec=30min
-    '';
+    logind.settings.Login = {      
+      IeAction= "suspend";
+      IdleActionSec= "30min";
+    };
   };
 
   boot = {

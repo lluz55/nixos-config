@@ -15,21 +15,19 @@ with lib;
         desktopManager.gnome.enable = true;
       };
       udev.packages = with pkgs; [
-        gnome.gnome-settings-daemon
+        gnome-settings-daemon
       ];
     };
 
     environment = {
       systemPackages = with pkgs; [
-        gnome.adwaita-icon-theme
-        gnome.dconf-editor
-        gnome.gnome-tweaks
+        adwaita-icon-theme
+        dconf-editor
+        gnome-tweaks
         wl-clipboard
       ];
       gnome.excludePackages = (with pkgs; [
         gnome-tour
-      ]) ++ (with pkgs.gnome; [
-        atomix
         epiphany
         geary
         gnome-characters
