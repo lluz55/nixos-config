@@ -1,5 +1,5 @@
-{ ... }:
-{
+{ lib, ... }:
+with lib; {
   imports = [
     ./options.nix
     ./networking.nix
@@ -17,5 +17,5 @@
     };
   };
   services.irqbalance.enable = true;
-  services.resolved.enable = false;
+  services.resolved.enable = lib.mkForce false;
 }

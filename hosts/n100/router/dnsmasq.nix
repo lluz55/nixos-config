@@ -34,14 +34,14 @@
         # Main PC
         "${config.macs.b450},b450,192.168.1.120,infinite"
         ## Main smartphone
-        "${config.macs.poco},POCO_X3,10.0.66.2,infinite"
-        "${config.macs.poco},POCO_X3,10.0.55.2,infinite"
+        # "${config.macs.poco},POCO_X3,10.0.66.2,infinite"
+        # "${config.macs.poco},POCO_X3,10.0.55.2,infinite"
         ## Main Note
         "${config.macs.gl62m},Gl62m,10.0.66.3,infinite"
         "${config.macs.gl62m},Gl62m,10.0.55.3,infinite"
 
         # Wife's smartphone
-        "${config.macs.rn10c},rn10c,10.0.55.4, infinite"
+        # "${config.macs.rn10c},rn10c,10.0.55.4, infinite"
 
         "da:91:24:fb:3d:bf,homelab,10.1.1.10,infinite"
       ];
