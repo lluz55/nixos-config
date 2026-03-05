@@ -29,9 +29,10 @@ with lib;
 
         virtualisation.oci-containers.containers = {
           frigate = {
-            image = "ghcr.io/blakeblackshear/frigate:a6ccb37-rocm";
+            image = "ghcr.io/blakeblackshear/frigate:0.17.0";
+            # image = "ghcr.io/blakeblackshear/frigate:0.15.0-beta4";
             extraOptions = [
-              "--shm-size=128mb"
+              "--shm-size=512mb"
               "--network=host"
               "--device=/dev/bus/usb:/dev/bus/usb"
               "--device=/dev/dri/renderD128:/dev/dri/renderD128"
