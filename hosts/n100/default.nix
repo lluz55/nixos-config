@@ -31,7 +31,6 @@ with lib;{
   glances.enable = true;
   twingate.enable = true;
 
-  services.tailscale.enable = true;
   services.vscode-server.enable = true;
   vscode-server.enable = true;
   services.netbird.enable = true;
