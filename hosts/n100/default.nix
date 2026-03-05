@@ -1,4 +1,4 @@
-{ pkgs, config, lib, unstable, ... }:
+{ pkgs, config, lib, unstable, inputs, ... }:
 let
   gasketRev = "09385d485812088e04a98a6e1227bf92663e0b59";
   gasketPkg = (pkgs.gasket.overrideAttrs (final: prev: {
@@ -17,6 +17,7 @@ with lib;{
   imports = [
     ./hardware-configuration.nix
     ./router
+    inputs.vscode-server.nixosModules.default
   ];
 
   console = {
@@ -27,11 +28,12 @@ with lib;{
   gnome.enable = false;
   hass.enable = true;
   frigate.enable = true;
-  vscode-server.enable = false;
   glances.enable = true;
   twingate.enable = true;
 
   services.tailscale.enable = true;
+  services.vscode-server.enable = true;
+  vscode-server.enable = true;
   services.netbird.enable = true;
   programs.mosh.enable = true;
 
