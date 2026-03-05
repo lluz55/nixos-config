@@ -77,11 +77,14 @@ with lib;
         };
 
         virtualisation.oci-containers.containers."homeassistant" = {
-          image = "ghcr.io/home-assistant/home-assistant:2024.9";
+          image = "ghcr.io/home-assistant/home-assistant:2026.3";
           volumes = [
             "/etc/localtime:/etc/localtime:ro"
             "${hassPath}:/config:rw"
           ];
+          environment = {
+            PYTHONPATH="/config/deps";
+          };
           extraOptions = [
             "--network=host"
             "--privileged"
