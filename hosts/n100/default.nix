@@ -90,6 +90,7 @@ with lib;{
     nixfmt-classic
 
     netbird
+    sops
   ];
 
   boot = {
