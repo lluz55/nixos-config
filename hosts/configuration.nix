@@ -28,6 +28,7 @@
   sops.secrets."macs/mibox2" = { };
   sops.secrets."macs/tabs5e" = { };
   sops.secrets."macs/a55" = { };
+  sops.secrets."macs/s23u" = { };
 
   security = {
     polkit = {
