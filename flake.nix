@@ -43,6 +43,9 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    vscode-server.url = "github:nix-community/nixos-vscode-server";
+
     # hyprland-nix.url = "github:spikespaz/hyprland-nix"; # hyprland-git.url = "github:hyprwm/hyprland/master";
     #hyprland-xdph-git.url = "github:hyprwm/xdg-desktop-portal-hyprland";
     #hyprland-protocols-git.url = "github:hyprwm/xdg-desktop-portal-hyprland";
@@ -63,6 +66,7 @@
     , flake-parts
     , nix-direnv
     , rust-overlay
+    # , vscode-server
     , # zen-browser,
       disko
     , sops-nix
