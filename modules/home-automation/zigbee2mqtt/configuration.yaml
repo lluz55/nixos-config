@@ -17,7 +17,8 @@ devices:
   '0xa4c138cea8629bb4':
     friendly_name: switch.main_entry
   '0xa4c138288f164e42':
-    friendly_name: switch.bathroom
+    friendly_name: switch.bedroom
+    state_action: false
   '0xa4c1384828367953':
     friendly_name: contact.parents_main_door
   '0x00158d000633b922':
@@ -37,13 +38,21 @@ devices:
     friendly_name: button_2_2nd_floor
   '0xa4c1380940bc76f8':
     friendly_name: button_1_2nd_floor
-  '0xa4c138a8776278b4':
-    friendly_name: switch.bedroom
   '0x8c65a3fffec0e05f':
     friendly_name: button_4_tiles
+  '0xa4c138c55f4aa956':
+    friendly_name: '0xa4c138c55f4aa956'
   '0xa4c138efb97a0977':
     friendly_name: outlet_washer
   '0xa4c138d41764dd15':
+    friendly_name: outlet_home_server
+  '0xa4c13890b25c9cb3':
     friendly_name: outlet_master_pc
+  '0xa4c138a8776278b4':
+    friendly_name: switch.bathroom
+  '0xa4c138d7b8e64866':
+    friendly_name: siren_home
+  '0xa4c138a981a2e9ce':
+    friendly_name: '0xa4c138a981a2e9ce'
 advanced:
   log_level: debug
