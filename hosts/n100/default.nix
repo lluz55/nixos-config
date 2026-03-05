@@ -93,7 +93,7 @@ with lib;{
   ];
 
   boot = {
-    kernelPackages = unstable.linuxKernel.packages.linux_zen;
+    kernelPackages = pkgs.linuxKernel.packages.linux_zen;
     loader = {
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
