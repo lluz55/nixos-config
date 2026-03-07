@@ -1,9 +1,10 @@
 #
 # Editors
 #
-{...}:{
+{pkgs, inputs, ...}:{
 
-imports = 
-[
-];
+imports = [
+  ./hl_tracker
+ ];
+
 }
