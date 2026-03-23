@@ -12,7 +12,7 @@ detectors: # <---- add detectors
 
 ui:
   time_format: 24hour
-  strftime_fmt: '%H:%M:%S - %a %d %B %Y'
+  #strftime_fmt: '%H:%M:%S - %a %d %B %Y'
 
 ffmpeg:
   hwaccel_args: preset-vaapi
@@ -28,7 +28,7 @@ go2rtc:
       - ffmpeg:rtsp://10.1.1.11:554/user=lluz&password={FRIGATE_PASSWORD}&ch02.264?dev=1/live
       - ffmpeg:back#video=h264#audio=copy#audio=aac#hardware
     casa:
-      - rtsp://lluz:Luke123luz_@10.1.1.15:554/Streaming/Channels/101
+      - rtsp://lluz:{FRIGATE_PASSWORD}@10.1.1.15:554/Streaming/Channels/101
       - ffmpeg:casa#audio=opus
     # maya:
     #   - rtsp://lluz:{FRIGATE_PWD_2}@10.1.1.13:554/0
@@ -45,7 +45,7 @@ cameras:
             rtsp://10.1.1.14:554/user=lluz&password={FRIGATE_PASSWORD}&channel=1&stream=1.sdp
           roles:
             - detect
-        #- path: rtsp://10.1.1.14:554/user=lluz&password=Luke123luz_&ch01.264?dev=1/live
+        #- path: rtsp://10.1.1.14:554/user=lluz&password={FRIGATE_PASSWORD}&ch01.264?dev=1/live
         #  roles:
         #  - record
     detect:
@@ -123,10 +123,10 @@ cameras:
   casa:
     ffmpeg:
       inputs:
-        - path: rtsp://lluz:Luke123luz_@10.1.1.15:554/Streaming/Channels/101
+        - path: rtsp://lluz:{FRIGATE_PASSWORD}@10.1.1.15:554/Streaming/Channels/101
           roles:
             - detect
-        - path: rtsp://lluz:Luke123luz_@10.1.1.15:554/Streaming/Channels/101
+        - path: rtsp://lluz:{FRIGATE_PASSWORD}@10.1.1.15:554/Streaming/Channels/101
           roles:
             - record
     detect:
@@ -202,3 +202,5 @@ semantic_search:
   model_size: small
 detect:
   enabled: true
+classification:
+  custom: {}

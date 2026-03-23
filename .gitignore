@@ -5,4 +5,11 @@ modules/home-automation/homeassistant
 modules/home-automation/node-red
 modules/home-automation/frigate/.vacuum
 modules/home-automation/frigate/frigate.db*
+modules/home-automation/frigate/.jwt_secret
+modules/home-automation/frigate/.exports
+modules/home-automation/frigate/.search_stats.json
+modules/home-automation/frigate/backup.db
+modules/home-automation/frigate/model_cache/
 modules/home-automation/zigbee2mqtt/database.db
+modules/home-automation/zigbee2mqtt/database.db.tmp.*
+**/.env
