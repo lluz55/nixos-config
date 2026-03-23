@@ -66,6 +66,11 @@ in
             # Limit guests network bandwidth
             meta iifname "vl-guests" limit rate over 500 kbytes/second drop
 
+            # WiFi cameras (vl-cams) — allow only DHCP and DNS from the router
+            # All other access is blocked here; only vl-mgmt can reach cameras via forward chain
+            iifname "vl-cams" udp dport 67-68 accept comment "Allow DHCP for vl-cams"
+            iifname "vl-cams" meta l4proto { udp, tcp } th dport 53 accept comment "Allow DNS for vl-cams"
+
             iifname "${config.WAN}" ct state { established, related } accept comment "Allow established traffic"
             iifname "${config.WAN}" icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"
             iifname "lo" accept comment "Accept everything from loopback interface"
@@ -77,6 +82,14 @@ in
 
             iifname { "vl-home" } ether saddr @authorized_home oifname "${config.WAN}" ct state new accept  
             iifname { "vl-mgmt" } ether saddr @authorized_mgmt oifname {"${config.WAN}", "br-cams", "br-lan", "vl-home"} ct state new accept 
+
+            # vl-mgmt can reach vl-cams (WiFi cameras)
+            iifname { "vl-mgmt" } ether saddr @authorized_mgmt oifname { "vl-cams" } ct state new accept comment "Allow mgmt to access WiFi cameras"
+
+            # vl-cams: block all lateral access; only allow NTP outbound and established return
+            iifname { "vl-cams" } oifname { "br-lan", "br-cams", "vl-home", "vl-guests", "vl-mgmt" } drop comment "Block vl-cams from all other networks"
+            iifname { "vl-cams" } oifname { "${config.WAN}" } udp dport ${ntp_port} accept comment "Allow NTP external access for vl-cams"
+
             iifname { "br-cams" } oifname { "${config.WAN}" } udp dport ${ntp_port} accept comment "Allow NTP extenal access"
             iifname { "br-cams" } ip saddr { "10.1.1.10" , "10.1.1.9" } oifname { "${config.WAN}" } accept comment "Allow Frigate extenal access"
             iifname { "br-lan", "vl-guests" } oifname { "${config.WAN}" } accept comment "Allow trusted to WAN interface (external access)"

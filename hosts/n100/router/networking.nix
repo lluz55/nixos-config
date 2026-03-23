@@ -48,6 +48,14 @@
         };
         vlanConfig.Id = 55;
       };
+      # WiFi cameras network — isolated, accessible only via vl-mgmt
+      "65-vl-cams" = {
+        netdevConfig = {
+          Kind = "vlan";
+          Name = "vl-cams";
+        };
+        vlanConfig.Id = 20;
+      };
     };
     networks = {
       "10-${config.WAN}" = {
@@ -84,7 +92,7 @@
       };
       "30-${config.LAN2}" = {
         matchConfig.Name = "${config.LAN2}";
-        vlan = [ "vl-mgmt" "vl-home" "vl-guests" ];
+        vlan = [ "vl-mgmt" "vl-home" "vl-guests" "vl-cams" ];
         networkConfig = { };
         linkConfig.RequiredForOnline = "enslaved";
       };
@@ -152,6 +160,17 @@
           ConfigureWithoutCarrier = true;
         };
         # Don't wait for it as it also would wait for wlan and DFS which takes around 5 min 
+        linkConfig.RequiredForOnline = "no";
+      };
+      # WiFi cameras — VLAN 20 — isolated, only reachable from vl-mgmt
+      "95-vl-cams" = {
+        matchConfig.Name = "vl-cams";
+        address = [
+          "10.1.2.1/24"
+        ];
+        networkConfig = {
+          ConfigureWithoutCarrier = true;
+        };
         linkConfig.RequiredForOnline = "no";
       };
     };
