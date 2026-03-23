@@ -85,7 +85,7 @@ with lib;
     broot
     sd
     zoxide
-    neofetch
+    fastfetch
     bat
 
     # Emulation - Windows VM
