@@ -14,9 +14,16 @@ with lib; {
   imports = [
     ./hardware-configuration.nix
   ];
+  systemd.services."systemd-networkd-wait-online".enable = lib.mkForce false;
+  services.avahi.enable = false;
+
+  networking = {
+    firewall.enable = false;
+    firewall.allowedTCPPorts = [ 5000 8554 8555 4096 40096];
+  };
 
   virt-tools.enable = false;
-  gnome.enable = true;
+  gnome.enable = false;
   hyprland.enable = false;
   arduino.enable = false;
 
@@ -28,6 +35,9 @@ with lib; {
     algorithm = "lz4";
   };
 
+
+  # Adicionar seu usuário ao grupo adbusers (substitua 'seu-usuario' pelo seu nome de usuário real)
+  users.users.lluz.extraGroups = [ "adbusers" ];
 
   i18n = {
     supportedLocales = lib.mkDefault [
@@ -75,6 +85,7 @@ with lib; {
 
   boot = {
     kernelPackages = unstable.linuxPackages_latest;
+    extraModulePackages = with config.boot.kernelPackages; [ rtl8822bu ];
     loader = {
         efi.canTouchEfiVariables = true;
         # system-boot.enable = true;
@@ -103,7 +114,6 @@ with lib; {
       };
   };
 
-  programs.light.enable = true;
   #programs.direnv = {
   #  enable = true;
   #  nix-direnv = {
@@ -134,9 +144,9 @@ with lib; {
         [
           vscode
           nmap
-          remmina
-          x2goclient
-          turbovnc
+          # remmina
+          # x2goclient
+          # turbovnc
           lazygit
           (vivaldi.override {
             proprietaryCodecs = true;
@@ -149,10 +159,11 @@ with lib; {
 
           font-awesome_4
 
-          wineWowPackages.stableFull
+          # wineWowPackages.stableFull
           cosmic-applets
           dust
           vivaldi
+          brave
         ];
     };
 }
