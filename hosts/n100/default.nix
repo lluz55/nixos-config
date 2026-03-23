@@ -30,6 +30,12 @@ with lib;{
   frigate.enable = true;
   glances.enable = true;
   twingate.enable = true;
+  cloudflaredConnectors = {
+    enable = true;
+    tunnels = {
+      ssh = { };
+    };
+  };
 
   services.vscode-server.enable = true;
   vscode-server.enable = true;

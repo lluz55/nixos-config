@@ -1,10 +1,10 @@
 #
-# Editors
+# Servers
 #
-{pkgs, inputs, ...}:{
+{ ... }: {
 
 imports = [
-  ./hl_tracker
+  ./cloudflared-connector.nix
  ];
 
 }

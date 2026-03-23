@@ -1,5 +1,8 @@
 # NixOS system configuration Flake
 
+## Modules
+- [Cloudflared Connectors (Multi-Tunnel)](./modules/servers/README-cloudflared-connectors.md)
+
 ## What to do
 - Download and install [NixOS](https://nixos.org/download)
 - Place private key in `/root/.ssh`
