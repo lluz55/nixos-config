@@ -47,8 +47,12 @@ with lib;{
     enable = true;
     settings = {
       PasswordAuthentication = true;
+      KbdInteractiveAuthentication = false;
+      PermitRootLogin = "no";
     };
   };
+
+  services.fail2ban.enable = true;
 
   services.prometheus = {
     exporters = {
