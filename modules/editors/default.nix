@@ -1,7 +1,6 @@
-#
-# Editors
-#
-
-[
-  ./nvim.nix
-]
+{
+  imports = [
+    ./nvim.nix
+    ./arduino.nix
+  ];
+}
