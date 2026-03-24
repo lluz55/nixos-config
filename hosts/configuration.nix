@@ -20,6 +20,9 @@
   sops.secrets."twingate_2.env" = { };
   sops.secrets."frigate.env" = { };
   sops.secrets."mqtt.env" = { };
+  sops.secrets."cloudflare/tunnels/ssh/token" = { };
+  sops.secrets."cloudflare/tunnels/haby/token" = { };
+  sops.secrets."cloudflare/tunnels/domain_base" = { };
   sops.secrets."macs/poco" = { };
   sops.secrets."macs/gl62m" = { };
   sops.secrets."macs/b450" = { };

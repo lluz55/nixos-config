@@ -34,6 +34,7 @@ with lib;{
     enable = true;
     tunnels = {
       ssh = { };
+      haby = { };
     };
   };
 
@@ -92,7 +93,7 @@ with lib;{
     nmap
     usbutils
 
-    nixfmt-rfc-style
+    nixfmt
 
     netbird
     sops

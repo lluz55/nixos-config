@@ -26,7 +26,7 @@ with lib;{
     dust
     htop
     nmap
-    nixfmt-rfc-style
+    nixfmt
 
     helix
     neovim
