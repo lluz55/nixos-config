@@ -70,9 +70,10 @@
     , # zen-browser,
       disko
     , sops-nix
-    , # , nix-ld
+     # , nix-ld
       # , nixos-generators
-      ...
+    ,
+    ...
     }:
     let
       inherit (users) masterUser;
@@ -96,13 +97,31 @@
         inherit system;
         config.allowUnfree = true;
       };
+
+      desktopProfile = [
+        ./modules
+        ./hosts/configuration.nix
+        masterUser.user
+        sops-nix.nixosModules.sops
+        home-manager.nixosModules.home-manager
+        {
+          nixpkgs.overlays = overlays;
+        }
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs; };
+            users = {
+              "${masterUser.name}".imports = [ ./home/${masterUser.name}.nix ];
+            };
+          };
+        }
+      ];
+
       mkSystem = name: cfg:
         let
-          masterUsername = masterUser.name;
-          additionalUserExists =
-            (cfg.additionalUser or null)
-            != null; # Variable must be boolean
-          additionalUsername = cfg.additionalUser.name;
+          additionalUserExists = (cfg.additionalUser or null) != null;
         in
         with lib;
         nixosSystem
@@ -113,67 +132,30 @@
                 inherit inputs unstable masterUser nix-direnv;
               }
               // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
-            modules =
-              (
-                if (builtins.hasAttr "isVPS" cfg && cfg.isVPS)
-                then [
-                  # VPS only configuration
-                  ./hosts/vps-server
-                ]
-                else [
-                  ./modules
-                  ./hosts/configuration.nix
-                  ./hosts/${name}
-                  masterUser.user
-                  sops-nix.nixosModules.sops
-                  home-manager.nixosModules.home-manager
-                  # nix-ld.nixosModules.nix-ld
-                  {
-                    nixpkgs.overlays = overlays;
-                  }
-                  {
-                    home-manager = {
-                      useGlobalPkgs = true;
-                      useUserPackages = true;
-                      extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs; };
-                      users =
-                        {
-                          # Load HM configuration for main user
-                          "${masterUsername}".imports = [ ./home/${masterUsername}.nix ];
-                        }
-                        // attrsets.optionalAttrs additionalUserExists {
-                          # Load HM configuration for additional user
-                          "${additionalUsername}".imports = [ ./home/${additionalUsername}.nix ];
-                        };
-                    };
-                  }
-                ]
-              )
-              # In case additional modules was passed
+            modules = [ ./hosts/${name} ]
               ++ (cfg.modules or [ ])
-              # Details from additional user
-              ++ (
-                if additionalUserExists
-                then [ cfg.additionalUser.user ]
-                else [ ]
-              );
+              ++ lib.optional additionalUserExists {
+                   home-manager.users."${cfg.additionalUser.name}".imports = [ ./home/${cfg.additionalUser.name}.nix ];
+                   imports = [ cfg.additionalUser.user ];
+                 };
           };
       # All hosts
       hosts = {
         n100 = {
-          modules = [ ];
+          modules = desktopProfile;
         };
         b450 = {
-          modules = [ ];
+          modules = desktopProfile;
         };
         gl62m = {
-          # TODO: Maybe convert to a List
+          modules = desktopProfile;
           additionalUser = karolayne;
         };
-        thinkpad = { };
+        thinkpad = {
+          modules = desktopProfile;
+        };
         vps-server = {
           modules = [ disko.nixosModules.disko ];
-          isVPS = true;
         };
       };
     in
