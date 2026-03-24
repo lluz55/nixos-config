@@ -164,7 +164,7 @@ with lib; {
     };
   };
 
-  programs.light.enable = true;
+  hardware.acpilight.enable = true;
 
   #sway.enable = true;
   services.pulseaudio.enable = false;

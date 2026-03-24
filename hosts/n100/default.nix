@@ -85,18 +85,20 @@ with lib;{
     tailscale
     arp-scan
     killall
-    du-dust
+    dust
     glances
     htop
     btop
     nmap
     usbutils
 
-    nixfmt-classic
+    nixfmt-rfc-style
 
     netbird
     sops
   ];
+
+  services.twingate.enable = lib.mkForce false;
 
   boot = {
     kernelPackages = pkgs.linuxKernel.packages.linux_zen;
@@ -113,7 +115,7 @@ with lib;{
     };
   };
 
-  programs.light.enable = true;
+  hardware.acpilight.enable = true;
 
   services.vaultwarden = {
     enable = true;

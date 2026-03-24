@@ -23,10 +23,10 @@ with lib;{
   environment.systemPackages = with unstable; [
     arp-scan
     killall
-    du-dust
+    dust
     htop
     nmap
-    nixfmt-classic
+    nixfmt-rfc-style
 
     helix
     neovim

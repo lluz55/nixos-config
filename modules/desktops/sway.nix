@@ -146,8 +146,8 @@ with lib;
             "XF86AudioMute" = "exec ${pkgs.pamixer}/bin/pamixer -t";
             "XF86AudioMicMute" = "exec ${pkgs.pamixer}/bin/pamixer --default-source -t";
 
-            "XF86MonBrightnessDown" = "exec ${pkgs.light}/bin/light -U 5";
-            "XF86MonBrightnessUp" = "exec ${pkgs.light}/bin/light -A 5";
+            "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 5%-";
+            "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set +5%";
           };
         };
         extraConfig = ''

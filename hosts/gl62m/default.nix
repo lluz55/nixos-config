@@ -118,7 +118,7 @@ with lib; {
       };
   };
 
-  programs.light.enable = true;
+  hardware.acpilight.enable = true;
   #programs.direnv = {
   #  enable = true;
   #  nix-direnv = {
