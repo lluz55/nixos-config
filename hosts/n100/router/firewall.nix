@@ -69,6 +69,9 @@ in
             iifname "${config.WAN}" ct state { established, related } accept comment "Allow established traffic"
             iifname "${config.WAN}" icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"
             iifname "lo" accept comment "Accept everything from loopback interface"
+
+            # Audit logs for blocked attempts on WAN
+            iifname "${config.WAN}" tcp flags & (fin|syn|rst|ack) == syn counter log prefix "NFT_INPUT_DROP: " drop
           }
           chain forward {
             type filter hook forward priority 0; policy drop;
@@ -103,7 +106,7 @@ in
             iifname {"vl-mgmt"} tcp dport { 5000, 1984 } dnat 10.1.1.9 # Allow forwarding to Frigate
             iifname {"vl-mgmt"} tcp dport 8080 dnat 10.1.1.10 # Allow forwarding to Zigbee2mqtt
             iifname {"vl-mgmt"} tcp dport 48899 dnat 10.1.1.14:8899 # Allow forwarding to CAM 14
-            tcp dport 80 dnat 10.1.1.10 # Allow forwarding to Emulated Hue - HASS
+            iifname {"vl-mgmt", "br-lan", "vl-home"} tcp dport 80 dnat 10.1.1.10 # Allow forwarding to Emulated Hue - HASS (Restricted to Internal)
             iifname {"vl-mgmt"} tcp dport 1880 dnat 10.1.1.10 # Allow forwarding to NodeRed
             iifname {"br-lan"} ip saddr 192.168.1.99 tcp dport 8080 dnat 10.1.1.10:8080 # Allow Twingate forwarding to Zigbee2mqtt
             iifname {"br-lan"} ip saddr 192.168.1.99 tcp dport 5000 dnat 10.1.1.9:5000 # Allow Twingate forwarding to Frigate
