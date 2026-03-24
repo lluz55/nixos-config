@@ -4,6 +4,12 @@ let
 in
 with lib;
 {
+  options.gnome.enable = mkOption {
+    type = types.bool;
+    default = false;
+    description = mdDoc "Enable gnome within this flake";
+  };
+
   config = mkIf (config.gnome.enable) {
     services = {
       libinput.enable = true;
@@ -40,7 +46,7 @@ with lib;
       ]);
     };
 
-    home-manager.users.lluz = {
+    home-manager.users."${masterUser.name}" = {
       dconf.settings = {
         "orgs/gnome/shell" = {
           disable-user-extension = false;

@@ -21,6 +21,12 @@ let
 in
 with lib;
 {
+  options.frigate.enable = mkOption {
+    type = types.bool;
+    default = false;
+    description = mdDoc "Enable Frigate";
+  };
+
   config = mkIf (config.frigate.enable) {
     boot.kernel.sysctl."kernel.perf_event_paranoid" = -1;
     systemd.tmpfiles.rules = [

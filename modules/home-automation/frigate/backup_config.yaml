@@ -123,12 +123,10 @@ cameras:
   casa:
     ffmpeg:
       inputs:
-        - path: 
-            rtsp://lluz:{FRIGATE_PASSWORD}@10.1.1.15:554/Streaming/Channels/101
+        - path: rtsp://lluz:{FRIGATE_PASSWORD}@10.1.1.15:554/Streaming/Channels/101
           roles:
             - detect
-        - path: 
-            rtsp://lluz:{FRIGATE_PASSWORD}@10.1.1.15:554/Streaming/Channels/101
+        - path: rtsp://lluz:{FRIGATE_PASSWORD}@10.1.1.15:554/Streaming/Channels/101
           roles:
             - record
     detect:
@@ -186,7 +184,7 @@ objects:
       # min_score: 0.75
       # threshold: 0.75
       threshold: 0.8
-version: 0.17-0
+version: 0.16-0
 camera_groups:
   Parent:
     order: 1

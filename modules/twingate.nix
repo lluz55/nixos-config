@@ -7,6 +7,12 @@
 # in
 with lib;
 {
+  options.twingate.enable = mkOption {
+    type = types.bool;
+    default = false;
+    description = mdDoc "Enable twingate connector";
+  };
+
   config = mkIf (config.twingate.enable) {
     # containers.twingate = {
     #   inherit allowedDevices;

@@ -4,6 +4,12 @@
 , ...
 }:
 with lib; {
+  options.virt-tools.enable = mkOption {
+    type = types.bool;
+    default = false;
+    description = mdDoc "Enable virtualization tools";
+  };
+
   config = mkIf config.virt-tools.enable {
     environment.systemPackages = with pkgs; [
       virt-manager

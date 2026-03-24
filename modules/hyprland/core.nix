@@ -1,5 +1,11 @@
 { unstable, lib, config, inputs, ... }:
 with lib;{
+  options.hyprland.enable = mkOption {
+    type = types.bool;
+    default = false;
+    description = mdDoc "Enable hyprland connector";
+  };
+
   config = mkIf config.hyprland.enable {
     programs.hyprland = {
       enable = true;

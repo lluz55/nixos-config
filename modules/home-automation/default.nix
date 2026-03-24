@@ -23,9 +23,16 @@ in
 with lib;
 {
   imports = [
-    ./caddy.nix
+    # ./caddy.nix
     ./frigate
   ];
+
+  options.hass.enable = mkOption {
+    type = types.bool;
+    default = false;
+    description = mdDoc "Enable Home Assistant";
+  };
+
   config = mkIf (config.hass.enable) {
     # Create files if doens't exist for Docker/Podman
     systemd.tmpfiles.rules = containers.mkCreateNeededFolders [

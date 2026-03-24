@@ -4,17 +4,17 @@
 , ...
 }: {
   imports = [
-    ./options.nix
     ./desktops
     ./shell
     ./home-automation
     ./tools
     ./twingate.nix
     ./virt.nix
+    ./editors
     ./hyprland/core.nix
     ./waybar/waybar.nix
+    ./servers
     #./editors/nixvim
-    # inputs.vscode-server.nixosModules.default
   ];
 
   # programs.nix-ld.enable = true;
