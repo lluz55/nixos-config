@@ -67,7 +67,7 @@
   ];
 
   services = {
-    twingate.enable = true;
+    twingate.enable = false; # Disable native service that fails without interactive setup
     pulseaudio.enable = false;
     pipewire = {
       enable = true;
@@ -76,6 +76,8 @@
       pulse.enable = true;
     };
   };
+
+  twingate.enable = true; # Enable custom container-based connector from modules/twingate.nix
 
   fonts.packages = with pkgs; [
     fira-code
