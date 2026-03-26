@@ -32,7 +32,8 @@ with lib; {
 
   zramSwap = {
     enable = true;
-    algorithm = "lz4";
+    algorithm = "zstd";
+    memoryPercent = 100;
   };
 
 
@@ -69,6 +70,9 @@ with lib; {
   };
 
   services = {
+    power-profiles-daemon.enable = false;
+    auto-cpufreq.enable = true;
+    thermald.enable = true;
     flatpak.enable = true;
     openssh = {
       enable = true;
