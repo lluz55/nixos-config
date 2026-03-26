@@ -23,7 +23,6 @@ in
 with lib;
 {
   imports = [
-    # ./caddy.nix
     ./frigate
   ];
 

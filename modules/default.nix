@@ -14,7 +14,6 @@
     ./hyprland/core.nix
     ./waybar/waybar.nix
     ./servers
-    #./editors/nixvim
   ];
 
   # programs.nix-ld.enable = true;

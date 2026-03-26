@@ -1,5 +1,4 @@
 { ... }:
 {
-  imports = [ (import ./hyprland.nix) ]
-    ++ [ (import ./variables.nix) ];
+  imports = [ (import ./hyprland.nix) ];
 }

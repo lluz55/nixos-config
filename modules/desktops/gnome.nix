@@ -1,7 +1,4 @@
 { config, lib, pkgs, masterUser, ... }:
-let
-  colors = import ../theming/colors.nix;
-in
 with lib;
 {
   options.gnome.enable = mkOption {
