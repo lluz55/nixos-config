@@ -18,6 +18,8 @@ with lib; {
   hyprland.enable = false;
   arduino.enable = false;
 
+  networking.networkmanager.enable = true;
+
    services.desktopManager.cosmic.enable = true;
    services.displayManager.cosmic-greeter.enable = true;
 

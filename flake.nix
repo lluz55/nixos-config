@@ -101,7 +101,7 @@
                 inherit inputs unstable masterUser nix-direnv;
               }
               // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
-            modules = [ ./hosts/${name} ]
+            modules = [ ./modules/rtl88x2bu.nix ./hosts/${name} ]
               ++ (cfg.modules or [ ])
               ++ lib.optional additionalUserExists {
                    home-manager.users."${cfg.additionalUser.name}".imports = [ ./home/${cfg.additionalUser.name}.nix ];

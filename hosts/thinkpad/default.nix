@@ -13,13 +13,24 @@ in
 with lib; {
   imports = [
     ./hardware-configuration.nix
+    ./router
   ];
-  systemd.services."systemd-networkd-wait-online".enable = lib.mkForce false;
   services.avahi.enable = false;
 
-  networking = {
-    firewall.enable = false;
-    firewall.allowedTCPPorts = [ 5000 8554 8555 4096 40096];
+  sops.secrets = lib.mkForce { };
+  sops.age.keyFile = lib.mkForce "/etc/ssh/ssh_host_ed25519_key";
+  twingate.enable = lib.mkForce false;
+
+  cameraRouter = {
+    enable = true;
+    mode = "provisioning";
+    uplinkInterface = "wlp3s0";
+    uplinkSsid = "vl-guests";
+    uplinkPsk = "H1o6u1s5e4-guests";
+    apInterface = "wlp4s0f3u2";
+    ssid = "tuya-cameras";
+    passphrase = "tuya-provisioning";
+    cameras = [ ];
   };
 
   virt-tools.enable = false;
@@ -45,11 +56,6 @@ with lib; {
       "en_US.UTF-8/UTF-8"
       "pt_BR.UTF-8/UTF-8"
     ];
-  };
-
-  networking = {
-    useNetworkd = true;
-    interfaces.enp2s0.useDHCP = true;
   };
 
   # systemd.network.networks."10-lan" = {
@@ -86,7 +92,6 @@ with lib; {
 
   boot = {
     kernelPackages = unstable.linuxPackages_latest;
-    extraModulePackages = with config.boot.kernelPackages; [ rtl8822bu ];
     loader = {
         efi.canTouchEfiVariables = true;
         # system-boot.enable = true;
