@@ -40,17 +40,6 @@ with lib;{
 
   services.netbird.enable = true;  programs.mosh.enable = true;
 
-  services.openssh = {
-    enable = true;
-    settings = {
-      PasswordAuthentication = true;
-      KbdInteractiveAuthentication = false;
-      PermitRootLogin = "no";
-    };
-  };
-
-  services.fail2ban.enable = true;
-
   services.prometheus = {
     exporters = {
       node = {

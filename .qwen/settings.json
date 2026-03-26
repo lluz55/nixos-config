@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git checkout *)",
+      "Bash(git add *)",
+      "WebSearch",
+      "WebFetch(github.com)"
+    ]
+  }
+}

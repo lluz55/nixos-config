@@ -13,13 +13,6 @@ with lib;{
 
   system.stateVersion = "24.11";
                 
-  services.openssh = {
-    enable = true;
-    settings = {
-      PasswordAuthentication = true;
-    };
-  };
-
   environment.systemPackages = with unstable; [
     arp-scan
     killall

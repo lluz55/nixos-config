@@ -142,9 +142,6 @@ with lib; {
   services = {
     openssh = {
       enable = true;
-      settings = {
-        PasswordAuthentication = true;
-      };
     };
     xserver.videoDrivers = [ "nvidia" ];
     logind.settings.Login = {

@@ -34,6 +34,8 @@
   sops.secrets."macs/s23u" = { };
 
   security = {
+    sudo-rs.enable = true;
+    lockKernelModules = true;
     polkit = {
       enable = true;
       extraConfig = ''
@@ -69,6 +71,7 @@
   services = {
     fstrim.enable = true;
     dbus.implementation = "broker";
+    fail2ban.enable = true;
     twingate.enable = false; # Disable native service that fails without interactive setup
     pulseaudio.enable = false;
     pipewire = {
@@ -76,6 +79,14 @@
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
+    };
+    openssh = {
+      enable = true;
+      settings = {
+        PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
+        PermitRootLogin = "no";
+      };
     };
   };
 

@@ -72,9 +72,6 @@ with lib; {
     flatpak.enable = true;
     openssh = {
       enable = true;
-      settings = {
-        PasswordAuthentication = true;
-      };
     };
     xserver.videoDrivers = [ "amd" ];
     logind.settings.Login = {      
