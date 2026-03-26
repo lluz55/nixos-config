@@ -67,6 +67,8 @@
   ];
 
   services = {
+    fstrim.enable = true;
+    dbus.implementation = "broker";
     twingate.enable = false; # Disable native service that fails without interactive setup
     pulseaudio.enable = false;
     pipewire = {
