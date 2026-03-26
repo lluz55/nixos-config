@@ -14,7 +14,6 @@
   };
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    # nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -24,10 +23,6 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    #vscode-server = {
-    #  url = "github:nix-community/nixos-vscode-server";
-    #  inputs.nixpkgs.follows = "nixpkgs";
-    #};
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
@@ -37,26 +32,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     rust-overlay.url = "github:oxalica/rust-overlay";
-    # zen-browser.url = "github:0xc000022070/zen-browser-flake";
-
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     vscode-server.url = "github:nix-community/nixos-vscode-server";
-
-    # hyprland-nix.url = "github:spikespaz/hyprland-nix"; # hyprland-git.url = "github:hyprwm/hyprland/master";
-    #hyprland-xdph-git.url = "github:hyprwm/xdg-desktop-portal-hyprland";
-    #hyprland-protocols-git.url = "github:hyprwm/xdg-desktop-portal-hyprland";
-    #hypr-contrib.url = "github:hyprwm/contrib";
-    #hyprpicker.url = "github:hyprwm/hyprpicker";
-
-    #nix-ld = {
-    #  url = "github:Mic92/nix-ld";
-    #  # this line assume that you also have nixpkgs as an input
-    #  inputs.nixpkgs.follows = "nixpkgs";
-    #};
   };
 
   outputs =
@@ -66,31 +46,20 @@
     , flake-parts
     , nix-direnv
     , rust-overlay
-    # , vscode-server
-    , # zen-browser,
-      disko
+    , disko
     , sops-nix
-     # , nix-ld
-      # , nixos-generators
-    ,
-    ...
+    , ...
     }:
     let
       inherit (users) masterUser;
       inherit (users) karolayne;
       users = import ./users.nix;
       system = "x86_64-linux";
-      # zen-browser = inputs.zen-browser.packages."${system}".specific;
-      # system-aarch64 = "aarch64-linux";
 
       unstable = import nixpkgs-unstable {
         inherit system;
         config.allowUnfree = true;
       };
-      #pkgs-aarch64 = import nixpkgs-unstable {
-      #  system = system-aarch64;
-      #  config.allowUnfree = true;
-      #};
       inherit (nixpkgs) lib;
       overlays = [ rust-overlay.overlays.default ];
       pkgs = import nixpkgs {
@@ -139,7 +108,6 @@
                    imports = [ cfg.additionalUser.user ];
                  };
           };
-      # All hosts
       hosts = {
         n100 = {
           modules = desktopProfile;
@@ -180,14 +148,6 @@
             description = "nix flake new -t github:lluz55/nixos-config#godot_rust <directory>";
           };
         };
-        #packages."x86_64-linux" = {
-        #  aarch64-linux-iso = nixos-generators.nixosGenerate {
-        #    system = "x86_64-linux";
-        #    format = "iso";
-        #    modules = [ ./modules/aarch64-linux-base.nix ];
-        #  };
-        #};
-        #packages.${system}.neovim = neovim-flake.packages.${system}.maximal;
         nixosConfigurations = lib.mapAttrs mkSystem hosts;
       };
     };
