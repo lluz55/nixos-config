@@ -2,13 +2,10 @@
 , lib
 , config
   #, pkgs-aarch64
-  # , zen-browser
 , self
 , ...
 }:
 let
-  pkgs-x86_64 = import unstable { system = "x86_64-linux"; };
-  # pkgs-aarch64 = import unstable { system = "aarch64-linux"; };
   drive-flags = "format=raw,readonly=on";
 in
 with lib; {
@@ -28,8 +25,10 @@ with lib; {
     modesetting.enable = true;
     open = false;
 
+    # Usa driver estável pré-compilado para evitar build em cada atualização
+    package = config.boot.kernelPackages.nvidiaPackages.latest;
     nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+
     prime = {
       intelBusId = "PCI:0:2:0";
       nvidiaBusId = "PCI:0:1:0";
@@ -60,12 +59,12 @@ with lib; {
     ];
   };
 
-  hardware.opengl = {
+  hardware.graphics = {
     extraPackages = with unstable; [ intel-media-driver ];
     # extraPackages32 = with unstable.pkgsi686Linux; [nvidia-vaapi-driver intel-media-driver];
 
     enable = true;
-    driSupport32Bit = true;
+    enable32Bit = true;
   };
 
   console = {
@@ -74,6 +73,7 @@ with lib; {
   };
 
   services = {
+    pulseaudio.enable = false;
     flatpak.enable = true;
     openssh = {
       enable = true;
@@ -82,14 +82,10 @@ with lib; {
       };
     };
     xserver.videoDrivers = [ "nvidia" ];
-    logind.extraConfig = ''
-      IeAction=suspend
-      I#dleActionSec=30min
-    '';
   };
 
   boot = {
-    kernelPackages = unstable.linuxPackages_latest;
+    kernelPackages = unstable.linuxPackages;
     loader = {
         efi.canTouchEfiVariables = true;
         # system-boot.enable = true;
@@ -128,7 +124,6 @@ with lib; {
   #};
 
   #sway.enable = true;
-  hardware.pulseaudio.enable = false;
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -180,10 +175,9 @@ with lib; {
           font-awesome_4
           nvidia-vaapi-driver
 
-          wineWowPackages.stableFull
+          wineWow64Packages.stableFull
           cosmic-applets
           dust
-          zen-browser
           vivaldi
         ];
     };
