@@ -14,6 +14,7 @@ with lib; {
   imports = [
     ./hardware-configuration.nix
     ./router
+    ./router-specialisation.nix
   ];
   services.avahi.enable = false;
 
@@ -21,17 +22,7 @@ with lib; {
   sops.age.keyFile = lib.mkForce "/etc/ssh/ssh_host_ed25519_key";
   twingate.enable = lib.mkForce false;
 
-  cameraRouter = {
-    enable = true;
-    mode = "provisioning";
-    uplinkInterface = "wlp3s0";
-    uplinkSsid = "vl-guests";
-    uplinkPsk = "H1o6u1s5e4-guests";
-    apInterface = "wlp4s0f3u2";
-    ssid = "tuya-cameras";
-    passphrase = "tuya-provisioning";
-    cameras = [ ];
-  };
+  cameraRouter.enable = false;
 
   virt-tools.enable = false;
   gnome.enable = false;
@@ -76,6 +67,7 @@ with lib; {
   };
 
   services = {
+    twingate.enable = lib.mkForce true;
     power-profiles-daemon.enable = false;
     auto-cpufreq.enable = true;
     thermald.enable = true;
@@ -84,7 +76,7 @@ with lib; {
       enable = true;
     };
     xserver.videoDrivers = [ "amd" ];
-    logind.settings.Login = {      
+    logind.settings.Login = {
       IeAction= "suspend";
       IdleActionSec= "30min";
     };
@@ -92,6 +84,7 @@ with lib; {
 
   boot = {
     kernelPackages = unstable.linuxPackages_latest;
+    kernelModules = [ "xt_LOG" "xt_conntrack" "xt_state" "xt_nat" "iptable_filter" "iptable_nat" ];
     loader = {
         efi.canTouchEfiVariables = true;
         # system-boot.enable = true;
@@ -110,7 +103,7 @@ with lib; {
         #    #  version = "3.1";
         #    #  src = unstable.fetchFromGitHub {
         #    #    owner = "AdisonCavani";
-        #    #    repo = "distro-grub-themes";
+        #    #    op = "distro-grub-themes";
         #    #    rev = "v3.1";
         #    #    hash = "sha256-ZcoGbbOMDDwjLhsvs77C7G7vINQnprdfI37a9ccrmPs=";
         #    #  };
@@ -152,6 +145,7 @@ with lib; {
     {
       systemPackages = with unstable;
         [
+          twingate
           vscode
           nmap
           # remmina
