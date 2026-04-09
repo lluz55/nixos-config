@@ -120,6 +120,10 @@ with lib; {
       };
   };
 
+  # TP-Link Archer T3U (RTL8812BU) driver
+  boot.kernelModules = [ "rtw_8812bu" ];
+  hardware.firmware = with unstable; [ linux-firmware ];
+
   #programs.direnv = {
   #  enable = true;
   #  nix-direnv = {
@@ -165,6 +169,7 @@ with lib; {
 
           font-awesome_4
 
+          qutebrowser
           # wineWowPackages.stableFull
           cosmic-applets
           dust

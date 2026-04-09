@@ -114,13 +114,10 @@ with lib; {
   };
 
   hardware.acpilight.enable = true;
-  #programs.direnv = {
-  #  enable = true;
-  #  nix-direnv = {
-  #    enable = true;
-  #    package = unstable.nix-direnv;
-  #  };
-  #};
+
+  # TP-Link Archer T3U (RTL8812BU) driver
+  boot.kernelModules = [ "rtw_8812bu" ];
+  hardware.firmware = with unstable; [ linux-firmware ];
 
   #sway.enable = true;
   services.pipewire = {
@@ -174,6 +171,7 @@ with lib; {
           font-awesome_4
           nvidia-vaapi-driver
 
+          qutebrowser
           wineWow64Packages.stableFull
           cosmic-applets
           dust

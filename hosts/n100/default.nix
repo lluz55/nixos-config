@@ -98,8 +98,7 @@ with lib;{
       efi.canTouchEfiVariables = true;
       timeout = 2;
     };
-    extraModulePackages = [ pkgs.linuxKernel.packages.linux_zen.gasket];
-    #extraModulePackages = [ gasketPkg ];
+    extraModulePackages = [ pkgs.linuxKernel.packages.linux_zen.gasket ];
     tmp = {
       useTmpfs = true;
       tmpfsSize = "30%";
@@ -107,6 +106,10 @@ with lib;{
   };
 
   hardware.acpilight.enable = true;
+
+  # TP-Link Archer T3U (RTL8812BU) driver
+  boot.kernelModules = [ "rtw_8812bu" ];
+  hardware.firmware = with pkgs; [ linux-firmware ];
 
   services.vaultwarden = {
     enable = true;

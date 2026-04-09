@@ -96,6 +96,10 @@ with lib; {
     '';
   };
 
+  # TP-Link Archer T3U (RTL8812BU) driver
+  boot.kernelModules = [ "rtw_8812bu" ];
+  hardware.firmware = with unstable; [ linux-firmware ];
+
   networking.firewall = {
     enable = true;
     allowedTCPPorts = [ 80 1420 4008 4009 3000 3001 5137 11434 8080 ];
@@ -252,6 +256,7 @@ with lib; {
         nvidia-vaapi-driver
 
         # Browsers
+        qutebrowser
         vivaldi
         # zen-browser
 
