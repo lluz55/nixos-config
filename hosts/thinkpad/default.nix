@@ -166,6 +166,7 @@ with lib; {
           qutebrowser
           # wineWowPackages.stableFull
           cosmic-applets
+          wl-clipboard
           dust
           vivaldi
           brave

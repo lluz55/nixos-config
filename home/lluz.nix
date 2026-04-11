@@ -54,6 +54,7 @@ with lib;
     # browser
     firefox
     chromium
+    qutebrowser
 
     # social
 

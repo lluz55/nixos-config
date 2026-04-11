@@ -4,7 +4,11 @@
       "Bash(git checkout *)",
       "Bash(git add *)",
       "WebSearch",
-      "WebFetch(github.com)"
+      "WebFetch(github.com)",
+      "WebFetch(www.reddit.com)",
+      "WebFetch(developer.tuya.com)",
+      "WebFetch(tims.itf.gov.ng)",
+      "WebFetch(www.f-blog.info)"
     ]
   },
   "$version": 3

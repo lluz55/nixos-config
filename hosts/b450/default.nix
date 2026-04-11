@@ -262,6 +262,7 @@ with lib; {
 
         # Others
         cosmic-applets
+        wl-clipboard
 
         brave
         # AI

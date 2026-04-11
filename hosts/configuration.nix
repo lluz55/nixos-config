@@ -33,9 +33,19 @@
   sops.secrets."macs/a55" = { };
   sops.secrets."macs/s23u" = { };
 
+  boot.kernelModules = [
+    "xt_tcp"
+    "xt_LOG"
+    "xt_conntrack"
+    "xt_state"
+    "xt_nat"
+    "iptable_filter"
+    "iptable_nat"
+  ];
+
   security = {
     sudo-rs.enable = true;
-    lockKernelModules = true;
+    lockKernelModules = false;
     polkit = {
       enable = true;
       extraConfig = ''

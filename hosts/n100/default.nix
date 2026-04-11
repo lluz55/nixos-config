@@ -117,5 +117,58 @@ with lib;{
       ROCKET_ADDRESS = "10.0.66.1";
       ROCKET_PORT = 8222;
     };
-    };
+  };
+
+  home-manager.users."${config.users.users.lluz.name}" = { pkgs, lib, unstable, ... }: {
+    home.packages = lib.mkForce (with unstable; [
+      wget
+      # Terminal
+      eza
+      fd
+      git
+      wget
+      kitty
+      starship
+
+      # Audio
+      pamixer
+      playerctl
+
+      # Files
+      unzip
+      unrar
+      zip
+
+      # browser
+      firefox
+      chromium
+
+      # social
+      discord
+      telegram-desktop
+
+      # dev
+      distrobox
+      docker
+
+      cmake
+      gnumake
+      nodejs
+      gcc
+
+      # Terminal
+      rustup
+      zellij
+      nmap
+      lazygit
+      ripgrep
+      nil
+      lua-language-server
+      broot
+      sd
+      zoxide
+      fastfetch
+      bat
+    ]);
+  };
 }

@@ -1,0 +1,55 @@
+sudo nixos-rebuild switch --flake ~/nixos-config#thinkpad
+[sudo: authenticate] Password:
+warning: Git tree '/home/lluz/nixos-config' is dirty
+building the system configuration...
+warning: Git tree '/home/lluz/nixos-config' is dirty
+Checking switch inhibitors... done
+stopping the following units: accounts-daemon.service, camera-provisioning-check.timer, camera-provisioning-nat.service, fail2ban.service, network-setup.service, NetworkManager.service, resolvconf.service, systemd-modules-load.service, systemd-sysctl.service, wpa_supplicant.service
+activating the configuration...
+reviving group 'dnsmasq' with GID 982
+removing group ‘wpa_supplicant’
+reviving user 'dnsmasq' with UID 985
+removing user ‘wpa_supplicant’
+setting up /etc...
+removing obsolete symlink ‘/etc/wpa_supplicant/nixos.conf’...
+reloading user units for lluz...
+restarting sysinit-reactivation.target
+reloading the following units: dbus-broker.service
+restarting the following units: polkit.service, systemd-udevd.service
+starting the following units: accounts-daemon.service, fail2ban.service, NetworkManager.service, resolvconf.service, systemd-modules-load.service, systemd-sysctl.service
+the following new units were started: camera-router-check.timer, hostapd.service, mandb.service, NetworkManager-dispatcher.service, nftables.service, sysinit-reactivation.target, systemd-hostnamed.service, systemd-networkd-persistent-storage.service, systemd-networkd-wait-online.service, systemd-networkd.service, systemd-networkd.socket, systemd-tmpfiles-resetup.service
+warning: the following units failed: camera-router-uplink.service, dnsmasq.service
+× camera-router-uplink.service - Wait for camera uplink connection to be online
+     Loaded: loaded (/etc/systemd/system/camera-router-uplink.service; enabled; preset: ignored)
+     Active: failed (Result: exit-code) since Thu 2026-03-26 14:55:34 -03; 6s ago
+ Invocation: 72930f2164e14c5b9080e15561c2f354
+    Process: 20996 ExecStart=/nix/store/qa7kqnks62sfdc7b9p5a2xdm96cvhdj7-networkmanager-1.56.0/bin/nmcli -w 120 connection up camera-uplink (code=exited, status=4)
+   Main PID: 20996 (code=exited, status=4)
+         IP: 0B in, 0B out
+         IO: 24K read, 0B written
+   Mem peak: 2.9M
+        CPU: 31ms
+
+mar 26 14:55:34 nixos systemd[1]: Starting Wait for camera uplink connection to be online...
+mar 26 14:55:34 nixos nmcli[20996]: Erro: Ativação da conexão falhou: No suitable device found for this connection (device enp2s0 not available because profile is not compatible with device (mismatching interface name)).
+mar 26 14:55:34 nixos systemd[1]: camera-router-uplink.service: Main process exited, code=exited, status=4/NOPERMISSION
+mar 26 14:55:34 nixos systemd[1]: camera-router-uplink.service: Failed with result 'exit-code'.
+mar 26 14:55:34 nixos systemd[1]: Failed to start Wait for camera uplink connection to be online.
+
+× dnsmasq.service - Dnsmasq Daemon
+     Loaded: loaded (/etc/systemd/system/dnsmasq.service; enabled; preset: ignored)
+     Active: failed (Result: exit-code) since Thu 2026-03-26 14:55:35 -03; 5s ago
+ Invocation: fea50c87d5da43ad897f385b0ea65610
+    Process: 21361 ExecStartPre=/nix/store/rf9kpyz6vlpnziw2ix95qfi4i4lrs8zh-unit-script-dnsmasq-pre-start/bin/dnsmasq-pre-start (code=exited, status=0/SUCCESS)
+    Process: 21380 ExecStart=/nix/store/836sg1qd96xx5fhw97x45rmg951r6g1v-dnsmasq-2.92/bin/dnsmasq -k --enable-dbus --user=dnsmasq -C /nix/store/ry3nqrlyd4mx2qx53a7vfs33568jcjw5-dnsmasq.conf (code=exited, status=2)
+   Main PID: 21380 (code=exited, status=2)
+         IP: 0B in, 0B out
+         IO: 0B read, 0B written
+   Mem peak: 2.4M
+        CPU: 30ms
+
+mar 26 14:55:35 nixos systemd[1]: dnsmasq.service: Scheduled restart job, restart counter is at 5.
+mar 26 14:55:35 nixos systemd[1]: dnsmasq.service: Start request repeated too quickly.
+mar 26 14:55:35 nixos systemd[1]: dnsmasq.service: Failed with result 'exit-code'.
+mar 26 14:55:35 nixos systemd[1]: Failed to start Dnsmasq Daemon.
+Command 'systemd-run -E LOCALE_ARCHIVE -E NIXOS_INSTALL_BOOTLOADER -E NIXOS_NO_CHECK --collect --no-ask-password --pipe --quiet --service-type=exec --unit=nixos-rebuild-switch-to-configuration /nix/store/5cwhw3xixcjl2096669393via03kc5zf-nixos-system-nixos-26.05.20260324.46db2e0/bin/switch-to-configuration switch' returned non-zero exit status 4.

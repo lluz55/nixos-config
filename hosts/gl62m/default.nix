@@ -174,6 +174,7 @@ with lib; {
           qutebrowser
           wineWow64Packages.stableFull
           cosmic-applets
+          wl-clipboard
           dust
           vivaldi
         ];
