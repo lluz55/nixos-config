@@ -37,6 +37,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     vscode-server.url = "github:nix-community/nixos-vscode-server";
+    llm-agents.url = "github:numtide/llm-agents.nix";
   };
 
   outputs =
@@ -48,6 +49,7 @@
     , rust-overlay
     , disko
     , sops-nix
+    , llm-agents
     , ...
     }:
     let
@@ -80,7 +82,7 @@
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs; };
+            extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs llm-agents; };
             users = {
               "${masterUser.name}".imports = [ ./home/${masterUser.name}.nix ];
             };
@@ -98,7 +100,7 @@
             inherit system;
             specialArgs =
               {
-                inherit inputs unstable masterUser nix-direnv;
+                inherit inputs unstable masterUser nix-direnv llm-agents;
               }
               // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
             modules = [ ./modules/rtl88x2bu.nix ./hosts/${name} ]

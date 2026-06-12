@@ -2,6 +2,7 @@
 , unstable
 , lib
 , osConfig
+, llm-agents
 , ...
 }:
 with lib;
@@ -64,6 +65,11 @@ with lib;
     # dev
     distrobox
     docker
+    claude-code
+    antigravity
+  ]) ++ [
+    llm-agents.packages.${pkgs.system}.antigravity-cli
+  ] ++ (with unstable; [
 
     # TODO: DELETE AFTER INSTALL NEOVIM AS NIX PACKAGE
     cmake
