@@ -15,6 +15,8 @@ with lib; {
   ];
 
   virt-tools.enable = false;
+  virtualisation.waydroid.enable = true;
+  virtualisation.waydroid.package = unstable.waydroid-nftables;
   gnome.enable = false;
   hyprland.enable = false;
   arduino.enable = false;
@@ -176,6 +178,7 @@ with lib; {
       wl-clipboard
       dust
       vivaldi
+      brave
       
       # Intel NPU driver for AI workloads (OpenVINO, Level Zero)
       intel-npu-driver
