@@ -68,6 +68,7 @@
         inherit system;
         config.allowUnfree = true;
       };
+      openai-codex = pkgs.callPackage ./pkgs/openai-codex/package.nix { inherit (pkgs) nodejs; };
 
       desktopProfile = [
         ./modules
@@ -82,7 +83,7 @@
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs llm-agents; };
+            extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs llm-agents openai-codex; };
             users = {
               "${masterUser.name}".imports = [ ./home/${masterUser.name}.nix ];
             };
@@ -100,7 +101,7 @@
             inherit system;
             specialArgs =
               {
-                inherit inputs unstable masterUser nix-direnv llm-agents;
+                inherit inputs unstable masterUser nix-direnv llm-agents openai-codex;
               }
               // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
             modules = [ ./modules/rtl88x2bu.nix ./hosts/${name} ]

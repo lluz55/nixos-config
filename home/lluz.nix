@@ -3,6 +3,7 @@
 , lib
 , osConfig
 , llm-agents
+, openai-codex
 , ...
 }:
 with lib;
@@ -69,6 +70,7 @@ with lib;
     antigravity
   ]) ++ [
     llm-agents.packages.${pkgs.system}.antigravity-cli
+    openai-codex
   ] ++ (with unstable; [
 
     # TODO: DELETE AFTER INSTALL NEOVIM AS NIX PACKAGE
