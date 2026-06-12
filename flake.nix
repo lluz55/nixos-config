@@ -115,6 +115,9 @@
         b450 = {
           modules = desktopProfile;
         };
+			  s14 = {
+          modules = desktopProfile;
+        };
         gl62m = {
           modules = desktopProfile;
           additionalUser = karolayne;
