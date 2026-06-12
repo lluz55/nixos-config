@@ -36,6 +36,7 @@ with lib; {
       # Power related
       sdn = "shutdown now";
       sdr = "shutdown -r now";
+      reset-wifi = "sudo rmmod rtw89_8852be rtw89_8852b rtw89_pci rtw89_core 2>/dev/null; sudo modprobe rtw89_8852be; sleep 2; sudo systemctl restart NetworkManager";
 
       c = "clear";
 
