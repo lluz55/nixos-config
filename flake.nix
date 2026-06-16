@@ -38,6 +38,10 @@
     };
     vscode-server.url = "github:nix-community/nixos-vscode-server";
     llm-agents.url = "github:numtide/llm-agents.nix";
+    battery_up = {
+      url = "github:lluz55/battery_up";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =

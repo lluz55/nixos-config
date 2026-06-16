@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "battery_up": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1781567456,
+        "narHash": "sha256-EyssNfZbruW2RzjQ2/rDhGy/zWYT/PZufZ5brqjkkrI=",
+        "owner": "lluz55",
+        "repo": "battery_up",
+        "rev": "86c7587e6842a6c30f7def7c7713e120ffdafa88",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lluz55",
+        "repo": "battery_up",
+        "type": "github"
+      }
+    },
     "blueprint": {
       "inputs": {
         "nixpkgs": [
@@ -304,6 +324,7 @@
     },
     "root": {
       "inputs": {
+        "battery_up": "battery_up",
         "disko": "disko",
         "flake-parts": "flake-parts",
         "home-manager": "home-manager",
