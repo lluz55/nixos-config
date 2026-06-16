@@ -119,7 +119,7 @@ with lib;{
     };
   };
 
-  home-manager.users."${config.users.users.lluz.name}" = { pkgs, lib, unstable, ... }: {
+  home-manager.users.lluz = { pkgs, lib, unstable, ... }: {
     home.packages = lib.mkForce (with unstable; [
       wget
       # Terminal

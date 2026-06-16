@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, config, ... }:
 with lib; {
   programs.fish = {
     enable = true;
@@ -8,7 +8,7 @@ with lib; {
       zoxide init fish | source
       starship init fish | source
     '';
-    shellAliases = mkForce {
+    shellAliases = mkForce ({
       ## Git aliases
       ga = "git add ";
       gaa = "git add .";
@@ -49,6 +49,8 @@ with lib; {
       ll = "exa -alF --icons --color=always --group-directories-first";
       la = "exa -a --icons --color=always --group-directories-first";
       l = "exa -F --icons --color=always --group-directories-first";
-    };
+    } // (lib.optionalAttrs (config.networking.hostName == "s14") {
+      qutebrowser = "qutebrowser --qt-flag disable-features=AcceleratedVideoDecodeLinuxGL";
+    }));
   };
 }
