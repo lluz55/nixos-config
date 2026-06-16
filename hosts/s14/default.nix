@@ -4,14 +4,22 @@
 , pkgs
   #, pkgs-aarch64
 , self
+, inputs
 , ...
 }:
 let
   drive-flags = "format=raw,readonly=on";
+  battery-up-pkg = inputs.battery_up.packages.${pkgs.system}.default.overrideAttrs (oldAttrs: {
+    cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+      src = oldAttrs.src;
+      hash = "sha256-ftb5WyiRmhPz6FkwUrnTGN7334cs4rU5jiaA7V0vAfM=";
+    };
+  });
 in
 with lib; {
   imports = [
     ./hardware-configuration.nix
+    inputs.battery_up.nixosModules.default
   ];
 
   virt-tools.enable = false;
@@ -26,6 +34,7 @@ with lib; {
   twingate.enable = lib.mkForce false;
 
   networking = {
+    hostName = "s14";
     networkmanager = {
       enable = true;
       wifi.powersave = false;
@@ -68,10 +77,16 @@ with lib; {
   powerManagement.enable = true;
 
   services = {
+    twingate.enable = lib.mkForce true;
     pulseaudio.enable = false;
     flatpak.enable = true;
     openssh = {
       enable = true;
+    };
+
+    battery-up = {
+      enable = true;
+      package = battery-up-pkg;
     };
     
     # Power and thermal management optimized for Intel Core Ultra (Arrow Lake)
@@ -90,6 +105,7 @@ with lib; {
       # system-boot.enable = true;
       timeout = 2;
       systemd-boot.enable = true;
+      systemd-boot.configurationLimit = 5;
     };
     # Load the modern xe driver for Intel Arc graphics (Arrow Lake)
     initrd.kernelModules = [ "xe" ];
@@ -155,6 +171,7 @@ with lib; {
       LIBVA_DRIVER_NAME = "iHD";
     };
     systemPackages = with unstable; [
+      twingate
       vscode
       nmap
       remmina
@@ -175,6 +192,7 @@ with lib; {
       qutebrowser
       wineWow64Packages.stableFull
       cosmic-applets
+      battery-up-pkg
       wl-clipboard
       dust
       vivaldi
@@ -182,6 +200,7 @@ with lib; {
       
       # Intel NPU driver for AI workloads (OpenVINO, Level Zero)
       intel-npu-driver
+      waydroid-helper
     ];
   };
 }
