@@ -10,15 +10,7 @@
 }:
 let
   drive-flags = "format=raw,readonly=on";
-  battery-up-pkg = inputs.battery_up.packages.${pkgs.stdenv.hostPlatform.system}.default.overrideAttrs (oldAttrs: {
-    cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
-      src = oldAttrs.src;
-      hash = "sha256-ftb5WyiRmhPz6FkwUrnTGN7334cs4rU5jiaA7V0vAfM=";
-    };
-    meta = (oldAttrs.meta or { }) // {
-      mainProgram = "battery-up";
-    };
-  });
+  battery-up-pkg = inputs.battery_up.packages.${pkgs.stdenv.hostPlatform.system}.default;
 in
 with lib; {
   imports = [
