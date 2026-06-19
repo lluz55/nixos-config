@@ -1,34 +1,21 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Ensure we run as root/sudo
-if [ "$EUID" -ne 0 ]; then
-  echo "Please run as root/sudo:"
-  echo "  sudo $0"
-  exit 1
-fi
+# Find the directory of the script and repo root
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="$(dirname "$SCRIPT_DIR")"
 
-TEMP_DIR=$(mktemp -d -t waydroid_script-XXXXXX)
-echo "Using temporary directory: $TEMP_DIR"
+echo "Building WaydroidSU (wsu) using Nix..."
+# Build as the current user to avoid Nix environment/permissions issues when running as root
+WSU_PATH=$(nix build "$REPO_DIR#waydroidsu" --no-link --print-out-paths)
 
-cleanup() {
-  echo "Cleaning up..."
-  rm -rf "$TEMP_DIR"
-}
-trap cleanup EXIT
+echo "WaydroidSU built successfully at: $WSU_PATH"
 
-echo "Cloning waydroid_script..."
-nix-shell -p git --run "git clone https://github.com/casualsnek/waydroid_script.git $TEMP_DIR"
+echo "Running WaydroidSU installation..."
+# wsu install requires root/sudo, so we execute the store binary under sudo
+sudo "$WSU_PATH/bin/wsu" install "$@"
 
-cd "$TEMP_DIR"
+echo "WaydroidSU/Magisk installation completed successfully!"
+echo "Please restart your Waydroid container to apply changes:"
+echo "  sudo systemctl restart waydroid-container.service"
 
-echo "Setting up Python virtual environment and installing Magisk..."
-# Run the installation inside a nix-shell containing the required system dependencies (lzip, python, git, sqlite)
-nix-shell -p python3 python3Packages.pip lzip git sqlite --run "
-  python3 -m venv venv
-  source venv/bin/activate
-  pip install -r requirements.txt
-  python3 main.py install magisk
-"
-
-echo "Magisk installation completed successfully!"

@@ -88,7 +88,7 @@ with lib;
     claude-code
     antigravity
   ]) ++ [
-    llm-agents.packages.${pkgs.system}.antigravity-cli
+    llm-agents.packages.${pkgs.stdenv.hostPlatform.system}.antigravity-cli
     openai-codex
   ] ++ (with unstable; [
 
@@ -123,4 +123,3 @@ with lib;
 # nodejs
 # cmake
 # gcc
-

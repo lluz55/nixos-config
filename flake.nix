@@ -73,6 +73,7 @@
         config.allowUnfree = true;
       };
       openai-codex = pkgs.callPackage ./pkgs/openai-codex/package.nix { inherit (pkgs) nodejs; };
+      waydroidsu = pkgs.callPackage ./pkgs/waydroidsu/package.nix { };
 
       desktopProfile = [
         ./modules
@@ -87,7 +88,7 @@
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs llm-agents openai-codex; };
+            extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs llm-agents openai-codex waydroidsu; };
             users = {
               "${masterUser.name}".imports = [ ./home/${masterUser.name}.nix ];
             };
@@ -105,7 +106,7 @@
             inherit system;
             specialArgs =
               {
-                inherit inputs unstable masterUser nix-direnv llm-agents openai-codex;
+                inherit inputs unstable masterUser nix-direnv llm-agents openai-codex waydroidsu;
               }
               // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
             modules = [ ./modules/rtl88x2bu.nix ./hosts/${name} ]
@@ -159,6 +160,10 @@
           };
         };
         nixosConfigurations = lib.mapAttrs mkSystem hosts;
+      };
+      perSystem = { pkgs, ... }: {
+        packages.waydroidsu = pkgs.callPackage ./pkgs/waydroidsu/package.nix { };
+        packages.default = pkgs.callPackage ./pkgs/waydroidsu/package.nix { };
       };
     };
 }
