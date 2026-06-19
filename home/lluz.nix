@@ -34,6 +34,25 @@ with lib;
     };
   };
 
+  xdg.configFile = {
+    "qutebrowser/config.py" = {
+      source = ./qutebrowser/config.py;
+      force = true;
+    };
+    "qutebrowser/autoconfig.yml" = {
+      source = ./qutebrowser/autoconfig.yml;
+      force = true;
+    };
+    "qutebrowser/quickmarks" = {
+      source = ./qutebrowser/quickmarks;
+      force = true;
+    };
+    "qutebrowser/bookmarks/urls" = {
+      text = "";
+      force = true;
+    };
+  };
+
   home.packages = (with unstable; [
     wget
     # Terminal
