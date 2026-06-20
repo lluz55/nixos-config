@@ -165,6 +165,7 @@ with lib; {
   environment = {
     sessionVariables = {
       LIBVA_DRIVER_NAME = "iHD";
+      QTWEBENGINE_CHROMIUM_FLAGS = "--enable-unsafe-webgpu --use-angle=vulkan --enable-features=Vulkan,VulkanFromANGLE";
     };
     systemPackages = with unstable; [
       twingate
