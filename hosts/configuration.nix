@@ -16,6 +16,12 @@
   sops.defaultSopsFormat = "yaml";
 
   sops.age.keyFile = "/home/${masterUser.name}/.config/sops/age/keys.txt";
+  sops.secrets."passwords/lluz" = {
+    neededForUsers = true;
+  };
+  sops.secrets."passwords/karolayne" = {
+    neededForUsers = true;
+  };
   sops.secrets."twingate.env" = { };
   sops.secrets."twingate_2.env" = { };
   sops.secrets."frigate.env" = { };
