@@ -22,6 +22,13 @@
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    home-config = {
+      url = "github:lluz55/home-config";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
+      inputs.home-manager.follows = "home-manager";
+      inputs.llm-agents.follows = "llm-agents";
+    };
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -51,6 +58,7 @@
     inputs @ { nixpkgs
     , nixpkgs-unstable
     , home-manager
+    , home-config
     , flake-parts
     , nix-direnv
     , rust-overlay
@@ -93,7 +101,7 @@
             useUserPackages = true;
             extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs llm-agents openai-codex waydroidsu; };
             users = {
-              "${masterUser.name}".imports = [ ./home/${masterUser.name}.nix ];
+              "${masterUser.name}".imports = [ home-config.homeModules.${masterUser.name} ];
             };
           };
         }
@@ -115,9 +123,9 @@
             modules = [ ./modules/rtl88x2bu.nix ./hosts/${name} ]
               ++ (cfg.modules or [ ])
               ++ lib.optional additionalUserExists {
-                   home-manager.users."${cfg.additionalUser.name}".imports = [ ./home/${cfg.additionalUser.name}.nix ];
-                   imports = [ cfg.additionalUser.user ];
-                 };
+              home-manager.users."${cfg.additionalUser.name}".imports = [ home-config.homeModules.${cfg.additionalUser.name} ];
+              imports = [ cfg.additionalUser.user ];
+            };
           };
       hosts = {
         n100 = {
@@ -126,7 +134,7 @@
         b450 = {
           modules = desktopProfile;
         };
-			  s14 = {
+        s14 = {
           modules = desktopProfile;
         };
         gl62m = {

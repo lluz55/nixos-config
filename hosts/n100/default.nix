@@ -38,7 +38,8 @@ with lib;{
     };
   };
 
-  services.netbird.enable = true;  programs.mosh.enable = true;
+  services.netbird.enable = true;
+  programs.mosh.enable = true;
 
   services.prometheus = {
     exporters = {
@@ -119,56 +120,4 @@ with lib;{
     };
   };
 
-  home-manager.users.lluz = { pkgs, lib, unstable, ... }: {
-    home.packages = lib.mkForce (with unstable; [
-      wget
-      # Terminal
-      eza
-      fd
-      git
-      wget
-      kitty
-      starship
-
-      # Audio
-      pamixer
-      playerctl
-
-      # Files
-      unzip
-      unrar
-      zip
-
-      # browser
-      firefox
-      chromium
-
-      # social
-      discord
-      telegram-desktop
-
-      # dev
-      distrobox
-      docker
-
-      cmake
-      gnumake
-      nodejs
-      gcc
-
-      # Terminal
-      rustup
-      zellij
-      nmap
-      lazygit
-      ripgrep
-      nil
-      lua-language-server
-      broot
-      sd
-      zoxide
-      fastfetch
-      bat
-    ]);
-  };
 }
