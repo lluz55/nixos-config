@@ -48,6 +48,10 @@
         # For compatibility with older versions of the `nix` binary
         devShell = self.devShells.${system}.default;
       }
-    );
+    ) // {
+      templates.default = {
+        path = ./.;
+        description = "Zig development template";
+      };
+    };
 }
-

@@ -152,24 +152,7 @@
     flake-parts.lib.mkFlake { inherit inputs; } {
       systems = [ "x86_64-linux" ];
       flake = {
-        templates = {
-          flutter = {
-            path = ./templates/flutter;
-            description = "nix flake new -t github:lluz55/nixos-config#flutter <directory>";
-          };
-          zig = {
-            path = ./templates/zig;
-            description = "nix flake new -t github:lluz55/nixos-config#zig <directory>";
-          };
-          bevy = {
-            path = ./templates/bevy;
-            description = "nix flake new -t github:lluz55/nixos-config#bevy <directory>";
-          };
-          godot_rust = {
-            path = ./templates/godot_rust;
-            description = "nix flake new -t github:lluz55/nixos-config#godot_rust <directory>";
-          };
-        };
+        templates = import ./templates;
         nixosConfigurations = lib.mapAttrs mkSystem hosts;
       };
       perSystem = { pkgs, ... }: {

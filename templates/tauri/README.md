@@ -1,15 +1,15 @@
-# Zig Template
+# Tauri + Dioxus Template
 
 Create a project from the main flake:
 
 ```sh
-nix flake new -t github:lluz55/nixos-config#zig my-zig-app
+nix flake new -t github:lluz55/nixos-config#tauri my-tauri-app
 ```
 
 Create a project from this standalone template flake:
 
 ```sh
-nix flake new -t github:lluz55/nixos-config?dir=templates/zig my-zig-app
+nix flake new -t github:lluz55/nixos-config?dir=templates/tauri my-tauri-app
 ```
 
 First time in the generated directory:

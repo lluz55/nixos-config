@@ -51,5 +51,10 @@
               jdk17
             ];
           };
-      });
+      }) // {
+        templates.default = {
+          path = ./.;
+          description = "Flutter development template";
+        };
+      };
 }

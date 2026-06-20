@@ -133,5 +133,10 @@
             #pkgs.xorg.libXinerama
           ];
         };
-      });
+      }) // {
+        templates.default = {
+          path = ./.;
+          description = "Odin development template";
+        };
+      };
 }

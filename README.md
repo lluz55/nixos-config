@@ -3,6 +3,28 @@
 ## Modules
 - [Cloudflared Connectors (Multi-Tunnel)](./modules/servers/README-cloudflared-connectors.md)
 
+## Templates
+
+Templates can be used from the main flake:
+
+```shell
+nix flake new -t github:lluz55/nixos-config#flutter my-flutter-app
+nix flake new -t github:lluz55/nixos-config#zig my-zig-app
+nix flake new -t github:lluz55/nixos-config#bevy my-bevy-game
+nix flake new -t github:lluz55/nixos-config#godot_rust my-godot-rust-game
+nix flake new -t github:lluz55/nixos-config#odin my-odin-app
+nix flake new -t github:lluz55/nixos-config#tauri my-tauri-app
+```
+
+Each template is also a standalone flake template and has its own README:
+
+- [Flutter](./templates/flutter/README.md)
+- [Zig](./templates/zig/README.md)
+- [Bevy](./templates/bevy/README.md)
+- [Godot Rust](./templates/godot_rust/README.md)
+- [Odin](./templates/odin/README.md)
+- [Tauri + Dioxus](./templates/tauri/README.md)
+
 ## What to do
 - Download and install [NixOS](https://nixos.org/download)
 - Place private key in `/root/.ssh`

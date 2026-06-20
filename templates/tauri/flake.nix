@@ -13,6 +13,11 @@
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       systems = import inputs.systems;
 
+      flake.templates.default = {
+        path = ./.;
+        description = "Tauri and Dioxus development template";
+      };
+
       perSystem = { config, self', pkgs, lib, system, ... }:
         let
           rustToolchain = pkgs.rust-bin.stable.latest.default.override {

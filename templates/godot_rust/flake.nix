@@ -46,6 +46,11 @@
       xorg.libXrandr    
     ];
   in {
+    templates.default = {
+      path = ./.;
+      description = "Godot Rust development template";
+    };
+
     devShells.${system}.${app} = unstable.mkShell {
       nativeBuildInputs = appNativeBuildInputs;
       buildInputs = shellInputs ++ appBuildInputs;

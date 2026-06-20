@@ -29,7 +29,6 @@
         rust
         clang
         mold
-        sd
       ];
       appNativeBuildInputs = with unstable; [
         pkg-config
@@ -58,15 +57,17 @@
       ];
     in
     {
+      templates.default = {
+        path = ./.;
+        description = "Bevy game development template";
+      };
+
       devShells.${system}.${app} = unstable.mkShell {
         nativeBuildInputs = appNativeBuildInputs;
         buildInputs = shellInputs ++ appBuildInputs;
 
         shellHook = ''
           export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${unstable.lib.makeLibraryPath appRuntimeInputs}"
-          # Replace mold path
-          sd 'fuse\-ld=.*\"' 'fuse-ld=${unstable.mold}/bin/mold"' .cargo/config.toml
-
         '';
       };
       devShell.${system} = self.devShells.${system}.${app};
