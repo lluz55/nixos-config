@@ -22,8 +22,11 @@ with lib; {
     package = unstable.waydroid-nftables;
   };
 
-  sops.secrets = lib.mkForce { };
-  sops.age.keyFile = lib.mkForce "/etc/ssh/ssh_host_ed25519_key";
+  sops.secrets = lib.mkForce {
+    "passwords/lluz" = {
+      neededForUsers = true;
+    };
+  };
   twingate.enable = lib.mkForce false;
 
   networking = {
@@ -56,9 +59,6 @@ with lib; {
     twingate.enable = lib.mkForce true;
     pulseaudio.enable = false;
     flatpak.enable = true;
-    openssh = {
-      enable = true;
-    };
 
     battery-up = {
       enable = true;
@@ -94,7 +94,7 @@ with lib; {
     '';
   };
 
-  hardware.acpilight.enable = true;
+
 
   systemd.services.disable-wifi-d3cold = {
     description = "Desabilitar D3cold para placa Wi-Fi Realtek (rtw89_8852be)";
@@ -129,12 +129,7 @@ with lib; {
     };
   };
 
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
+
 
   environment = {
     sessionVariables = {
@@ -142,34 +137,8 @@ with lib; {
       QTWEBENGINE_CHROMIUM_FLAGS = "--enable-unsafe-webgpu --use-angle=vulkan --enable-features=Vulkan,VulkanFromANGLE";
     };
     systemPackages = with unstable; [
-      twingate
-      vscode
-      nmap
-      remmina
-      x2goclient
-      turbovnc
-      lazygit
-      (vivaldi.override {
-        proprietaryCodecs = true;
-      })
-      vivaldi-ffmpeg-codecs
-      #neovim
-      rustup
-
-      #blender
-
-      font-awesome_4
-
-      qutebrowser
       wineWow64Packages.stableFull
-      cosmic-applets
       battery-up-pkg
-      wl-clipboard
-      dust
-      vivaldi
-      brave
-
-      # Intel NPU driver for AI workloads (OpenVINO, Level Zero)
       intel-npu-driver
     ];
   };

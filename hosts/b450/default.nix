@@ -90,12 +90,7 @@
 
   };
 
-  hardware.nvidia = {
-    modesetting.enable = true;
-    open = false;
-    nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.latest;
-  };
+  hardware.nvidia.custom.enable = true;
 
   networking.interfaces.eno1.wakeOnLan = {
     enable = true;
@@ -107,10 +102,6 @@
   };
 
   services = {
-    openssh = {
-      enable = true;
-    };
-    xserver.videoDrivers = [ "nvidia" ];
     logind.settings.Login = {
       IeAction = "suspend";
       IdleActionSec = "30min";
@@ -126,15 +117,7 @@
     };
   };
 
-  hardware.acpilight.enable = true;
 
-  services.pulseaudio.enable = false;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
 
   # Gaming
   programs = {
@@ -174,44 +157,16 @@
         # Shells
         nushell
 
-        # Remote
-        twingate
-        #x2goclient
-        #turbovnc
-        #remmina
-
-        # Networking tools
-        nmap
-
         # Dev tools
-        lazygit
-        rustup
         devenv
-        dust
         dysk
-
-        # Editors
-        neovim
-        vscode
 
         # 3D tools
         blender
 
-        font-awesome_4
-
         # Nvidia drivers
         nvidia-vaapi-driver
 
-        # Browsers
-        qutebrowser
-        vivaldi
-        # zen-browser
-
-        # Others
-        cosmic-applets
-        wl-clipboard
-
-        brave
         # AI
         lmstudio
         nvitop

@@ -11,8 +11,11 @@ with lib; {
   ];
   services.avahi.enable = false;
 
-  sops.secrets = lib.mkForce { };
-  sops.age.keyFile = lib.mkForce "/etc/ssh/ssh_host_ed25519_key";
+  sops.secrets = lib.mkForce {
+    "passwords/lluz" = {
+      neededForUsers = true;
+    };
+  };
   twingate.enable = lib.mkForce false;
 
   cameraRouter.enable = false;
@@ -37,9 +40,6 @@ with lib; {
     auto-cpufreq.enable = true;
     thermald.enable = true;
     flatpak.enable = true;
-    openssh = {
-      enable = true;
-    };
     xserver.videoDrivers = [ "amd" ];
     logind.settings.Login = {
       IeAction = "suspend";
@@ -57,22 +57,5 @@ with lib; {
     };
   };
 
-  environment.systemPackages = with unstable; [
-    twingate
-    vscode
-    nmap
-    lazygit
-    (vivaldi.override {
-      proprietaryCodecs = true;
-    })
-    vivaldi-ffmpeg-codecs
-    rustup
-    font-awesome_4
-    qutebrowser
-    cosmic-applets
-    wl-clipboard
-    dust
-    vivaldi
-    brave
-  ];
+
 }

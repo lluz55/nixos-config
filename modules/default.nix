@@ -17,6 +17,7 @@
     ./hyprland/core.nix
     ./waybar/waybar.nix
     ./servers
+    ./hardware/nvidia.nix
   ];
 
   # programs.nix-ld.enable = true;
@@ -46,6 +47,7 @@
       zoxide
       sd
       broot
+      dust
 
       # Git
       gh

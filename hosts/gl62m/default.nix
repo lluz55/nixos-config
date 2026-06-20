@@ -14,26 +14,14 @@ with lib; {
 
   networking.networkmanager.enable = true;
 
-  hardware.nvidia = {
-    modesetting.enable = true;
-    open = false;
-
-    # Usa driver estável pré-compilado para evitar build em cada atualização
-    package = config.boot.kernelPackages.nvidiaPackages.latest;
-    nvidiaSettings = true;
-
+  hardware.nvidia.custom = {
+    enable = true;
+    powerManagement.enable = true;
     prime = {
+      enable = true;
       intelBusId = "PCI:0:2:0";
       nvidiaBusId = "PCI:0:1:0";
-      sync.enable = true; # Disable NVIDIA GPU
-      #offload = {
-      #  enable = true;
-      #  enableOffloadCmd = true;
-      #};
-    };
-    powerManagement = {
-      enable = true;
-      #finegrained = true;
+      sync = true;
     };
   };
 
@@ -51,10 +39,6 @@ with lib; {
   services = {
     pulseaudio.enable = false;
     flatpak.enable = true;
-    openssh = {
-      enable = true;
-    };
-    xserver.videoDrivers = [ "nvidia" ];
   };
 
   boot = {
@@ -66,14 +50,7 @@ with lib; {
     };
   };
 
-  hardware.acpilight.enable = true;
 
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
 
   environment.systemPackages = with unstable; [
     (unstable.writeShellScriptBin "nof" ''
@@ -83,24 +60,7 @@ with lib; {
       export __VK_LAYER_NV_optimus=NVIDIA_only
       exec "$@"
     '')
-    vscode
-    nmap
-    remmina
-    x2goclient
-    turbovnc
-    lazygit
-    (vivaldi.override {
-      proprietaryCodecs = true;
-    })
-    vivaldi-ffmpeg-codecs
-    rustup
-    font-awesome_4
     nvidia-vaapi-driver
-    qutebrowser
     wineWow64Packages.stableFull
-    cosmic-applets
-    wl-clipboard
-    dust
-    vivaldi
   ];
 }

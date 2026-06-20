@@ -77,12 +77,8 @@ with lib;{
     lm_sensors
     tailscale
     arp-scan
-    killall
-    dust
     glances
-    htop
     btop
-    nmap
     usbutils
 
     nixfmt

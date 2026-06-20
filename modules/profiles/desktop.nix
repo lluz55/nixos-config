@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, unstable, ... }:
 with lib;
 {
   options.profiles.desktop.enable = mkEnableOption "common desktop host defaults";
@@ -25,5 +25,25 @@ with lib;
       enable = mkDefault true;
       enable32Bit = mkDefault true;
     };
+
+    hardware.acpilight.enable = mkDefault true;
+
+    environment.systemPackages = with unstable; [
+      vscode
+      brave
+      (vivaldi.override {
+        proprietaryCodecs = true;
+      })
+      vivaldi-ffmpeg-codecs
+      qutebrowser
+      wl-clipboard
+      cosmic-applets
+      rustup
+      font-awesome_4
+      remmina
+      x2goclient
+      turbovnc
+      twingate
+    ];
   };
 }
