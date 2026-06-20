@@ -2,14 +2,10 @@
 , lib
 , config
 , pkgs
-  #, pkgs-aarch64
-, self
 , inputs
-, waydroidsu
 , ...
 }:
 let
-  drive-flags = "format=raw,readonly=on";
   battery-up-pkg = inputs.battery_up.packages.${pkgs.stdenv.hostPlatform.system}.default;
 in
 with lib; {
@@ -18,12 +14,13 @@ with lib; {
     inputs.battery_up.nixosModules.default
   ];
 
+  profiles.desktop.enable = true;
+  profiles.rtl88x2bu.enable = true;
   virt-tools.enable = false;
-  virtualisation.waydroid.enable = true;
-  virtualisation.waydroid.package = unstable.waydroid-nftables;
-  gnome.enable = false;
-  hyprland.enable = false;
-  arduino.enable = false;
+  waydroid = {
+    enable = true;
+    package = unstable.waydroid-nftables;
+  };
 
   sops.secrets = lib.mkForce { };
   sops.age.keyFile = lib.mkForce "/etc/ssh/ssh_host_ed25519_key";
@@ -37,9 +34,6 @@ with lib; {
     };
   };
 
-  services.desktopManager.cosmic.enable = true;
-  services.displayManager.cosmic-greeter.enable = true;
-
   # Ensure user lluz has access to GPU and NPU render nodes
   users.users.lluz.extraGroups = [ "render" ];
 
@@ -48,26 +42,12 @@ with lib; {
     algorithm = "zstd"; # Optimized compression algorithm
   };
 
-  i18n = {
-    supportedLocales = lib.mkDefault [
-      "en_US.UTF-8/UTF-8"
-      "pt_BR.UTF-8/UTF-8"
-    ];
-  };
-
   hardware.graphics = {
     extraPackages = with unstable; [
       intel-media-driver
       vpl-gpu-rt
       intel-compute-runtime
     ];
-    enable = true;
-    enable32Bit = true;
-  };
-
-  console = {
-    font = "Lat2-Terminus16";
-    keyMap = "us";
   };
 
   powerManagement.enable = true;
@@ -84,7 +64,7 @@ with lib; {
       enable = true;
       package = battery-up-pkg;
     };
-    
+
     # Power and thermal management optimized for Intel Core Ultra (Arrow Lake)
     # power-profiles-daemon is required by COSMIC desktop for power management integration
     # system76-power is for System76 hardware only — not applicable here
@@ -98,7 +78,6 @@ with lib; {
     kernelPackages = unstable.linuxPackages;
     loader = {
       efi.canTouchEfiVariables = true;
-      # system-boot.enable = true;
       timeout = 2;
       systemd-boot.enable = true;
       systemd-boot.configurationLimit = 5;
@@ -150,11 +129,6 @@ with lib; {
     };
   };
 
-  # TP-Link Archer T3U (RTL8812BU) driver
-  boot.kernelModules = [ "rtw_8812bu" ];
-  hardware.firmware = with unstable; [ linux-firmware ];
-
-  #sway.enable = true;
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -194,11 +168,9 @@ with lib; {
       dust
       vivaldi
       brave
-      
+
       # Intel NPU driver for AI workloads (OpenVINO, Level Zero)
       intel-npu-driver
-      waydroid-helper
-      waydroidsu
     ];
   };
 }

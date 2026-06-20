@@ -5,6 +5,9 @@
 }: {
   imports = [
     ./desktops
+    ./profiles
+    ./wayland.nix
+    ./waydroid
     ./shell
     ./home-automation
     ./tools

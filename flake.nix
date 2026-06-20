@@ -120,7 +120,7 @@
                 inherit inputs unstable masterUser nix-direnv llm-agents openai-codex waydroidsu;
               }
               // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
-            modules = [ ./modules/rtl88x2bu.nix ./hosts/${name} ]
+            modules = [ ./hosts/${name} ]
               ++ (cfg.modules or [ ])
               ++ lib.optional additionalUserExists {
               home-manager.users."${cfg.additionalUser.name}".imports = [ home-config.homeModules.${cfg.additionalUser.name} ];

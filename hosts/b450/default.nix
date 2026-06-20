@@ -1,19 +1,11 @@
 { unstable
-, lib
 , config
-  # , zen-browser
-, # , pkgs-aarch64
-  ...
+, ...
 }:
-let
-  drive-flags = "format=raw,readonly=on";
-in
-with lib; {
+{
   imports = [
     ./hardware-configuration.nix
   ];
-  # systemd.services.NetworkManager-wait-online.enable = false;
-
   # Twingate Server 2 connector
   virtualisation.oci-containers.containers."twingate-server" = {
     image = "twingate/connector:1.78";
@@ -79,14 +71,10 @@ with lib; {
   '';
 
   # My services
+  profiles.desktop.enable = true;
+  profiles.rtl88x2bu.enable = true;
   virt-tools.enable = true;
-  gnome.enable = false;
-  hyprland.enable = false;
   glances.enable = true;
-  # twingate.enable = true;
-
-  services.desktopManager.cosmic.enable = true;
-  services.displayManager.cosmic-greeter.enable = true;
 
   boot = {
     kernelParams = [ "nvidia_drm.fbdev=1" ];
@@ -95,10 +83,6 @@ with lib; {
       options bluetooth disable_ertm=Y
     '';
   };
-
-  # TP-Link Archer T3U (RTL8812BU) driver
-  boot.kernelModules = [ "rtw_8812bu" ];
-  hardware.firmware = with unstable; [ linux-firmware ];
 
   networking.firewall = {
     enable = true;
@@ -117,30 +101,9 @@ with lib; {
     enable = true;
   };
 
-  # services.rustdesk-server = {
-  #   enable = true;
-  #   openFirewall = true;
-  #   relay.enable = false;
-  # };
-
   zramSwap = {
     enable = true;
     algorithm = "lz4";
-  };
-
-  i18n = {
-    supportedLocales = lib.mkDefault [
-      "en_US.UTF-8/UTF-8"
-      "pt_BR.UTF-8/UTF-8"
-    ];
-  };
-
-  hardware.graphics.enable32Bit = true;
-  # TODO: change opengl to hardware.graphics.enable32Bit
-
-  console = {
-    font = "Lat2-Terminus16";
-    keyMap = "us";
   };
 
   services = {
@@ -152,7 +115,6 @@ with lib; {
       IeAction = "suspend";
       IdleActionSec = "30min";
     };
-    # twingate.enable = true;
   };
 
   boot = {
@@ -166,7 +128,6 @@ with lib; {
 
   hardware.acpilight.enable = true;
 
-  #sway.enable = true;
   services.pulseaudio.enable = false;
   services.pipewire = {
     enable = true;
@@ -199,20 +160,6 @@ with lib; {
   };
 
   environment =
-    #    let
-    #      aarch64-linux-vm =
-    #        unstable.writeScriptBin "run-nixos-vm-aarch64" ''
-    #
-    #            #!${unstable.runtimeShell} \
-    #            ${unstable.qemu_full}/bin/qemu-system-aarch64 \
-    #            -machine virt \
-    #            -cpu cortex-a57 \
-    #            -m 2G \
-    #            -nographic \
-    #            -drive if=pflash,file=${pkgs-aarch64.OVMF.fd}/AAVMF/QEMU_EFI-pflash.raw,${drive-flags} \
-    #            -drive file=/home/lluz/Downloads/nixos-aarch64-linux.iso,${drive-flags}
-    #            '';
-    #    in
     {
       sessionVariables = {
         STEAM_EXTRA_COMPAT_TOOLS_PATHS = "/home/lluz/.steam/root/compatibilitytools.d";

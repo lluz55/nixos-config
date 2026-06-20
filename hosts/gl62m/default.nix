@@ -1,27 +1,18 @@
 { unstable
 , lib
 , config
-  #, pkgs-aarch64
-, self
 , ...
 }:
-let
-  drive-flags = "format=raw,readonly=on";
-in
 with lib; {
   imports = [
     ./hardware-configuration.nix
   ];
 
+  profiles.desktop.enable = true;
+  profiles.rtl88x2bu.enable = true;
   virt-tools.enable = false;
-  gnome.enable = false;
-  hyprland.enable = false;
-  arduino.enable = false;
 
   networking.networkmanager.enable = true;
-
-   services.desktopManager.cosmic.enable = true;
-   services.displayManager.cosmic-greeter.enable = true;
 
   hardware.nvidia = {
     modesetting.enable = true;
@@ -53,25 +44,8 @@ with lib; {
     algorithm = "lz4";
   };
 
-
-  i18n = {
-    supportedLocales = lib.mkDefault [
-      "en_US.UTF-8/UTF-8"
-      "pt_BR.UTF-8/UTF-8"
-    ];
-  };
-
   hardware.graphics = {
     extraPackages = with unstable; [ intel-media-driver ];
-    # extraPackages32 = with unstable.pkgsi686Linux; [nvidia-vaapi-driver intel-media-driver];
-
-    enable = true;
-    enable32Bit = true;
-  };
-
-  console = {
-    font = "Lat2-Terminus16";
-    keyMap = "us";
   };
 
   services = {
@@ -86,40 +60,14 @@ with lib; {
   boot = {
     kernelPackages = unstable.linuxPackages;
     loader = {
-        efi.canTouchEfiVariables = true;
-        # system-boot.enable = true;
-        timeout = 2;
-        systemd-boot.enable = true;
-        # grub = {
-        #   enable = true;
-        #   devices = ["/dev/sda"];
-        #    # devices = [ "/dev/sda" ];
-        #    # device = "/dev/sdb";
-        #    useOSProber = true;
-        #    configurationLimit = 4;
-        #    efiSupport = true;
-        #    #theme = unstable.stdenv.mkDerivation {
-        #    #  pname = "distro-grub-themes";
-        #    #  version = "3.1";
-        #    #  src = unstable.fetchFromGitHub {
-        #    #    owner = "AdisonCavani";
-        #    #    repo = "distro-grub-themes";
-        #    #    rev = "v3.1";
-        #    #    hash = "sha256-ZcoGbbOMDDwjLhsvs77C7G7vINQnprdfI37a9ccrmPs=";
-        #    #  };
-        #    #  installPhase = "cp -r customize/nixos $out";
-        #    #};
-        #  };
-      };
+      efi.canTouchEfiVariables = true;
+      timeout = 2;
+      systemd-boot.enable = true;
+    };
   };
 
   hardware.acpilight.enable = true;
 
-  # TP-Link Archer T3U (RTL8812BU) driver
-  boot.kernelModules = [ "rtw_8812bu" ];
-  hardware.firmware = with unstable; [ linux-firmware ];
-
-  #sway.enable = true;
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -127,56 +75,32 @@ with lib; {
     pulse.enable = true;
   };
 
-  environment =
-    #let
-    #  aarch64-linux-vm =
-    #    unstable.writeScriptBin "run-nixos-vm-aarch64" ''
-
-    #        #!${unstable.runtimeShell} \
-    #        ${unstable.qemu_full}/bin/qemu-system-aarch64 \
-    #        -machine virt \
-    #        -cpu cortex-a57 \
-    #        -m 2G \
-    #        -nographic \
-    #        -drive if=pflash,file=${pkgs-aarch64.OVMF.fd}/AAVMF/QEMU_EFI-pflash.raw,${drive-flags} \
-    #        -drive file=${self.packages."x86_64-linux".aarch64-linux-iso}/iso/nixos.iso,${drive-flags}
-    #        '';
-    #in
-    {
-      systemPackages = with unstable;
-        [
-          # aarch64-linux-vm
-          (unstable.writeShellScriptBin "nof" ''
-            export __NV_PRIME_RENDER_OFFLOAD=1
-            export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
-            export __GLX_VENDOR_LIBRARY_NAME=nvidia
-            export __VK_LAYER_NV_optimus=NVIDIA_only
-            exec "$@"
-          '')
-          vscode
-          nmap
-          remmina
-          x2goclient
-          turbovnc
-          lazygit
-          (vivaldi.override {
-            proprietaryCodecs = true;
-          })
-          vivaldi-ffmpeg-codecs
-          #neovim
-          rustup
-
-          #blender
-
-          font-awesome_4
-          nvidia-vaapi-driver
-
-          qutebrowser
-          wineWow64Packages.stableFull
-          cosmic-applets
-          wl-clipboard
-          dust
-          vivaldi
-        ];
-    };
+  environment.systemPackages = with unstable; [
+    (unstable.writeShellScriptBin "nof" ''
+      export __NV_PRIME_RENDER_OFFLOAD=1
+      export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
+      export __GLX_VENDOR_LIBRARY_NAME=nvidia
+      export __VK_LAYER_NV_optimus=NVIDIA_only
+      exec "$@"
+    '')
+    vscode
+    nmap
+    remmina
+    x2goclient
+    turbovnc
+    lazygit
+    (vivaldi.override {
+      proprietaryCodecs = true;
+    })
+    vivaldi-ffmpeg-codecs
+    rustup
+    font-awesome_4
+    nvidia-vaapi-driver
+    qutebrowser
+    wineWow64Packages.stableFull
+    cosmic-applets
+    wl-clipboard
+    dust
+    vivaldi
+  ];
 }

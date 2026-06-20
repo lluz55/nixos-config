@@ -26,6 +26,7 @@ with lib;{
   };
 
   gnome.enable = false;
+  profiles.rtl88x2bu.enable = true;
   hass.enable = true;
   frigate.enable = true;
   glances.enable = true;
@@ -107,10 +108,6 @@ with lib;{
   };
 
   hardware.acpilight.enable = true;
-
-  # TP-Link Archer T3U (RTL8812BU) driver
-  boot.kernelModules = [ "rtw_8812bu" ];
-  hardware.firmware = with pkgs; [ linux-firmware ];
 
   services.vaultwarden = {
     enable = true;
