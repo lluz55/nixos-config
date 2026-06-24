@@ -52,6 +52,10 @@
       url = "github:lluz55/battery_up";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hl-caddy = {
+      url = "path:/home/lluz/dev/hl-caddy";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -101,7 +105,10 @@
             useUserPackages = true;
             extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs llm-agents openai-codex waydroidsu; };
             users = {
-              "${masterUser.name}".imports = [ home-config.homeModules.${masterUser.name} ];
+              "${masterUser.name}".imports = [
+                home-config.homeModules.${masterUser.name}
+                ./modules/home/qutebrowser.nix
+              ];
             };
           };
         }

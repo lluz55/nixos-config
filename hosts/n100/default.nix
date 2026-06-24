@@ -18,6 +18,7 @@ with lib;{
     ./hardware-configuration.nix
     ./router
     inputs.vscode-server.nixosModules.default
+    inputs.hl-caddy.nixosModules.default
   ];
 
   console = {
@@ -112,5 +113,33 @@ with lib;{
       ROCKET_PORT = 8222;
     };
   };
+
+  services.hl-caddy = {
+    enable = true;
+    listenPort = 8880;
+    services = {
+      home-assistant = {
+        path = "/home-assistant/";
+        proxyTo = "10.0.66.1:8123";
+      };
+      zigbee2mqtt = {
+        path = "/zigbee2mqtt/";
+        proxyTo = "10.1.1.10:8080";
+      };
+      frigate = {
+        path = "/frigate/";
+        proxyTo = "10.0.66.1:5000";
+      };
+    };
+    cloudflare = {
+      enable = true;
+      tunnelName = "home-caddy";
+      credentialsFile = config.sops.secrets."cloudflare/home/credentials".path;
+      domainFile = config.sops.secrets."cloudflare/home/domain".path;
+    };
+  };
+
+  sops.secrets."cloudflare/home/credentials" = { owner = "cloudflared"; };
+  sops.secrets."cloudflare/home/domain" = { owner = "cloudflared"; };
 
 }
