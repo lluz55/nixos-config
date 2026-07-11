@@ -27,6 +27,11 @@ with lib; {
       xwayland = {
         enable = true;
       };
+      settings = {
+        bind = optionals (config.tools.adblock.enable or false) [
+          "SUPER ALT, A, exec, sudo toggle-adblock"
+        ];
+      };
     };
   };
 }

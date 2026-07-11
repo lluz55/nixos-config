@@ -26,7 +26,7 @@
 
         c.auto_save.session = True
         c.colors.webpage.darkmode.algorithm = 'lightness-cielab'
-        c.content.blocking.method = 'adblock'
+        c.content.blocking.method = 'both'
         c.content.blocking.adblock.lists = [
             'https://easylist.to/easylist/easylist.txt',
             'https://easylist.to/easylist/easyprivacy.txt',
