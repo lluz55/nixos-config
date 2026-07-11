@@ -7,6 +7,10 @@ with lib; {
       echo -n (date +%H:%M) (prompt_pwd)
       zoxide init fish | source
       starship init fish | source
+
+      function claude_2
+        env CLAUDE_CONFIG_DIR="$HOME/.claude_2" claude $argv
+      end
     '';
     shellAliases = mkForce ({
       ## Git aliases
