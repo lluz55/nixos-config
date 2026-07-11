@@ -15,3 +15,9 @@ This template provides an Odin development shell with graphics and language-serv
 - If changing the pinned Odin or OLS source revisions, update the corresponding Nix hashes in the same change.
 - Verify build-sensitive edits with `nix develop -c odin build .` when an Odin source tree exists.
 
+## Refresh Guidance
+
+- Check the official Odin docs and package index before adding language examples, vendor libraries, or standard-library imports.
+- Treat directories as packages: keep one package name per directory and avoid mixing unrelated modules in the same folder.
+- Prefer imports from `core:` or `vendor:` when available in the Odin distribution before adding extra source dependencies.
+- Use `nix develop -c odin test .` when test procedures exist, and keep build/run examples directory-based unless a single-file example explicitly needs `-file`.

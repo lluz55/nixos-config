@@ -19,7 +19,11 @@
       system = "x86_64-linux";
       app = "game";
 
-      rust = unstable.rust-bin.nightly.latest.default.override { extensions = [ "rust-src" ]; };
+      rust = unstable.rust-bin.stable."1.60.0".default.override {
+        extensions = [
+          "rust-src"
+        ];
+      };
       rustPlatform = unstable.makeRustPlatform {
         cargo = rust;
         rustc = rust;
@@ -29,8 +33,11 @@
         rust
         clang
         mold
+        sccache
       ];
       appNativeBuildInputs = with unstable; [
+        clang
+        mold
         pkg-config
       ];
       appBuildInputs =
@@ -44,6 +51,7 @@
           vulkan-validation-layers
         ]);
       appRuntimeInputs = with unstable; [
+        stdenv.cc.cc.lib
         vulkan-loader
         xorg.libXcursor
         xorg.libXi
@@ -68,6 +76,9 @@
 
         shellHook = ''
           export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${unstable.lib.makeLibraryPath appRuntimeInputs}"
+          export RUSTC_WRAPPER="${unstable.sccache}/bin/sccache"
+          export SCCACHE_DIR="''${XDG_CACHE_HOME:-$HOME/.cache}/sccache"
+          export CARGO_INCREMENTAL=1
         '';
       };
       devShell.${system} = self.devShells.${system}.${app};
@@ -81,6 +92,10 @@
 
         nativeBuildInputs = appNativeBuildInputs;
         buildInputs = appBuildInputs;
+
+        preCheck = ''
+          export LD_LIBRARY_PATH="${unstable.lib.makeLibraryPath appRuntimeInputs}:$LD_LIBRARY_PATH"
+        '';
 
         postInstall = ''
           cp -r assets $out/bin/

@@ -15,3 +15,9 @@ This template is a Rust project shell for Godot-oriented development with Nix fl
 - When adding crates, update `Cargo.lock` and verify with `nix develop -c cargo test`.
 - Keep `assets/` for project assets and avoid committing generated build outputs.
 
+## Refresh Guidance
+
+- Check the godot-rust book and current `godot` crate docs before generating GDExtension registration, class, signal, property, or lifecycle code.
+- Use the public `godot` crate API rather than private generated modules or undocumented internals.
+- Align Cargo features with the Godot editor/runtime version. Enable at most one `api-*` feature and avoid experimental features unless the generated project explicitly needs them.
+- Keep pure Rust logic testable without launching the Godot editor; reserve editor/runtime checks for integration behavior that cannot be verified with `cargo test`.

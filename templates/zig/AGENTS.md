@@ -15,3 +15,9 @@ This template provides a Zig development shell using `zig-overlay` and ZLS throu
 - Avoid committing generated `zig-cache`, `.zig-cache`, or `zig-out` directories.
 - Keep the template minimal; add libraries only when they are required by the generated starter project.
 
+## Refresh Guidance
+
+- Check the Zig language reference for the pinned compiler version before generating syntax, build-system code, allocator usage, or standard-library APIs.
+- Prefer `zig build` steps in `build.zig` over ad hoc shell scripts when adding compile, run, or test workflows.
+- Use explicit allocators in examples that allocate, and keep ownership/lifetime behavior visible in starter code.
+- Run `nix develop -c zig build test` when the project defines a test step; otherwise use targeted `zig test` commands for files with tests.
