@@ -164,6 +164,7 @@
       };
       perSystem = { pkgs, ... }: {
         packages.waydroidsu = pkgs.callPackage ./pkgs/waydroidsu/package.nix { };
+        packages.battery-up = pkgs.callPackage ./pkgs/battery-up/package.nix { };
         packages.default = pkgs.callPackage ./pkgs/waydroidsu/package.nix { };
       };
     };

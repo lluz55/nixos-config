@@ -6,7 +6,7 @@
 , ...
 }:
 let
-  battery-up-pkg = inputs.battery_up.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  battery-up-pkg = pkgs.callPackage ../../pkgs/battery-up/package.nix { };
 in
 with lib; {
   imports = [
