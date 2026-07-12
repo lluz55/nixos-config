@@ -7,6 +7,7 @@
 }:
 let
   battery-up-pkg = pkgs.callPackage ../../pkgs/battery-up/package.nix { };
+  bestfin-pkg = pkgs.callPackage ../../pkgs/bestfin/package.nix { };
 in
 with lib; {
   imports = [
@@ -139,6 +140,7 @@ with lib; {
     systemPackages = with unstable; [
       wineWow64Packages.stableFull
       battery-up-pkg
+      bestfin-pkg
       intel-npu-driver
     ];
   };

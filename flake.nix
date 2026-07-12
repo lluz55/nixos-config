@@ -89,6 +89,7 @@
       };
       openai-codex = pkgs.callPackage ./pkgs/openai-codex/package.nix { inherit (pkgs) nodejs; };
       waydroidsu = pkgs.callPackage ./pkgs/waydroidsu/package.nix { };
+      bestfin = pkgs.callPackage ./pkgs/bestfin/package.nix { };
 
       desktopProfile = [
         ./modules
@@ -103,7 +104,7 @@
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs llm-agents openai-codex waydroidsu; };
+            extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs llm-agents openai-codex waydroidsu bestfin; };
             users = {
               "${masterUser.name}".imports = [
                 home-config.homeModules.${masterUser.name}
@@ -124,7 +125,7 @@
             inherit system;
             specialArgs =
               {
-                inherit inputs unstable masterUser nix-direnv llm-agents openai-codex waydroidsu;
+                inherit inputs unstable masterUser nix-direnv llm-agents openai-codex waydroidsu bestfin;
               }
               // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
             modules = [ ./hosts/${name} ]
@@ -165,6 +166,7 @@
       perSystem = { pkgs, ... }: {
         packages.waydroidsu = pkgs.callPackage ./pkgs/waydroidsu/package.nix { };
         packages.battery-up = pkgs.callPackage ./pkgs/battery-up/package.nix { };
+        packages.bestfin = pkgs.callPackage ./pkgs/bestfin/package.nix { };
         packages.default = pkgs.callPackage ./pkgs/waydroidsu/package.nix { };
       };
     };
