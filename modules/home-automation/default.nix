@@ -51,10 +51,17 @@ with lib;
       hostBridge = "br-cams";
       localAddress = "10.1.1.10/24";
 
-      # Needed for containers inside HASS container to work properly
-      additionalCapabilities = [
-        ''all" --system-call-filter="add_key keyctl bpf" --capability="all''
+      # Nested Podman (running --privileged OCI containers) needs these
+      # syscalls beyond nspawn's default seccomp allowlist. EXTRA_NSPAWN_FLAGS
+      # is expanded unquoted at runtime, so each flag must be its own list
+      # element (no embedded spaces) or the shell word-splits it; nspawn
+      # merges repeated --system-call-filter= occurrences.
+      extraFlags = [
+        "--system-call-filter=add_key"
+        "--system-call-filter=keyctl"
+        "--system-call-filter=bpf"
       ];
+      additionalCapabilities = [ "all" ];
 
       config = { ... }: {
         boot. isContainer = true;
