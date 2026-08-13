@@ -48,10 +48,6 @@
     };
     vscode-server.url = "github:nix-community/nixos-vscode-server";
     llm-agents.url = "github:numtide/llm-agents.nix";
-    battery_up = {
-      url = "github:lluz55/battery_up";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     hl-caddy = {
       url = "path:/home/lluz/dev/hl-caddy";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -90,6 +86,7 @@
       openai-codex = pkgs.callPackage ./pkgs/openai-codex/package.nix { inherit (pkgs) nodejs; };
       waydroidsu = pkgs.callPackage ./pkgs/waydroidsu/package.nix { };
       bestfin = pkgs.callPackage ./pkgs/bestfin/package.nix { };
+      kilocode = pkgs.callPackage ./pkgs/kilocode/package.nix { };
 
       desktopProfile = [
         ./modules
@@ -104,7 +101,7 @@
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs llm-agents openai-codex waydroidsu bestfin; };
+            extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs llm-agents openai-codex waydroidsu bestfin kilocode; };
             users = {
               "${masterUser.name}".imports = [
                 home-config.homeModules.${masterUser.name}
@@ -125,7 +122,7 @@
             inherit system;
             specialArgs =
               {
-                inherit inputs unstable masterUser nix-direnv llm-agents openai-codex waydroidsu bestfin;
+                inherit inputs unstable masterUser nix-direnv llm-agents openai-codex waydroidsu bestfin kilocode;
               }
               // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
             modules = [ ./hosts/${name} ]
@@ -167,6 +164,8 @@
         packages.waydroidsu = pkgs.callPackage ./pkgs/waydroidsu/package.nix { };
         packages.battery-up = pkgs.callPackage ./pkgs/battery-up/package.nix { };
         packages.bestfin = pkgs.callPackage ./pkgs/bestfin/package.nix { };
+        packages.kilocode = pkgs.callPackage ./pkgs/kilocode/package.nix { };
+        packages."9router" = pkgs.callPackage ./pkgs/9router/package.nix { inherit (pkgs) nodejs; };
         packages.default = pkgs.callPackage ./pkgs/waydroidsu/package.nix { };
       };
     };

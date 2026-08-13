@@ -32,6 +32,10 @@
   #     glibc
   #   ]);
 
+  environment.sessionVariables = {
+    OPENCODE_ENABLE_EXA = "1";
+  };
+
   environment.systemPackages = with unstable;
     [
       # PS2 Emulator

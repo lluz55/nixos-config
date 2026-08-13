@@ -8,11 +8,16 @@
 let
   battery-up-pkg = pkgs.callPackage ../../pkgs/battery-up/package.nix { };
   bestfin-pkg = pkgs.callPackage ../../pkgs/bestfin/package.nix { };
+  codex-openrouter-pkg = pkgs.callPackage ../../pkgs/codex-openrouter/package.nix { codex = unstable.codex; };
+  kon-pkg = pkgs.callPackage ../../pkgs/kon/package.nix { };
+  kon-openrouter-pkg = pkgs.callPackage ../../pkgs/kon-openrouter/package.nix { kon = kon-pkg; };
+  kilocode-pkg = pkgs.callPackage ../../pkgs/kilocode/package.nix { };
 in
 with lib; {
   imports = [
     ./hardware-configuration.nix
-    inputs.battery_up.nixosModules.default
+    ../../pkgs/battery-up/module.nix
+    ../../pkgs/9router/module.nix
   ];
 
   profiles.desktop.enable = true;
@@ -35,6 +40,10 @@ with lib; {
     networkmanager = {
       enable = true;
       wifi.powersave = false;
+    };
+    firewall = {
+      allowedTCPPorts = [ 18081 18082 ];
+      allowedUDPPorts = [ 18082 ];
     };
   };
 
@@ -63,7 +72,13 @@ with lib; {
 
     battery-up = {
       enable = true;
+      # package default = binário do release (pkgs/battery-up/package.nix);
+      # override explícito mantido por clareza.
       package = battery-up-pkg;
+    };
+
+    "9router" = {
+      enable = true;
     };
 
     # Power and thermal management optimized for Intel Core Ultra (Arrow Lake)
@@ -142,6 +157,12 @@ with lib; {
       battery-up-pkg
       bestfin-pkg
       intel-npu-driver
+      opencode
+      pi-coding-agent
+      codex-openrouter-pkg
+      kon-pkg
+      kon-openrouter-pkg
+      kilocode-pkg
     ];
   };
 }
