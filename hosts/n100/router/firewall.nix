@@ -68,6 +68,32 @@ in
 
             iifname "${config.WAN}" ct state { established, related } accept comment "Allow established traffic"
             iifname "${config.WAN}" icmp type { echo-request, destination-unreachable, time-exceeded } counter accept comment "Allow select ICMP"
+
+            # ICMPv6 na WAN — obrigatorio para IPv6 funcionar (RFC 4890).
+            #
+            # `icmp` acima e ICMPv4; sem as regras abaixo o Router Advertisement
+            # do upstream cai no `policy drop` desta chain e o SLAAC nunca
+            # completa: a WAN fica so com fe80:: e o host nao ganha GUA.
+            # A regra `ct state established,related` NAO cobre isso — RA e
+            # multicast nao solicitado e nao casa com conntrack.
+            #
+            # Isto NAO abre nada: continua sem qualquer regra aceitando
+            # `ct state new` vindo da WAN. O hole punching do WebRTC (daemon
+            # dl_home_control) passa pelo `established` acima, porque quem
+            # inicia e o daemon — nenhuma porta precisa ser aberta.
+            #
+            # hoplimit 255 e exigencia do RFC 4861 §11: pacote NDP roteado de
+            # fora do link chega com hoplimit menor e e descartado, o que
+            # impede vizinho/roteador forjado remotamente.
+            iifname "${config.WAN}" icmpv6 type { nd-neighbor-solicit, nd-neighbor-advert, nd-router-advert } ip6 hoplimit 255 counter accept comment "NDP/SLAAC — sem isto nao ha GUA na WAN"
+
+            # packet-too-big nao e opcional: IPv6 nao fragmenta em transito, o
+            # PMTUD depende inteiramente deste ICMPv6. Sem ele o sintoma e
+            # conexao que estabelece e trava quando o pacote cresce.
+            iifname "${config.WAN}" icmpv6 type { destination-unreachable, packet-too-big, time-exceeded, parameter-problem } counter accept comment "ICMPv6 de erro (PMTUD)"
+
+            iifname "${config.WAN}" icmpv6 type echo-request limit rate 10/second counter accept comment "ping6 com rate limit"
+
             iifname "lo" accept comment "Accept everything from loopback interface"
 
             # Audit logs for blocked attempts on WAN
