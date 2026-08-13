@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "battery-up";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchzip {
     url = "https://github.com/lluz55/battery_up/releases/download/v${version}/battery-up-v${version}-x86_64-linux.tar.gz";
-    hash = "sha256-kzUq/yRb63wn9yywQGPsd+LYZDvJF5fh+WsRgYvxEE0=";
+    hash = "sha256-PoCL682E+7f3PgEgJQpkj2N+17R7SRAv8OhWReHQWyU=";
   };
 
   nativeBuildInputs = [
