@@ -13,3 +13,4 @@ modules/home-automation/frigate/model_cache/
 modules/home-automation/zigbee2mqtt/database.db
 modules/home-automation/zigbee2mqtt/database.db.tmp.*
 **/.env
+.agent
