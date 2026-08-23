@@ -1,15 +1,5 @@
-{ config, secrets, lib, ... }:
-let
-  macs = {
-    gl62m = builtins.readFile config.sops.secrets."macs/gl62m".path;
-    b450 = builtins.readFile config.sops.secrets."macs/b450".path;
-    mibox2 = builtins.readFile config.sops.secrets."macs/mibox2".path;
-    tabs5e = builtins.readFile config.sops.secrets."macs/tabs5e".path;
-    s23u = builtins.readFile config.sops.secrets."macs/s23u".path;
-
-  };
-in
-with lib;{
+{ lib, ... }:
+with lib; {
   options = {
     # Interfaces
     WAN = mkOption {
@@ -27,14 +17,6 @@ with lib;{
     LAN2 = mkOption {
       type = types.str;
       default = "enp4s0";
-    };
-
-    # TODO: To use git ssh key authentication the private key must be in `/root/.ssh` 
-    # when using `nix-rebuild switch...`
-    # TODO: Use own module for this
-    macs = mkOption {
-      type = types.attrs;
-      default = macs;
     };
   };
 }
