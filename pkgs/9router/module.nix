@@ -30,6 +30,22 @@ in
       default = "lluz";
       description = "User account under which 9router runs.";
     };
+
+    headroom = {
+      enable = lib.mkEnableOption "Headroom context optimization proxy alongside 9router";
+
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.callPackage ./../headroom/package.nix { };
+        description = "Package providing Headroom.";
+      };
+
+      port = lib.mkOption {
+        type = lib.types.port;
+        default = 8787;
+        description = "Port to bind Headroom proxy.";
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -39,6 +55,8 @@ in
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
 
+      path = with pkgs; [ nodejs bash coreutils ];
+
       environment = {
         HOME = "/home/${cfg.user}";
       };
@@ -47,7 +65,29 @@ in
         Type = "simple";
         User = cfg.user;
         WorkingDirectory = "/home/${cfg.user}";
-        ExecStart = "${lib.getExe cfg.package} --port ${toString cfg.port} --host ${cfg.host} --no-browser --skip-update";
+        ExecStart = "${lib.getExe cfg.package} --port ${toString cfg.port} --host ${cfg.host} --no-browser --log --skip-update";
+        Restart = "always";
+        RestartSec = "5s";
+      };
+    };
+
+    systemd.services."headroom" = lib.mkIf cfg.headroom.enable {
+      description = "Headroom Context Optimization Proxy";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
+
+      path = with pkgs; [ git coreutils bash uv ];
+
+      environment = {
+        HOME = "/home/${cfg.user}";
+      };
+
+      serviceConfig = {
+        Type = "simple";
+        User = cfg.user;
+        WorkingDirectory = "/home/${cfg.user}";
+        ExecStart = "${lib.getExe cfg.headroom.package} proxy --port ${toString cfg.headroom.port}";
         Restart = "on-failure";
         RestartSec = "5s";
       };
