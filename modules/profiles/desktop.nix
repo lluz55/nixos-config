@@ -11,6 +11,15 @@ with lib;
     services.desktopManager.cosmic.enable = true;
     services.displayManager.cosmic-greeter.enable = true;
 
+    # O módulo services.gnome.gnome-keyring (ligado por cosmic.nix) só liga o
+    # pam_gnome_keyring no serviço PAM `login` (tty). Como o login gráfico
+    # passa pelo cosmic-greeter, o gnome-keyring-daemon sobe em modo `--login`
+    # e nunca recebe a senha pelo pipe do PAM → o chaveiro "Login" fica
+    # trancado a sessão inteira e o libsecret devolve `KeyringLocked` para
+    # qualquer app (ex.: flutter_secure_storage). Ligar aqui destranca o
+    # chaveiro com a mesma senha do login.
+    security.pam.services.cosmic-greeter.enableGnomeKeyring = true;
+
     i18n.supportedLocales = mkDefault [
       "en_US.UTF-8/UTF-8"
       "pt_BR.UTF-8/UTF-8"
