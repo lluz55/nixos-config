@@ -18,7 +18,6 @@ with lib;{
     ./hardware-configuration.nix
     ./router
     inputs.vscode-server.nixosModules.default
-    inputs.hl-caddy.nixosModules.default
   ];
 
   console = {
@@ -26,8 +25,9 @@ with lib;{
     keyMap = "br-abnt2";
   };
 
+  profiles.desktop.enable = true;
   gnome.enable = false;
-  profiles.rtl88x2bu.enable = true;
+  # profiles.rtl88x2bu.enable = true;
   hass.enable = true;
   frigate.enable = true;
   glances.enable = true;
@@ -97,7 +97,7 @@ with lib;{
       efi.canTouchEfiVariables = true;
       timeout = 2;
     };
-    extraModulePackages = [ pkgs.linuxKernel.packages.linux_zen.gasket ];
+    # extraModulePackages = [ pkgs.linuxKernel.packages.linux_zen.gasket ];
     tmp = {
       useTmpfs = true;
       tmpfsSize = "30%";
@@ -114,32 +114,32 @@ with lib;{
     };
   };
 
-  services.hl-caddy = {
-    enable = true;
-    listenPort = 8880;
-    services = {
-      home_assistant = {
-        path = "/home-assistant/";
-        proxyTo = "10.0.66.1:8123";
-      };
-      zigbee2mqtt = {
-        path = "/zigbee2mqtt/";
-        proxyTo = "10.1.1.10:8080";
-      };
-      frigate = {
-        path = "/frigate/";
-        proxyTo = "10.0.66.1:5000";
-      };
-    };
-    cloudflare = {
-      enable = true;
-      tunnelName = "home-caddy";
-      credentialsFile = config.sops.secrets."cloudflare/home/credentials".path;
-      domainFile = config.sops.secrets."cloudflare/home/domain".path;
-    };
-  };
+  #services.hl-caddy = {
+  #  enable = false;
+  #  listenPort = 8880;
+  #  services = {
+  #    home_assistant = {
+  #      path = "/home-assistant/";
+  #      proxyTo = "10.0.66.1:8123";
+  #    };
+  #    zigbee2mqtt = {
+  #      path = "/zigbee2mqtt/";
+  #      proxyTo = "10.1.1.10:8080";
+  #    };
+  #    frigate = {
+  #      path = "/frigate/";
+  #      proxyTo = "10.0.66.1:5000";
+  #    };
+  #  };
+  #  cloudflare = {
+  #    enable = true;
+  #    tunnelName = "home-caddy";
+  #    credentialsFile = config.sops.secrets."cloudflare/home/credentials".path;
+  #    domainFile = config.sops.secrets."cloudflare/home/domain".path;
+  #  };
+  #};
 
-  sops.secrets."cloudflare/home/credentials" = { owner = "cloudflared"; };
-  sops.secrets."cloudflare/home/domain" = { owner = "cloudflared"; };
+  # sops.secrets."cloudflare/home/credentials" = { owner = "cloudflared"; };
+  # sops.secrets."cloudflare/home/domain" = { owner = "cloudflared"; };
 
 }

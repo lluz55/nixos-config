@@ -151,23 +151,6 @@
         "type": "github"
       }
     },
-    "hl-caddy": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1783135494,
-        "narHash": "sha256-bySNmKGBYZ6LUbjyK5vu/g790Ln+FQshCr5SgEfje+k=",
-        "path": "/home/lluz/dev/hl-caddy",
-        "type": "path"
-      },
-      "original": {
-        "path": "/home/lluz/dev/hl-caddy",
-        "type": "path"
-      }
-    },
     "home-config": {
       "inputs": {
         "home-manager": [
@@ -362,7 +345,6 @@
       "inputs": {
         "disko": "disko",
         "flake-parts": "flake-parts",
-        "hl-caddy": "hl-caddy",
         "home-config": "home-config",
         "home-manager": "home-manager",
         "llm-agents": "llm-agents",

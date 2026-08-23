@@ -48,10 +48,10 @@
     };
     vscode-server.url = "github:nix-community/nixos-vscode-server";
     llm-agents.url = "github:numtide/llm-agents.nix";
-    hl-caddy = {
-      url = "path:/home/lluz/dev/hl-caddy";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    #hl-caddy = {
+    #  url = "path:/home/lluz/dev/hl-caddy";
+    #  inputs.nixpkgs.follows = "nixpkgs";
+    #};
     searxng-mpc = {
       url = "path:/home/lluz/tmp/searxng-mpc";
       inputs.nixpkgs.follows = "nixpkgs";
