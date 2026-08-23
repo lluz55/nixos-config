@@ -8,7 +8,6 @@
     user = { config, ... }: {
       users.users.lluz = {
         isNormalUser = true;
-        hashedPasswordFile = config.sops.secrets."passwords/lluz".path;
         extraGroups = [
           "audio"
           "camera"
