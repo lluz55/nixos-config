@@ -12,12 +12,15 @@ let
   kon-pkg = pkgs.callPackage ../../pkgs/kon/package.nix { };
   kon-openrouter-pkg = pkgs.callPackage ../../pkgs/kon-openrouter/package.nix { kon = kon-pkg; };
   kilocode-pkg = pkgs.callPackage ../../pkgs/kilocode/package.nix { };
+  hound-mcp-pkg = pkgs.callPackage ../../pkgs/hound-mcp/package.nix { };
+  dsh-pkg = pkgs.callPackage ../../pkgs/dsh/package.nix { };
 in
 with lib; {
   imports = [
     ./hardware-configuration.nix
     ../../pkgs/battery-up/module.nix
     ../../pkgs/9router/module.nix
+    inputs.searxng-mpc.nixosModules.default
   ];
 
   profiles.desktop.enable = true;
@@ -79,6 +82,7 @@ with lib; {
 
     "9router" = {
       enable = true;
+      headroom.enable = true;
     };
 
     # Power and thermal management optimized for Intel Core Ultra (Arrow Lake)
@@ -163,6 +167,12 @@ with lib; {
       kon-pkg
       kon-openrouter-pkg
       kilocode-pkg
+      hound-mcp-pkg
+      dsh-pkg
+      inputs.prime-agent.packages.${pkgs.system}.prime-agent
+      inputs.searxng-mpc.packages.${pkgs.system}.default
+      inputs.searxng-mpc.packages.${pkgs.system}.searxng-instance
+      inputs.searxng-mpc.packages.${pkgs.system}.all-in-one
     ];
   };
 }

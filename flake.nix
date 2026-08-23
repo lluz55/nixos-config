@@ -52,6 +52,14 @@
       url = "path:/home/lluz/dev/hl-caddy";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    searxng-mpc = {
+      url = "path:/home/lluz/tmp/searxng-mpc";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    prime-agent = {
+      url = "path:/home/lluz/tmp/prime-agent";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -166,6 +174,8 @@
         packages.bestfin = pkgs.callPackage ./pkgs/bestfin/package.nix { };
         packages.kilocode = pkgs.callPackage ./pkgs/kilocode/package.nix { };
         packages."9router" = pkgs.callPackage ./pkgs/9router/package.nix { inherit (pkgs) nodejs; };
+        packages.headroom = pkgs.callPackage ./pkgs/headroom/package.nix { };
+        packages.hound-mcp = pkgs.callPackage ./pkgs/hound-mcp/package.nix { };
         packages.default = pkgs.callPackage ./pkgs/waydroidsu/package.nix { };
       };
     };
