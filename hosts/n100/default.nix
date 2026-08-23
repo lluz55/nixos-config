@@ -118,7 +118,7 @@ with lib;{
     enable = true;
     listenPort = 8880;
     services = {
-      home-assistant = {
+      home_assistant = {
         path = "/home-assistant/";
         proxyTo = "10.0.66.1:8123";
       };
