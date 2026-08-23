@@ -86,7 +86,25 @@
         config.allowUnfree = true;
       };
       inherit (nixpkgs) lib;
-      overlays = [ rust-overlay.overlays.default ];
+      overlays = [
+        rust-overlay.overlays.default
+        (final: prev: {
+          linuxKernel = prev.linuxKernel // {
+            packages = prev.lib.mapAttrs (_: kpkgs:
+              if (kpkgs ? gasket) then
+                kpkgs.extend (kfinal: kprev: {
+                  gasket = kprev.gasket.overrideAttrs (old: {
+                    patches = (old.patches or [ ]) ++ [
+                      ./pkgs/gasket/linux-7.1-compat.patch
+                    ];
+                  });
+                })
+              else
+                kpkgs
+            ) prev.linuxKernel.packages;
+          };
+        })
+      ];
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;

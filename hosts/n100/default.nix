@@ -97,12 +97,17 @@ with lib;{
       efi.canTouchEfiVariables = true;
       timeout = 2;
     };
-    # extraModulePackages = [ pkgs.linuxKernel.packages.linux_zen.gasket ];
+    extraModulePackages = [ config.boot.kernelPackages.gasket ];
+    kernelModules = [ "gasket" "apex" ];
     tmp = {
       useTmpfs = true;
       tmpfsSize = "30%";
     };
   };
+
+  services.udev.extraRules = ''
+    SUBSYSTEM=="apex", MODE="0660", GROUP="users"
+  '';
 
   hardware.acpilight.enable = true;
 
