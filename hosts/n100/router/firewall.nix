@@ -25,15 +25,6 @@ in
               ${config.macs.tabs5e},
            }
           }
-          set authorized_mgmt {
-            typeof ether saddr
-            flags constant
-            elements = {
-              ${config.macs.gl62m},
-              ${config.macs.b450},
-              ${config.macs.s23u},
-            }
-          }
           limit slow {
             rate over 1 mbytes/second 
           }
@@ -55,7 +46,7 @@ in
             iifname "vl-guests" oifname { "vl-guests", "vl-home", "vl-mgmt", "br-cams", "br-lan"} drop comment "Block access to other networks"
             iifname "vl-home" oifname { "vl-guests", "vl-mgmt", "br-cams"} drop comment "Block access to other networks"
             iifname { "vl-home" } ether saddr @authorized_home accept
-            iifname { "vl-mgmt" } ether saddr @authorized_mgmt accept 
+            iifname { "vl-mgmt" } accept comment "Rede de manutencao confiavel — sem filtro por MAC"
             #iifname "vl-guests" oifname "${config.WAN}" accept
             
             # Limit guests network bandwidth
@@ -105,10 +96,10 @@ in
             ct status dnat accept comment "Allow NAT through interfaces"
 
             iifname { "vl-home" } ether saddr @authorized_home oifname "${config.WAN}" ct state new accept  
-            iifname { "vl-mgmt" } ether saddr @authorized_mgmt oifname {"${config.WAN}", "br-cams", "br-lan", "vl-home"} ct state new accept 
+            iifname { "vl-mgmt" } oifname {"${config.WAN}", "br-cams", "br-lan", "vl-home"} ct state new accept 
 
             # vl-mgmt can reach vl-cams (WiFi cameras)
-            iifname { "vl-mgmt" } ether saddr @authorized_mgmt oifname { "vl-cams" } ct state new accept comment "Allow mgmt to access WiFi cameras"
+            iifname { "vl-mgmt" } oifname { "vl-cams" } ct state new accept comment "Allow mgmt to access WiFi cameras"
 
             # vl-cams: block all lateral access; only allow NTP outbound and established return
             iifname { "vl-cams" } oifname { "br-lan", "br-cams", "vl-home", "vl-guests", "vl-mgmt" } drop comment "Block vl-cams from all other networks"
