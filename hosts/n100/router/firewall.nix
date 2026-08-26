@@ -36,6 +36,7 @@ in
             iifname "vl-guests" oifname { "vl-guests", "vl-home", "vl-mgmt", "br-cams", "br-lan"} drop comment "Block access to other networks"
             iifname "vl-home" oifname { "vl-guests", "vl-mgmt", "br-cams"} drop comment "Block access to other networks"
             iifname { "vl-home" } accept
+            iifname { "vl-mgmt" } accept comment "Rede de manutencao confiavel — sem filtro por MAC"
             #iifname "vl-guests" oifname "${config.WAN}" accept
             
             # Limit guests network bandwidth
@@ -84,7 +85,7 @@ in
             ip protocol { tcp, udp } ct state { established } flow add @f comment "Offload tcp/udp established traffic"
             ct status dnat accept comment "Allow NAT through interfaces"
 
-            iifname { "vl-home" } oifname "${config.WAN}" ct state new accept  
+            iifname { "vl-home" } oifname "${config.WAN}" ct state new accept
             iifname { "vl-mgmt" } oifname {"${config.WAN}", "br-cams", "br-lan", "vl-home"} ct state new accept 
 
             # vl-mgmt can reach vl-cams (WiFi cameras)

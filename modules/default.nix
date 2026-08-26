@@ -20,17 +20,14 @@
     ./hardware/nvidia.nix
   ];
 
-  # programs.nix-ld.enable = true;
-  # programs.nix-ld.libraries = options.programs.nix-ld.libraries.default ++ (with pkgs;
-  #   [
-  #     rust-analyzer
-  #     luajitPackages.luarocks # needed?
-  #     stylua # needed?
-  #     ast-grep
-  #     lua-language-server
-  #     python3
-  #     glibc
-  #   ]);
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    stdenv.cc.cc.lib
+    zlib
+    glibc
+    openssl
+    curl
+  ];
 
   environment.sessionVariables = {
     OPENCODE_ENABLE_EXA = "1";

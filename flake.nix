@@ -48,16 +48,12 @@
     };
     vscode-server.url = "github:nix-community/nixos-vscode-server";
     llm-agents.url = "github:numtide/llm-agents.nix";
-    #hl-caddy = {
-    #  url = "path:/home/lluz/dev/hl-caddy";
-    #  inputs.nixpkgs.follows = "nixpkgs";
-    #};
-    searxng-mpc = {
-      url = "path:/home/lluz/tmp/searxng-mpc";
+    dl-conn = {
+      url = "github:lluz55/dl_conn";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    prime-agent = {
-      url = "path:/home/lluz/tmp/prime-agent";
+    searxng-mpc = {
+      url = "github:lluz55/searxng-mpc";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -113,6 +109,7 @@
       waydroidsu = pkgs.callPackage ./pkgs/waydroidsu/package.nix { };
       bestfin = pkgs.callPackage ./pkgs/bestfin/package.nix { };
       kilocode = pkgs.callPackage ./pkgs/kilocode/package.nix { };
+      donsetch = pkgs.callPackage ./pkgs/donsetch/package.nix { };
 
       desktopProfile = [
         ./modules
@@ -127,7 +124,7 @@
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs llm-agents openai-codex waydroidsu bestfin kilocode; };
+            extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs llm-agents openai-codex waydroidsu bestfin kilocode donsetch; };
             users = {
               "${masterUser.name}".imports = [
                 home-config.homeModules.${masterUser.name}
@@ -148,7 +145,7 @@
             inherit system;
             specialArgs =
               {
-                inherit inputs unstable masterUser nix-direnv llm-agents openai-codex waydroidsu bestfin kilocode;
+                inherit inputs unstable masterUser nix-direnv llm-agents openai-codex waydroidsu bestfin kilocode donsetch;
               }
               // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
             modules = [ ./hosts/${name} ]
@@ -194,6 +191,7 @@
         packages."9router" = pkgs.callPackage ./pkgs/9router/package.nix { inherit (pkgs) nodejs; };
         packages.headroom = pkgs.callPackage ./pkgs/headroom/package.nix { };
         packages.hound-mcp = pkgs.callPackage ./pkgs/hound-mcp/package.nix { };
+        packages.donsetch = pkgs.callPackage ./pkgs/donsetch/package.nix { };
         packages.default = pkgs.callPackage ./pkgs/waydroidsu/package.nix { };
       };
     };

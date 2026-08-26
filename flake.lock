@@ -53,6 +53,27 @@
         "type": "github"
       }
     },
+    "dl-conn": {
+      "inputs": {
+        "flake-utils": "flake-utils",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1787604958,
+        "narHash": "sha256-pWDrF5ZHH7bQxd1EEo8bXrIIChw6M0WJ3jdutP66MCY=",
+        "owner": "lluz55",
+        "repo": "dl_conn",
+        "rev": "8e56b210dccd6a29a11630c923cc011f0aae915a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lluz55",
+        "repo": "dl_conn",
+        "type": "github"
+      }
+    },
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
@@ -135,7 +156,25 @@
     },
     "flake-utils": {
       "inputs": {
-        "systems": "systems_2"
+        "systems": "systems"
+      },
+      "locked": {
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "flake-utils_2": {
+      "inputs": {
+        "systems": "systems_3"
       },
       "locked": {
         "lastModified": 1731533236,
@@ -206,7 +245,7 @@
         "bun2nix": "bun2nix",
         "flake-parts": "flake-parts_2",
         "nixpkgs": "nixpkgs",
-        "systems": "systems",
+        "systems": "systems_2",
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
@@ -324,26 +363,10 @@
         "type": "github"
       }
     },
-    "prime-agent": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1787059484,
-        "narHash": "sha256-5cd3mu4KoZg1dgfrlVSXMt5WD4iWFXRzDpcPMbDZafo=",
-        "path": "/home/lluz/tmp/prime-agent",
-        "type": "path"
-      },
-      "original": {
-        "path": "/home/lluz/tmp/prime-agent",
-        "type": "path"
-      }
-    },
     "root": {
       "inputs": {
         "disko": "disko",
+        "dl-conn": "dl-conn",
         "flake-parts": "flake-parts",
         "home-config": "home-config",
         "home-manager": "home-manager",
@@ -351,7 +374,6 @@
         "nix-direnv": "nix-direnv",
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "prime-agent": "prime-agent",
         "rust-overlay": "rust-overlay",
         "searxng-mpc": "searxng-mpc",
         "sops-nix": "sops-nix",
@@ -378,20 +400,23 @@
     },
     "searxng-mpc": {
       "inputs": {
-        "flake-utils": "flake-utils",
+        "flake-utils": "flake-utils_2",
         "nixpkgs": [
           "nixpkgs"
         ]
       },
       "locked": {
-        "lastModified": 1787048877,
-        "narHash": "sha256-M6LL1YWeJj9ArRxBM7wz2iFp0ukuoYgqTNIK5gRJzUA=",
-        "path": "/home/lluz/tmp/searxng-mpc",
-        "type": "path"
+        "lastModified": 1786820760,
+        "narHash": "sha256-aetWgfOqJe64kEcAih6odKwt4YZ8ilKFyUVw4c6/p2U=",
+        "owner": "lluz55",
+        "repo": "searxng-mpc",
+        "rev": "4d24541b352272e5343ca566c48ca9f6174408c2",
+        "type": "github"
       },
       "original": {
-        "path": "/home/lluz/tmp/searxng-mpc",
-        "type": "path"
+        "owner": "lluz55",
+        "repo": "searxng-mpc",
+        "type": "github"
       }
     },
     "sops-nix": {
@@ -430,6 +455,21 @@
       }
     },
     "systems_2": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_3": {
       "locked": {
         "lastModified": 1681028828,
         "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",

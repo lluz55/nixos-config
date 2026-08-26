@@ -14,6 +14,7 @@ let
   kilocode-pkg = pkgs.callPackage ../../pkgs/kilocode/package.nix { };
   hound-mcp-pkg = pkgs.callPackage ../../pkgs/hound-mcp/package.nix { };
   dsh-pkg = pkgs.callPackage ../../pkgs/dsh/package.nix { };
+  donsetch-pkg = pkgs.callPackage ../../pkgs/donsetch/package.nix { };
 in
 with lib; {
   imports = [
@@ -169,7 +170,7 @@ with lib; {
       kilocode-pkg
       hound-mcp-pkg
       dsh-pkg
-      inputs.prime-agent.packages.${pkgs.system}.prime-agent
+      donsetch-pkg
       inputs.searxng-mpc.packages.${pkgs.system}.default
       inputs.searxng-mpc.packages.${pkgs.system}.searxng-instance
       inputs.searxng-mpc.packages.${pkgs.system}.all-in-one
