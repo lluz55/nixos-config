@@ -9,7 +9,7 @@ with lib;
 
   config = mkIf (config.twingate.enable) {
     virtualisation.oci-containers.containers."twingate" = {
-      image = "twingate/connector:1.85";
+      image = "docker.io/twingate/connector:1.91";
       environment = {
         TWINGATE_LABEL_HOSTNAME = "`hostname`";
       };
