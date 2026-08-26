@@ -128,6 +128,10 @@ with lib;{
     secretFile = config.sops.secrets."nostr/dl-conn-key".path;
   };
 
+  users.users.lluz.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGEuQb+luFJEkBjPJxhQe27+Uo63aVFJs5sQi/N+bgmw lluz@nixos"
+  ];
+
   users.users.dl-conn = {
     isSystemUser = true;
     group = "dl-conn";
