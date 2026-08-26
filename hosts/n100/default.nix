@@ -121,22 +121,22 @@ with lib;{
   };
 
   # dl_conn — Cloudflare Tunnel + Nostr signaling gateway
-  sops.secrets."nostr/dl-conn-key" = {
-    owner = "dl-conn";
-    group = "dl-conn";
-  };
+  # sops.secrets."nostr/dl-conn-key" = {
+  #   owner = "dl-conn";
+  #   group = "dl-conn";
+  # };
 
-  services.dl-conn = {
-    enable = true;
-    configFile = "/etc/dl-conn/config.yaml";
-    secretFile = config.sops.secrets."nostr/dl-conn-key".path;
-  };
+  # services.dl-conn = {
+  #   enable = true;
+  #   configFile = "/etc/dl-conn/config.yaml";
+  #   secretFile = config.sops.secrets."nostr/dl-conn-key".path;
+  # };
 
-  users.users.dl-conn = {
-    isSystemUser = true;
-    group = "dl-conn";
-    home = "/var/lib/dl-conn";
-    createHome = true;
-  };
-  users.groups.dl-conn = {};
+  # users.users.dl-conn = {
+  #   isSystemUser = true;
+  #   group = "dl-conn";
+  #   home = "/var/lib/dl-conn";
+  #   createHome = true;
+  # };
+  # users.groups.dl-conn = {};
 }
