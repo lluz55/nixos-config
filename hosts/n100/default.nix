@@ -25,7 +25,7 @@ with lib;{
     keyMap = "br-abnt2";
   };
 
-  profiles.desktop.enable = true;
+  profiles.desktop.enable = false;
   gnome.enable = false;
   # profiles.rtl88x2bu.enable = true;
   hass.enable = true;
