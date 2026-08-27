@@ -19,6 +19,7 @@ with lib;{
     ./router
     inputs.vscode-server.nixosModules.default
     inputs.dl-conn.nixosModules.default
+    inputs.dl-home-control.nixosModules.default
   ];
 
   console = {
@@ -213,6 +214,26 @@ with lib;{
           websocket = true;
         }
       ];
+    };
+  };
+
+  # dl_home_control — daemon ponte MQTT/Frigate <-> Nostr (mesma stack
+  # zigbee2mqtt/mosquitto/Frigate já provisionada acima para o dl-conn).
+  # A chave secreta Nostr (hex ou nsec bech32 — keystore.Load decodifica os
+  # dois, ver cli/internal/keystore/keystore.go) precisa existir em
+  # secrets/secrets.yaml sob a chave `nostr.dl_home_control` antes do
+  # rebuild (`sops secrets/secrets.yaml` neste repo).
+  sops.secrets."nostr/dl_home_control" = {
+    owner = "dl-home-control";
+    group = "dl-home-control";
+  };
+
+  services.dl-home-control = {
+    enable = true;
+    settings = {
+      key_path = config.sops.secrets."nostr/dl_home_control".path;
+      mqtt_broker = "tcp://10.1.1.8:1883"; # mosquitto (container zigbee2mqtt, allow_anonymous)
+      frigate_url = "http://10.0.66.1:5000";
     };
   };
 

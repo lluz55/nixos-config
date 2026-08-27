@@ -52,6 +52,10 @@
       url = "github:lluz55/dl_conn";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    dl-home-control = {
+      url = "github:lluz55/dl_home_control";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     searxng-mpc = {
       url = "github:lluz55/searxng-mpc";
       inputs.nixpkgs.follows = "nixpkgs";
