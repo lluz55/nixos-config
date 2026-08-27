@@ -110,12 +110,13 @@
       bestfin = pkgs.callPackage ./pkgs/bestfin/package.nix { };
       kilocode = pkgs.callPackage ./pkgs/kilocode/package.nix { };
       donsetch = pkgs.callPackage ./pkgs/donsetch/package.nix { };
+      claude-code = pkgs.callPackage ./pkgs/claude-code/package.nix { };
+      antigravity-cli = pkgs.callPackage ./pkgs/antigravity-cli/package.nix { };
 
       desktopProfile = [
         ./modules
         ./hosts/configuration.nix
         masterUser.user
-        sops-nix.nixosModules.sops
         home-manager.nixosModules.home-manager
         {
           nixpkgs.overlays = overlays;
@@ -124,7 +125,7 @@
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs llm-agents openai-codex waydroidsu bestfin kilocode donsetch; };
+            extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs llm-agents openai-codex waydroidsu bestfin kilocode donsetch claude-code antigravity-cli; };
             users = {
               "${masterUser.name}".imports = [
                 home-config.homeModules.${masterUser.name}
@@ -132,6 +133,18 @@
               ];
             };
           };
+        }
+      ];
+
+      # Secrets management (sops-nix + age key) applies to every host,
+      # regardless of whether it also pulls in desktopProfile — a headless
+      # server like n100 still needs it.
+      sopsBase = [
+        sops-nix.nixosModules.sops
+        {
+          sops.defaultSopsFile = ./secrets/secrets.yaml;
+          sops.defaultSopsFormat = "yaml";
+          sops.age.keyFile = "/home/${masterUser.name}/.config/sops/age/keys.txt";
         }
       ];
 
@@ -145,10 +158,11 @@
             inherit system;
             specialArgs =
               {
-                inherit inputs unstable masterUser nix-direnv llm-agents openai-codex waydroidsu bestfin kilocode donsetch;
+                inherit inputs unstable masterUser nix-direnv llm-agents openai-codex waydroidsu bestfin kilocode donsetch claude-code antigravity-cli;
               }
               // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
             modules = [ ./hosts/${name} ]
+              ++ sopsBase
               ++ (cfg.modules or [ ])
               ++ lib.optional additionalUserExists {
               home-manager.users."${cfg.additionalUser.name}".imports = [ home-config.homeModules.${cfg.additionalUser.name} ];
@@ -188,6 +202,8 @@
         packages.battery-up = pkgs.callPackage ./pkgs/battery-up/package.nix { };
         packages.bestfin = pkgs.callPackage ./pkgs/bestfin/package.nix { };
         packages.kilocode = pkgs.callPackage ./pkgs/kilocode/package.nix { };
+        packages.claude-code = pkgs.callPackage ./pkgs/claude-code/package.nix { };
+        packages.antigravity-cli = pkgs.callPackage ./pkgs/antigravity-cli/package.nix { };
         packages."9router" = pkgs.callPackage ./pkgs/9router/package.nix { inherit (pkgs) nodejs; };
         packages.headroom = pkgs.callPackage ./pkgs/headroom/package.nix { };
         packages.hound-mcp = pkgs.callPackage ./pkgs/hound-mcp/package.nix { };

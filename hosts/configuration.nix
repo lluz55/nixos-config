@@ -12,10 +12,6 @@
     };
   };
 
-  sops.defaultSopsFile = ../secrets/secrets.yaml;
-  sops.defaultSopsFormat = "yaml";
-
-  sops.age.keyFile = "/home/${masterUser.name}/.config/sops/age/keys.txt";
   sops.secrets."passwords/lluz" = {
     neededForUsers = true;
   };

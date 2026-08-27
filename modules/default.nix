@@ -1,6 +1,8 @@
 { inputs
 , pkgs
 , unstable
+, claude-code ? pkgs.callPackage ../pkgs/claude-code/package.nix { }
+, antigravity-cli ? pkgs.callPackage ../pkgs/antigravity-cli/package.nix { }
 , ...
 }: {
   imports = [
@@ -35,6 +37,8 @@
 
   environment.systemPackages = with unstable;
     [
+      claude-code
+      antigravity-cli
       # PS2 Emulator
       #pcsx2
 
