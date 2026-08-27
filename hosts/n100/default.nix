@@ -121,26 +121,108 @@ with lib;{
   };
 
   # dl_conn — Cloudflare Tunnel + Nostr signaling gateway
-  # sops.secrets."nostr/dl-conn-key" = {
-  #   owner = "dl-conn";
-  #   group = "dl-conn";
-  # };
+  sops.secrets."nostr/dl-conn-key" = {
+    owner = "dl-conn";
+    group = "dl-conn";
+  };
 
-  # services.dl-conn = {
-  #   enable = true;
-  #   configFile = "/etc/dl-conn/config.yaml";
-  #   secretFile = config.sops.secrets."nostr/dl-conn-key".path;
-  # };
+  services.dl-conn = {
+    enable = true;
+    secretFile = config.sops.secrets."nostr/dl-conn-key".path;
+    settings = {
+      nostr = {
+        relays = [
+          "wss://relay.damus.io"
+          "wss://nos.lol"
+          "wss://relay.nostr.band"
+          "wss://relay.primal.net"
+          "wss://nostr.mom"
+          "wss://relay.snort.social"
+          "wss://nostr.oxtr.dev"
+          "wss://nostr.land"
+        ];
+        authorizedNpubs = [
+          "npub19eza5qtcr620pufewsnjdvk2c540naaa43nuhzn336myuswzc77sd0jd8z"
+          "npub1e247rm7ndy0p9reyhrhtwckkkkxpqpd8ya5m0qa22f7evuacmkwspjxh0y"
+        ];
+        fallbackNip04 = false;
+      };
+      tunnel = {
+        listenPort = 9099;
+        cloudflaredPath = "cloudflared";
+        autoStart = true;
+        inactivityTimeout = "10m";
+      };
+      auth = {
+        tokenTTL = "120s";
+        sessionTTL = "4h";
+      };
+      services = [
+        {
+          id = "hass";
+          name = "Home Assistant";
+          icon = "home";
+          prefix = "/hass";
+          target = "http://10.1.1.10:8123";
+          stripPrefix = true;
+          websocket = true;
+          # HASS answers 400 to every request while dl_conn is not in its
+          # trusted_proxies. Remove once HA has "use_x_forwarded_for: true"
+          # + "trusted_proxies: [10.1.1.1]".
+          forwardedFor = false;
+        }
+        {
+          id = "frigate";
+          name = "Frigate";
+          icon = "video";
+          prefix = "/frigate";
+          target = "http://10.0.66.1:5000";
+          stripPrefix = true;
+          websocket = false;
+          rootPaths = [ "/locales/" ];
+        }
+        {
+          id = "frigate-api";
+          name = "Frigate API";
+          icon = "video";
+          prefix = "/api";
+          target = "http://10.0.66.1:5000";
+          stripPrefix = false;
+          websocket = false;
+          hidden = true;
+        }
+        {
+          id = "frigate-ws";
+          name = "Frigate WebSocket";
+          icon = "video";
+          prefix = "/ws";
+          target = "http://10.0.66.1:5000";
+          stripPrefix = false;
+          websocket = true;
+          hidden = true;
+        }
+        {
+          id = "zigbee2mqtt";
+          name = "Zigbee2MQTT";
+          icon = "router";
+          prefix = "/zigbee2mqtt";
+          target = "http://10.1.1.8:8080";
+          stripPrefix = true;
+          websocket = true;
+        }
+      ];
+    };
+  };
 
   users.users.lluz.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGEuQb+luFJEkBjPJxhQe27+Uo63aVFJs5sQi/N+bgmw lluz@nixos"
   ];
 
-  # users.users.dl-conn = {
-  #   isSystemUser = true;
-  #   group = "dl-conn";
-  #   home = "/var/lib/dl-conn";
-  #   createHome = true;
-  # };
-  # users.groups.dl-conn = {};
+  users.users.dl-conn = {
+    isSystemUser = true;
+    group = "dl-conn";
+    home = "/var/lib/dl-conn";
+    createHome = true;
+  };
+  users.groups.dl-conn = {};
 }
