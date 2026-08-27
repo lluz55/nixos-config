@@ -61,11 +61,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787859706,
-        "narHash": "sha256-xa2gH47qkd7OFhWkb/J7gBrTh+aeGytrfKXcE6Xi6To=",
+        "lastModified": 1787860847,
+        "narHash": "sha256-stgkNjMlhgXr/87Lm1xcvonRiE/p/gGlkoCnMsMtv38=",
         "owner": "lluz55",
         "repo": "dl_conn",
-        "rev": "fa274af8c456ad8e83cb567879f5bb4eb4d69c8e",
+        "rev": "086823d95dd98d2af46649fb926236da8a68804f",
         "type": "github"
       },
       "original": {
