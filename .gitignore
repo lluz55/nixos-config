@@ -12,5 +12,7 @@ modules/home-automation/frigate/backup.db
 modules/home-automation/frigate/model_cache/
 modules/home-automation/zigbee2mqtt/database.db
 modules/home-automation/zigbee2mqtt/database.db.tmp.*
+modules/home-automation/zigbee2mqtt/configuration_backup_*.yaml
+modules/home-automation/zigbee2mqtt/migration-*.log
 **/.env
 .agent
