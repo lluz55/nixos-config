@@ -1,18 +1,17 @@
 homeassistant:
+  enabled: true
   discovery_topic: homeassistant
-  legacy_entity_attributes: true
-  legacy_triggers: true
-permit_join: false
 mqtt:
   base_topic: zigbee2mqtt
-  server: mqtt://0.0.0.0
+  server: mqtt://localhost:1883
   user: lluz
   keepalive: 60
   reject_unauthorized: true
   version: 4
 serial:
-  port: /dev/ttyACM0
-frontend: true
+  port: /dev/ttyUSB0
+frontend:
+  enabled: true
 devices:
   '0xa4c138cea8629bb4':
     friendly_name: switch.main_entry
@@ -56,3 +55,4 @@ devices:
     friendly_name: '0xa4c138a981a2e9ce'
 advanced:
   log_level: debug
+version: 5

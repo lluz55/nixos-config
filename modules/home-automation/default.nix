@@ -11,11 +11,18 @@ let
   zigbeeDongleById = "/dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_86eda3e37f45ed11bdbac68f0a86e0b4-if00-port0";
   mqtt_env = config.sops.secrets."mqtt.env".path;
 
-  allowedDevices = containers.mkAllowedDevices { devices = [ zigbeeDongleById ]; };
-  bindMounts = containers.mkBindMounts {
-    devicesList = [ zigbee2mqttPath mosquittoPath nodeRedPath mqtt_env ];
+  homeAutoAllowedDevices = containers.mkAllowedDevices { };
+  homeAutoBindMounts = containers.mkBindMounts {
+    devicesList = [ nodeRedPath ];
     mountDevices = [
       { hostPath = homeAutoPath; isReadOnly = false; }
+    ];
+  };
+
+  zigbeeAllowedDevices = containers.mkAllowedDevices { devices = [ zigbeeDongleById ]; };
+  zigbeeBindMounts = containers.mkBindMounts {
+    devicesList = [ zigbee2mqttPath mosquittoPath mqtt_env ];
+    mountDevices = [
       { hostPath = zigbeeDongleById; }
     ];
   };
@@ -43,8 +50,8 @@ with lib;
     ];
 
     containers.homeAuto = {
-      inherit allowedDevices;
-      inherit bindMounts;
+      allowedDevices = homeAutoAllowedDevices;
+      bindMounts = homeAutoBindMounts;
 
       autoStart = true;
       privateNetwork = true;
@@ -77,8 +84,7 @@ with lib;
 
         networking = {
           firewall.enable = true;
-          firewall.allowedTCPPorts = [ 8123 8080 1883 1880 80];
-          firewall.allowedUDPPorts = [ 1883 ];
+          firewall.allowedTCPPorts = [ 8123 1880 80 ];
           useHostResolvConf = mkForce false;
           defaultGateway = "10.1.1.1";
           nameservers = [ "1.1.1.1" "8.8.8.8" ];
@@ -116,9 +122,65 @@ with lib;
             TZ = "America/Brasilia";
           };
         };
+      };
+    };
+
+    containers.zigbee2mqtt = {
+      allowedDevices = zigbeeAllowedDevices;
+      bindMounts = zigbeeBindMounts;
+
+      autoStart = true;
+      privateNetwork = true;
+      hostBridge = "br-cams";
+      localAddress = "10.1.1.8/24";
+
+      # See homeAuto above: nested Podman needs these syscalls beyond
+      # nspawn's default seccomp allowlist.
+      extraFlags = [
+        "--system-call-filter=add_key"
+        "--system-call-filter=keyctl"
+        "--system-call-filter=bpf"
+      ];
+      additionalCapabilities = [ "all" ];
+
+      config = { ... }: {
+        boot.isContainer = true;
+        system.stateVersion = "23.11";
+
+        environment.systemPackages = with pkgs; [
+          # Needed for debug
+          netcat
+          tcpdump
+          usbutils
+        ];
+
+        networking = {
+          firewall.enable = true;
+          firewall.allowedTCPPorts = [ 8080 1883 ];
+          useHostResolvConf = mkForce false;
+          defaultGateway = "10.1.1.1";
+          nameservers = [ "1.1.1.1" "8.8.8.8" ];
+        };
+
+        services = {
+          resolved.enable = true;
+        };
+
+        virtualisation.oci-containers.containers."zigbee2mqtt" = {
+          image = "docker.io/koenkk/zigbee2mqtt:latest";
+          volumes = [
+            "${zigbee2mqttPath}:/app/data:rw"
+            "/run/udev:/run/udev:ro"
+          ];
+          extraOptions = [
+            "--network=host"
+            "--device=${zigbeeDongleById}:/dev/ttyUSB0"
+            "--env-file=${mqtt_env}"
+          ];
+        };
 
         virtualisation.oci-containers.containers."mosquitto" = {
-          image = "eclipse-mosquitto";
+          image = "docker.io/eclipse-mosquitto";
           volumes = [
             "${mosquittoPath}:/mosquitto:rw"
           ];
@@ -128,19 +190,6 @@ with lib;
           environment = {
             ZIGBEE2MQTT_CONFIG_PASSWORD = mqtt_env;
           };
-        };
-
-        virtualisation.oci-containers.containers."zigbee2mqtt" = {
-          image = "koenkk/zigbee2mqtt:latest";
-          volumes = [
-            "${zigbee2mqttPath}:/app/data:rw"
-            "/run/udev:/run/udev:ro"
-          ];
-          extraOptions = [
-            "--network=host"
-            "--device=/dev/serial/by-id/usb-ITead_Sonoff_Zigbee_3.0_USB_Dongle_Plus_86eda3e37f45ed11bdbac68f0a86e0b4-if00-port0:/dev/ttyACM0"
-            "--env-file=${mqtt_env}"
-          ];
         };
       };
     };

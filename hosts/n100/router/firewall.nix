@@ -96,7 +96,7 @@ in
             iifname { "vl-cams" } oifname { "${config.WAN}" } udp dport ${ntp_port} accept comment "Allow NTP external access for vl-cams"
 
             iifname { "br-cams" } oifname { "${config.WAN}" } udp dport ${ntp_port} accept comment "Allow NTP extenal access"
-            iifname { "br-cams" } ip saddr { "10.1.1.10" , "10.1.1.9" } oifname { "${config.WAN}" } accept comment "Allow Frigate extenal access"
+            iifname { "br-cams" } ip saddr { "10.1.1.10" , "10.1.1.9" , "10.1.1.8" } oifname { "${config.WAN}" } accept comment "Allow Frigate/Zigbee2mqtt extenal access"
             iifname { "br-lan", "vl-guests" } oifname { "${config.WAN}" } accept comment "Allow trusted to WAN interface (external access)"
             iifname { "${config.WAN}" } oifname {  "br-lan", "vl-mgmt", "br-cams", "vl-home", "vl-guests" } ct state { established, related } accept comment "Allow established back to other networks"
           }
@@ -106,19 +106,19 @@ in
           chain prerouting {
             type nat hook prerouting priority dstnat; policy accept;
 
-            iifname {"vl-mgmt", "br-lan", "vl-home"} tcp dport { 8123, 8080 } dnat 10.1.1.10 # Allow forwarding to Home Automation
+            iifname {"vl-mgmt", "br-lan", "vl-home"} tcp dport 8123 dnat 10.1.1.10 # Allow forwarding to Home Automation
              # iifname {"vl-mgmt", "br-lan", "vl-home"} tcp dport { 5000 } dnat 10.1.1.9 # Allow forwarding to Home Automation
             iifname {"vl-mgmt", "br-lan", "vl-home"} tcp dport { 5000 } dnat 10.1.1.1 # Allow forwarding to Home Automation
             iifname {"vl-mgmt", "br-lan", "vl-home"} tcp dport { 50001 } dnat 10.1.1.1 # Allow forwarding to Fix Frigate Image
             iifname {"vl-mgmt"} tcp dport { 5000, 1984 } dnat 10.1.1.9 # Allow forwarding to Frigate
-            iifname {"vl-mgmt"} tcp dport 8080 dnat 10.1.1.10 # Allow forwarding to Zigbee2mqtt
+            iifname {"vl-mgmt"} tcp dport 8080 dnat 10.1.1.8 # Allow forwarding to Zigbee2mqtt
             iifname {"vl-mgmt"} tcp dport 48899 dnat 10.1.1.14:8899 # Allow forwarding to CAM 14
             iifname {"vl-mgmt", "br-lan", "vl-home"} tcp dport 80 dnat 10.1.1.10 # Allow forwarding to Emulated Hue - HASS (Restricted to Internal)
             iifname {"vl-mgmt"} tcp dport 1880 dnat 10.1.1.10 # Allow forwarding to NodeRed
-            iifname {"br-lan"} ip saddr 192.168.1.99 tcp dport 8080 dnat 10.1.1.10:8080 # Allow Twingate forwarding to Zigbee2mqtt
+            iifname {"br-lan"} ip saddr 192.168.1.99 tcp dport 8080 dnat 10.1.1.8:8080 # Allow Twingate forwarding to Zigbee2mqtt
             iifname {"br-lan"} ip saddr 192.168.1.99 tcp dport 5000 dnat 10.1.1.9:5000 # Allow Twingate forwarding to Frigate
             iifname {"vl-home"} tcp dport 5000 dnat 10.1.1.9 # Allow forwarding to Frigate
-            iifname {"vl-home"} tcp dport 8080 dnat 10.1.1.10 # Allow forwarding to Zigbee2mqtt
+            iifname {"vl-home"} tcp dport 8080 dnat 10.1.1.8 # Allow forwarding to Zigbee2mqtt
 
             iifname {"vl-mgmt"} tcp dport 60014 dnat 10.1.1.14:34567 # Camera 14 XMeye config
             iifname {"vl-mgmt"} tcp dport 60013 dnat 10.1.1.13:34567 # Camera 13 XMeye config
