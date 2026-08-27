@@ -87,6 +87,8 @@ with lib;{
 
     netbird
     sops
+
+    config.services.dl-conn.package
   ];
 
   services.twingate.enable = lib.mkForce false;
