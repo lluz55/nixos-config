@@ -12,6 +12,13 @@
 
       # Cache dns queries.
       cache-size = 1000;
+      # Cap negative (NXDOMAIN) caching — without this, a lookup that races
+      # a record's real propagation (e.g. a Cloudflare Quick Tunnel's
+      # freshly minted *.trycloudflare.com hostname, queried the instant
+      # cloudflared prints it) gets cached as "doesn't exist" for whatever
+      # TTL the negative SOA response carries, which can be minutes. A short
+      # cap means the next retry a few seconds later gets a fresh answer.
+      neg-ttl = 10;
 
       dhcp-range = [
         "br-lan,192.168.1.100,192.168.1.150,24h"
