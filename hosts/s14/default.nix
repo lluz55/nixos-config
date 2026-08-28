@@ -20,11 +20,17 @@ with lib; {
   imports = [
     ./hardware-configuration.nix
     ../../pkgs/battery-up/module.nix
+    ../../pkgs/bestfin/module.nix
     ../../pkgs/9router/module.nix
     inputs.searxng-mpc.nixosModules.default
   ];
 
   profiles.desktop.enable = true;
+
+  programs.bestfin = {
+    enable = true;
+    package = bestfin-pkg;
+  };
   profiles.rtl88x2bu.enable = true;
   virt-tools.enable = false;
   waydroid = {
@@ -161,7 +167,6 @@ with lib; {
     systemPackages = with unstable; [
       wineWow64Packages.stableFull
       battery-up-pkg
-      bestfin-pkg
       intel-npu-driver
       opencode
       pi-coding-agent
