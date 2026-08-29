@@ -36,6 +36,7 @@ with lib; {
     "passwords/lluz" = {
       neededForUsers = true;
     };
+    "opencode/api_key" = { owner = "lluz"; };
   };
   twingate.enable = lib.mkForce false;
 

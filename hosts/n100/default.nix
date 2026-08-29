@@ -88,6 +88,8 @@ with lib;{
 
     netbird
     sops
+    opencode
+    pi-coding-agent
 
     config.services.dl-conn.package
   ];

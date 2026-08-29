@@ -134,6 +134,7 @@
               "${masterUser.name}".imports = [
                 home-config.homeModules.${masterUser.name}
                 ./modules/home/qutebrowser.nix
+                ./modules/home/pi-coding-agent.nix
               ];
             };
           };

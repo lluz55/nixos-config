@@ -62,5 +62,6 @@ with lib; {
     '')
     nvidia-vaapi-driver
     wineWow64Packages.stableFull
+    pi-coding-agent
   ];
 }

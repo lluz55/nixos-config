@@ -171,6 +171,7 @@
         lmstudio
         nvitop
         opencode
+        pi-coding-agent
         appimage-run
 
         davinci-resolve

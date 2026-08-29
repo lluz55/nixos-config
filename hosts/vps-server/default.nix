@@ -23,6 +23,7 @@ with lib;{
 
     helix
     neovim
+    pi-coding-agent
 
     fastfetch
   ];
