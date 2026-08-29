@@ -106,11 +106,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787947251,
-        "narHash": "sha256-MMVwpS7Ps6DZK+TzkBdIbsCJar2M+8fv5FGpryaLmPY=",
+        "lastModified": 1788024760,
+        "narHash": "sha256-APRO5JMY8PE/q7I2U4vTN1qHiCldx+UGGMSZreLvqI8=",
         "owner": "lluz55",
         "repo": "dl_conn",
-        "rev": "5bf5e74d37e67022bf9a21740d83bd17830c0ded",
+        "rev": "525084176b5aea66d3123383d4f1815e442e92a0",
         "type": "github"
       },
       "original": {
