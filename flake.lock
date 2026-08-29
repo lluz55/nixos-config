@@ -106,11 +106,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787860847,
-        "narHash": "sha256-stgkNjMlhgXr/87Lm1xcvonRiE/p/gGlkoCnMsMtv38=",
+        "lastModified": 1787947251,
+        "narHash": "sha256-MMVwpS7Ps6DZK+TzkBdIbsCJar2M+8fv5FGpryaLmPY=",
         "owner": "lluz55",
         "repo": "dl_conn",
-        "rev": "086823d95dd98d2af46649fb926236da8a68804f",
+        "rev": "5bf5e74d37e67022bf9a21740d83bd17830c0ded",
         "type": "github"
       },
       "original": {
@@ -128,11 +128,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1787609876,
-        "narHash": "sha256-AXBk2qRslb9JzSasB3C3Xs/JRO/HzlLw7sURjeWw8eI=",
+        "lastModified": 1787864629,
+        "narHash": "sha256-lgHFlSSQwrdtaOIGanf0QMZT8KmQWg/POj/bmgTANcc=",
         "owner": "lluz55",
         "repo": "dl_home_control",
-        "rev": "e0b9d5dcb8144ba77172459301932d5713cbfb49",
+        "rev": "df7002351daed8886a0b80407640a79b6703616c",
         "type": "github"
       },
       "original": {
