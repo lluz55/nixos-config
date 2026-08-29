@@ -85,3 +85,8 @@ services:
     target: "http://10.0.66.1:61208"
     stripPrefix: true
     websocket: true
+telemetry:
+  enabled: true
+  intervalSeconds: 10
+  retentionDays: 7
+  exposeViaNostr: true
