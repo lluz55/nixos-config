@@ -1,6 +1,7 @@
 { pkgs
 , inputs
 , masterUser
+, config
 , ...
 }: {
   time.timeZone = "America/Recife";
@@ -25,6 +26,7 @@
   sops.secrets."cloudflare/tunnels/ssh/token" = { };
   sops.secrets."cloudflare/tunnels/haby/token" = { };
   sops.secrets."cloudflare/tunnels/domain_base" = { };
+  sops.secrets."opencode/api_key" = { owner = masterUser.name; };
   sops.secrets."macs/poco" = { };
   sops.secrets."macs/gl62m" = { };
   sops.secrets."macs/b450" = { };
@@ -34,6 +36,13 @@
   sops.secrets."macs/tabs5e" = { };
   sops.secrets."macs/a55" = { };
   sops.secrets."macs/s23u" = { };
+
+  # GitHub access token for Nix's `access-tokens` setting, kept out of nix.conf itself
+  # (world-readable in the store) via nix's `!include` directive below.
+  sops.secrets."nix_tokens/github.com" = { };
+  sops.templates."nix-access-tokens.conf".content = ''
+    access-tokens = github.com=${config.sops.placeholder."nix_tokens/github.com"}
+  '';
 
   boot.kernelModules = [
     "xt_tcp"
@@ -127,6 +136,7 @@
         trusted-users = root lluz
         keep-outputs = true
         keep-derivations = true
+        !include ${config.sops.templates."nix-access-tokens.conf".path}
       '';
     settings = {
       # tarball-ttl = 0;

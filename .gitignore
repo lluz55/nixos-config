@@ -16,3 +16,4 @@ modules/home-automation/zigbee2mqtt/configuration_backup_*.yaml
 modules/home-automation/zigbee2mqtt/migration-*.log
 **/.env
 .agent
+secrets/nix-tokens.nix
