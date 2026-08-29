@@ -173,6 +173,23 @@ with lib;{
     };
   };
 
+  # dl_bestfin — relay Nostr local (strfry) para sync do household na rede
+  # local, em vez de depender só dos relays públicos padrão do app. Ver
+  # modules/servers/nostr-sync-relay.nix e
+  # modules/servers/README-nostr-sync-relay.md para o processo completo.
+  #
+  # authorizedPubkeys precisa ser preenchido antes do rebuild (o módulo
+  # falha a assertion enquanto estiver vazio): abra o app, vá em
+  # Sincronização > Identidade, toque na chave (parcialmente exibida) para
+  # copiar o hex completo (64 chars) e cole abaixo.
+  services.nostrSyncRelay = {
+    enable = true;
+    authorizedPubkeys = [
+      "16719fcbae835e9c27d1c03ae517d07833e89190219f23e8da79f3c417ca7ace"
+      # "cole aqui o hex de 64 chars copiado em Sincronização > Identidade"
+    ];
+  };
+
   users.users.lluz.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGEuQb+luFJEkBjPJxhQe27+Uo63aVFJs5sQi/N+bgmw lluz@nixos"
   ];
