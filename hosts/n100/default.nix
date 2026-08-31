@@ -164,6 +164,11 @@ with lib;{
     group = "dl-home-control";
   };
 
+  # A TUI do daemon abre com `dl-home-control-tui` (wrapper instalado pelo
+  # módulo): ela se liga ao serviço **já em execução** pelo socket de controle
+  # local, em vez de subir um segundo daemon. Rodar `cli tui` sem `--attach`
+  # com o serviço no ar falha de propósito — seriam duas assinaturas Nostr da
+  # mesma pubkey, dois clientes MQTT e dois escritores do acl.json.
   services.dl-home-control = {
     enable = true;
     settings = {
