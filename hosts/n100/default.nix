@@ -157,9 +157,9 @@ with lib;{
   # zigbee2mqtt/mosquitto/Frigate já provisionada acima para o dl-conn).
   # A chave secreta Nostr (hex ou nsec bech32 — keystore.Load decodifica os
   # dois, ver cli/internal/keystore/keystore.go) precisa existir em
-  # secrets/secrets.yaml sob a chave `nostr.dl_home_control` antes do
+  # secrets/secrets.yaml sob a chave `nostr.dl-home-control` antes do
   # rebuild (`sops secrets/secrets.yaml` neste repo).
-  sops.secrets."nostr/dl_home_control" = {
+  sops.secrets."nostr/dl-home-control" = {
     owner = "dl-home-control";
     group = "dl-home-control";
   };
@@ -172,7 +172,7 @@ with lib;{
   services.dl-home-control = {
     enable = true;
     settings = {
-      key_path = config.sops.secrets."nostr/dl_home_control".path;
+      key_path = config.sops.secrets."nostr/dl-home-control".path;
       mqtt_broker = "tcp://10.1.1.8:1883"; # mosquitto (container zigbee2mqtt, allow_anonymous)
       frigate_url = "http://10.0.66.1:5000";
     };
