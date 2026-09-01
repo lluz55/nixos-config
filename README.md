@@ -84,6 +84,41 @@ later rebuild picks up the token automatically — no flag needed.
 **Rotating the token:** edit the secret with `sops secrets/secrets.yaml` and update
 `nix_tokens.github.com`, then rebuild.
 
+## Deploying n100 from a local `dl_home_control` checkout
+
+`lluz55/dl_home_control` is a **private** repo. Nix fetches flake inputs from
+GitHub unauthenticated, so without a token the evaluation dies with a 404 whose
+wording suggests the commit doesn't exist — it does; you just can't read it.
+
+The repo-wide answer is the sops-provided `access-tokens` above. The local-checkout
+route exists for the two cases that answer doesn't cover: code that isn't pushed
+yet, and a machine whose current generation predates the `!include` line (check
+with `grep include /etc/nix/nix.conf` — if it's absent, you're in the bootstrap
+case and need the one-shot `--option access-tokens` flag anyway).
+
+```shell
+scripts/deploy-n100.sh            # switch (default)
+scripts/deploy-n100.sh build      # build only, nothing touches the machine
+DLHC_SRC=/other/checkout scripts/deploy-n100.sh
+```
+
+The script passes `--override-input dl-home-control "$DLHC_SRC"` (default
+`~/dev/dl_home_control`), so evaluation and build happen locally and only the
+closure travels over SSH — no GitHub fetch of that input at all.
+
+**What you give up:** the deployed revision is *not* recorded in `flake.lock`.
+Nobody, including future you, can tell from this repo which `dl_home_control`
+commit the n100 is running, and uncommitted work in the checkout ships silently
+(the script warns, and deliberately doesn't block). For a reproducible deploy,
+push the commit and use `nix flake update dl-home-control` with a token instead.
+
+The daemon's TUI is reachable on the host afterwards — it attaches to the
+**running** service over its local control socket:
+
+```shell
+dl-home-control-tui
+```
+
 ## Install NixOS on any VPS
 
 1. Generate ssh key

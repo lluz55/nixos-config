@@ -52,6 +52,16 @@
       url = "github:lluz55/dl_conn";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Repositório PRIVADO: sem `access-tokens`, o Nix recebe 404 do GitHub e a
+    # mensagem se parece com "commit não existe". O caminho padrão deste repo
+    # é o token via sops (`hosts/configuration.nix`, seção do README); o deploy
+    # do n100 usa o checkout local como alternativa, com
+    # `scripts/deploy-n100.sh` — útil enquanto o código não foi publicado e
+    # numa máquina cuja geração ainda não tem o `!include` do token.
+    #
+    # A URL abaixo continua sendo github: de propósito — este flake é
+    # compartilhado por 6 hosts, e um `path:` absoluto quebraria a avaliação
+    # de todos eles em qualquer máquina onde esse diretório não exista.
     dl-home-control = {
       url = "github:lluz55/dl_home_control";
       inputs.nixpkgs.follows = "nixpkgs";
