@@ -13,6 +13,7 @@ let
     kernel = config.boot.kernelPackages.kernel;
   };
   codegraph-pkg = pkgs.callPackage ../../pkgs/codegraph/package.nix { };
+  hound-mcp-pkg = pkgs.callPackage ../../pkgs/hound-mcp/package.nix { };
 in
 with lib;{
   imports = [
@@ -121,7 +122,7 @@ with lib;{
     config.services.pi-web.package
 
     config.services.dl-conn.package
-  ] ++ [ codegraph-pkg ];
+  ] ++ [ codegraph-pkg hound-mcp-pkg ];
 
   services.twingate.enable = lib.mkForce false;
 
@@ -204,6 +205,7 @@ with lib;{
       key_path = config.sops.secrets."nostr/dl-home-control".path;
       mqtt_broker = "tcp://10.1.1.8:1883"; # mosquitto (container zigbee2mqtt, allow_anonymous)
       frigate_url = "http://10.0.66.1:5000";
+      camera_tunnel_enabled = true;
     };
   };
 

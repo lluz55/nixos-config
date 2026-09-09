@@ -85,6 +85,42 @@ services:
     target: "http://10.0.66.1:61208"
     stripPrefix: true
     websocket: true
+  - id: "pi-web"
+    name: "Pi Web"
+    icon: "code"
+    description: "Interface web do agente Pi"
+    prefix: "/pi-web"
+    target: "http://127.0.0.1:8584"
+    stripPrefix: true
+    websocket: true
+  - id: "9router"
+    name: "9Router"
+    icon: "cpu"
+    description: "Gateway AI local"
+    prefix: "/9router"
+    target: "http://127.0.0.1:20128"
+    stripPrefix: true
+    websocket: true
+  - id: "dsh"
+    name: "DeepSeek Harness"
+    icon: "terminal"
+    description: "DeepSeek Harness (dsh) web profile"
+    prefix: "/dsh"
+    target: "http://127.0.0.1:3080"
+    stripPrefix: true
+    websocket: true
+    # O dsh cerca /api pelo header Host para se defender de DNS rebinding:
+    # aceita só loopback (ou uma autoridade --trusted-host) e recusa o que
+    # tiver Origin de outra origem. Pelo túnel o browser manda o hostname
+    # público nos dois, então o HTML carrega mas toda chamada de API e o
+    # WebSocket levam 403.
+    #
+    # originHost apresenta a requisição ao backend como se tivesse chegado
+    # direto nele (reescreve Host, remove Origin/Sec-Fetch-Site). O hostname
+    # efêmero do trycloudflare.com deixa de importar — é o que faz isso
+    # funcionar sem fixar o túnel em lugar nenhum e sem reiniciar o dsh a
+    # cada rotação (reinício trocaria o token de lançamento).
+    originHost: "127.0.0.1:3080"
 telemetry:
   enabled: true
   intervalSeconds: 10

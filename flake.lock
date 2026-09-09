@@ -107,11 +107,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1788600936,
-        "narHash": "sha256-W3SCk/0YKyJAHYl8kEYdOfPjJtwcIgaL4Q7tvoHkOHg=",
+        "lastModified": 1788989327,
+        "narHash": "sha256-VrDNwqBvbJg86IAhXGr6JpGk/qJOSG8nuviXwokTlL4=",
         "owner": "lluz55",
         "repo": "dl_conn",
-        "rev": "c1096662c59e20025804c3b4d6197fd951a057f9",
+        "rev": "f209322b2cee4481159ed12eb9c18cea73698d7d",
         "type": "github"
       },
       "original": {
@@ -129,8 +129,8 @@
         ]
       },
       "locked": {
-        "lastModified": 1788955797,
-        "narHash": "sha256-e1aY0UmHc8QTeA+wcb8ImDVkNjT5cNEIh9dAcl41dCE=",
+        "lastModified": 1788889843,
+        "narHash": "sha256-d9VILTa2jc3fyy/dlOo4bbXOnyLbYPP9x07v8Y5sB2A=",
         "path": "/home/lluz/dev/dl_home_control",
         "type": "path"
       },
