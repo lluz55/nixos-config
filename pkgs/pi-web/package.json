@@ -1,0 +1,15 @@
+{
+  "name": "pi-web-nix",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@earendil-works/pi-agent-core": "0.85.1",
+    "@earendil-works/pi-coding-agent": "0.85.1",
+    "@earendil-works/pi-ai": "0.85.1",
+    "@jmfederico/pi-web": "1.202609.0",
+    "node-pty": "1.2.0-beta.15"
+  },
+  "overrides": {
+    "node-pty": "1.2.0-beta.15"
+  }
+}
