@@ -52,18 +52,11 @@
       url = "github:lluz55/dl_conn";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Repositório PRIVADO: sem `access-tokens`, o Nix recebe 404 do GitHub e a
-    # mensagem se parece com "commit não existe". O caminho padrão deste repo
-    # é o token via sops (`hosts/configuration.nix`, seção do README); o deploy
-    # do n100 usa o checkout local como alternativa, com
-    # `scripts/deploy-n100.sh` — útil enquanto o código não foi publicado e
-    # numa máquina cuja geração ainda não tem o `!include` do token.
-    #
-    # A URL abaixo continua sendo github: de propósito — este flake é
-    # compartilhado por 6 hosts, e um `path:` absoluto quebraria a avaliação
-    # de todos eles em qualquer máquina onde esse diretório não exista.
+    # Repositório local para dl-home-control (desenvolvimento no host local).
+    # Para outros hosts sem o path local, configure ~/.netrc com GitHub token
+    # ou use `inputs-local.nix` para sobrescrever este input.
     dl-home-control = {
-      url = "github:lluz55/dl_home_control";
+      url = "path:/home/lluz/dev/dl_home_control";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     searxng-mpc = {
@@ -219,10 +212,11 @@
         packages.kilocode = pkgs.callPackage ./pkgs/kilocode/package.nix { };
         packages.claude-code = pkgs.callPackage ./pkgs/claude-code/package.nix { };
         packages.antigravity-cli = pkgs.callPackage ./pkgs/antigravity-cli/package.nix { };
-        packages."9router" = pkgs.callPackage ./pkgs/9router/package.nix { inherit (pkgs) nodejs; };
+        packages."9router" = pkgs.callPackage ./pkgs/9router/package.nix { };
         packages.headroom = pkgs.callPackage ./pkgs/headroom/package.nix { };
         packages.hound-mcp = pkgs.callPackage ./pkgs/hound-mcp/package.nix { };
         packages.donsetch = pkgs.callPackage ./pkgs/donsetch/package.nix { };
+        packages.dsh = pkgs.callPackage ./pkgs/dsh/package.nix { };
         packages.default = pkgs.callPackage ./pkgs/waydroidsu/package.nix { };
       };
     };
