@@ -1,7 +1,11 @@
 { unstable
 , config
+, pkgs
 , ...
 }:
+let
+  codegraph-pkg = pkgs.callPackage ../../pkgs/codegraph/package.nix { };
+in
 {
   imports = [
     ./hardware-configuration.nix
@@ -175,6 +179,6 @@
         appimage-run
 
         davinci-resolve
-      ];
+      ] ++ [ codegraph-pkg ];
     };
 }
