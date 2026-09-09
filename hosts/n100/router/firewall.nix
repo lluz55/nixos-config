@@ -29,6 +29,11 @@ in
             type filter hook input priority 0; policy drop;
             iifname { "br-lan", "br-cams", "vl-mgmt"} accept comment "Allow local network to access the router"
 
+            # PI WEB (UI do Pi Coding Agent) — só VLANs confiáveis. WAN é
+            # drop (sem accept de new) e vl-guests não tem regra de accept,
+            # então 0.0.0.0:8584 não expõe pra fora nem pros guests.
+            iifname { "br-lan", "br-cams", "vl-mgmt", "vl-home" } tcp dport 8584 accept comment "PI WEB (coding agent UI)"
+
             # Guests and Home networks
             iifname {"vl-guests", "vl-home"} udp dport 67-68 accept
             iifname {"vl-guests", "vl-home"} meta l4proto { udp, tcp} th dport { 4244, 5222, 5223, 5228, 50318, 59234, 5242 } accept

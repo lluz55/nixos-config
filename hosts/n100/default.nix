@@ -12,6 +12,7 @@ let
   })).override {
     kernel = config.boot.kernelPackages.kernel;
   };
+  codegraph-pkg = pkgs.callPackage ../../pkgs/codegraph/package.nix { };
 in
 with lib;{
   imports = [
@@ -20,6 +21,9 @@ with lib;{
     inputs.vscode-server.nixosModules.default
     inputs.dl-conn.nixosModules.default
     inputs.dl-home-control.nixosModules.default
+    ../../pkgs/9router/module.nix
+    ../../pkgs/dsh/module.nix
+    ../../pkgs/pi-web/module.nix
   ];
 
   console = {
@@ -44,6 +48,30 @@ with lib;{
 
   services.netbird.enable = true;
   programs.mosh.enable = true;
+
+  # 9Router — gateway AI local, ouvindo na LAN (porta 20128 default do
+  # próprio 9router; sem --host explícito o CLI já usa 0.0.0.0).
+  services."9router" = {
+    enable = true;
+  };
+
+  # DeepSeek Harness (dsh) — web profile. Bind só em 127.0.0.1 (upstream
+  # recusa --host 0.0.0.0 de propósito); acesse via SSH -L, Tailscale ou
+  # Netbird já configurados neste host.
+  services.dsh = {
+    enable = true;
+  };
+
+  # PI WEB — UI web do Pi Coding Agent (módulo pkgs/pi-web/module.nix).
+  # Reusa pi-web-server/pi-web-sessiond como systemd system services (user
+  # lluz, data dir ~/.pi-web). Bind 0.0.0.0:8584; o firewall
+  # (router/firewall.nix) abre a porta só pras VLANs confiáveis (WAN drop,
+  # vl-guests sem accept), então não expõe pra fora nem pros guests.
+  services.pi-web = {
+    enable = true;
+    host = "0.0.0.0";
+    port = 8584;
+  };
 
   services.prometheus = {
     exporters = {
@@ -90,9 +118,10 @@ with lib;{
     sops
     opencode
     pi-coding-agent
+    config.services.pi-web.package
 
     config.services.dl-conn.package
-  ];
+  ] ++ [ codegraph-pkg ];
 
   services.twingate.enable = lib.mkForce false;
 
