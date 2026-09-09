@@ -10,6 +10,10 @@
 # O preço, consciente: o que vai para a máquina NÃO fica registrado no
 # flake.lock. Para um deploy reproduzível/auditável, publique o commit e use
 # `nix flake update dl-home-control` com credencial — ver README.
+#
+# `--ask-elevate-password` é necessário: o usuário `lluz` no n100 não tem
+# sudo NOPASSWD, então sem essa flag o nixos-rebuild falha tarde demais para
+# reagir (depois de gastar minutos baixando/construindo a closure).
 set -euo pipefail
 
 DLHC_SRC="${DLHC_SRC:-$HOME/dev/dl_home_control}"
@@ -43,5 +47,5 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.."
 exec nixos-rebuild "$ACTION" \
   --flake ".#n100" \
   --target-host "$TARGET" \
-  --elevate=sudo \
+  --elevate=sudo --ask-elevate-password \
   --override-input dl-home-control "$DLHC_SRC"
