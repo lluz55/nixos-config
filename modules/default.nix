@@ -20,6 +20,7 @@
     ./waybar/waybar.nix
     ./servers
     ./hardware/nvidia.nix
+    ./hardware/printing.nix
   ];
 
   programs.nix-ld.enable = true;
