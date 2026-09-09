@@ -15,6 +15,18 @@ let
   hound-mcp-pkg = pkgs.callPackage ../../pkgs/hound-mcp/package.nix { };
   dsh-pkg = pkgs.callPackage ../../pkgs/dsh/package.nix { };
   donsetch-pkg = pkgs.callPackage ../../pkgs/donsetch/package.nix { };
+  codegraph-pkg = pkgs.callPackage ../../pkgs/codegraph/package.nix { };
+
+  tinder-desktop = pkgs.makeDesktopItem {
+    name = "tinder";
+    desktopName = "Tinder";
+    comment = "Tinder web app";
+    exec = "${unstable.brave}/bin/brave --app=https://tinder.com/app/recs";
+    icon = "brave-browser";
+    terminal = false;
+    categories = [ "Network" ];
+    startupWMClass = "brave-tinder.com__app_recs-Default";
+  };
 in
 with lib; {
   imports = [
@@ -22,6 +34,7 @@ with lib; {
     ../../pkgs/battery-up/module.nix
     ../../pkgs/bestfin/module.nix
     ../../pkgs/9router/module.nix
+    ../../pkgs/pi-web/module.nix
     inputs.searxng-mpc.nixosModules.default
   ];
 
@@ -31,17 +44,19 @@ with lib; {
     enable = true;
     package = bestfin-pkg;
   };
+
+  programs.appimage = {
+    enable = true;
+    binfmt = true;
+  };
   profiles.rtl88x2bu.enable = true;
   virt-tools.enable = false;
-  waydroid = {
-    enable = true;
-    package = unstable.waydroid-nftables;
-  };
 
   sops.secrets = lib.mkForce {
     "passwords/lluz" = {
       neededForUsers = true;
     };
+    "nix_tokens/github.com" = { };
     "opencode/api_key" = { owner = "lluz"; };
   };
   twingate.enable = lib.mkForce false;
@@ -53,13 +68,16 @@ with lib; {
       wifi.powersave = false;
     };
     firewall = {
-      allowedTCPPorts = [ 18081 18082 ];
-      allowedUDPPorts = [ 18082 ];
+      allowedTCPPorts = [ 18081 18082 8584 ]; # 8584: PI WEB (services.pi-web)
+      allowedUDPPorts = [ 18082 37020 ];
     };
   };
 
-  # Ensure user lluz has access to GPU and NPU render nodes
-  users.users.lluz.extraGroups = [ "render" ];
+  # Impressora/scanner Epson L395 (CUPS + escpr, SANE + epsonscan2).
+  profiles.printing.enable = true;
+
+  # render: nós de GPU/NPU; lp e scanner: impressão e digitalização.
+  users.users.lluz.extraGroups = [ "render" "lp" "scanner" ];
 
   zramSwap = {
     enable = true;
@@ -67,6 +85,7 @@ with lib; {
   };
 
   hardware.graphics = {
+    enable32Bit = true;
     extraPackages = with unstable; [
       intel-media-driver
       vpl-gpu-rt
@@ -91,6 +110,16 @@ with lib; {
     "9router" = {
       enable = true;
       headroom.enable = true;
+    };
+
+    # PI WEB — UI web para sessões persistentes do Pi Coding Agent.
+    # Bind em 0.0.0.0:8584 (porta liberada no firewall abaixo) para acesso
+    # direto na LAN/rede confiável. Sem autenticação nativa — não expor essa
+    # porta diretamente à internet sem VPN/reverse-proxy autenticado na frente.
+    pi-web = {
+      enable = true;
+      host = "0.0.0.0";
+      port = 8584;
     };
 
     # Power and thermal management optimized for Intel Core Ultra (Arrow Lake)
@@ -165,7 +194,7 @@ with lib; {
       QTWEBENGINE_CHROMIUM_FLAGS = "--enable-unsafe-webgpu --use-angle=vulkan --enable-features=Vulkan,VulkanFromANGLE";
     };
     systemPackages = with unstable; [
-      wineWow64Packages.stableFull
+      wineWowPackages.stableFull
       battery-up-pkg
       intel-npu-driver
       opencode
@@ -177,6 +206,9 @@ with lib; {
       hound-mcp-pkg
       dsh-pkg
       donsetch-pkg
+      codegraph-pkg
+      config.services.pi-web.package
+      tinder-desktop
       inputs.searxng-mpc.packages.${pkgs.system}.default
       inputs.searxng-mpc.packages.${pkgs.system}.searxng-instance
       inputs.searxng-mpc.packages.${pkgs.system}.all-in-one
