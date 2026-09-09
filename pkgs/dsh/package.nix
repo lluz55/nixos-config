@@ -17,11 +17,11 @@
 # atualize npmDepsHash.
 buildNpmPackage (finalAttrs: {
   pname = "dsh";
-  version = "0.1.0-rc.7";
+  version = "0.1.3-alpha.2";
 
   src = lib.cleanSource ./.;
 
-  npmDepsHash = "sha256-Rk8YhH5B2NHs8bFTlBRnApn+8O0LcvVai+Af09ElrXA=";
+  npmDepsHash = "sha256-zeU4NWY5J0Pe0Gadx6q85t0T/G3ttU5Ei1/JBjCzyXU=";
 
   nodejs = nodejs_22;
 
@@ -41,8 +41,14 @@ buildNpmPackage (finalAttrs: {
     mkdir -p $out/lib/dsh
     cp -a package.json node_modules $out/lib/dsh/
 
+    # --expose-internals: o bundle @deepseek-ai/cordis-plugin-hmr (parte do
+    # perfil "web") exige acesso às internals do Node para o watcher de HMR;
+    # sem essa flag o boot falha com "--expose-internals is required for HMR
+    # service" (ou, em builds mais antigas do dsh, crasha com SIGSEGV direto
+    # dentro do V8 ao tentar tocar essas internals sem a flag). Ver
+    # https://github.com/deepseek-ai/deepseek-harness/discussions/1313.
     makeWrapper ${lib.getExe nodejs_22} $out/bin/dsh \
-      --add-flags $out/lib/dsh/node_modules/@deepseek-ai/dsh/lib/bin.js \
+      --add-flags "--expose-internals $out/lib/dsh/node_modules/@deepseek-ai/dsh/lib/bin.js" \
       --suffix PATH : ${lib.makeBinPath [ git ripgrep ]}
 
     runHook postInstall
