@@ -1,0 +1,8 @@
+{
+  "name": "9router-nix",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "9router": "0.5.69"
+  }
+}

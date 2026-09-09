@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.services."9router";
-  nine-router-pkg = pkgs.callPackage ./package.nix { inherit (pkgs) nodejs; };
+  nine-router-pkg = pkgs.callPackage ./package.nix { };
 in
 {
   options.services."9router" = {
