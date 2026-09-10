@@ -121,6 +121,9 @@ services:
     # funcionar sem fixar o túnel em lugar nenhum e sem reiniciar o dsh a
     # cada rotação (reinício trocaria o token de lançamento).
     originHost: "127.0.0.1:3080"
+    # O serviço dsh publica sua URL local de lançamento aqui. O dl_conn
+    # resgata o token no loopback e entrega ao navegador apenas o cookie.
+    launchTokenFile: "/run/dsh/web-url"
 telemetry:
   enabled: true
   intervalSeconds: 10

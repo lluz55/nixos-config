@@ -19,6 +19,26 @@ let
   # Caminho do arquivo de configuração no home do usuário
   configDir = "/home/${cfg.user}/.dsh";
   configFile = "${configDir}/providers.json";
+
+  # Capture the one-time launch URL without putting it on the public side of
+  # the tunnel. The daemon remains the main process; the output filter mirrors
+  # every line to journald and atomically publishes only the local URL.
+  launcher = pkgs.writeShellScript "dsh-web-launcher" ''
+    set -euo pipefail
+    umask 077
+    exec ${lib.getExe cfg.package} web --port ${toString cfg.port} --no-open > >(
+      while IFS= read -r line; do
+        printf '%s\n' "$line"
+        case "$line" in
+          "dsh web: http://127.0.0.1:${toString cfg.port}/?token="*)
+            tmp="$RUNTIME_DIRECTORY/web-url.tmp"
+            printf '%s\n' "''${line#dsh web: }" > "$tmp"
+            mv -f "$tmp" "$RUNTIME_DIRECTORY/web-url"
+            ;;
+        esac
+      done
+    ) 2>&1
+  '';
 in
 {
   options.services.dsh = {
@@ -121,7 +141,9 @@ in
         Type = "simple";
         User = cfg.user;
         WorkingDirectory = "/home/${cfg.user}";
-        ExecStart = "${lib.getExe cfg.package} web --port ${toString cfg.port} --no-open";
+        ExecStart = launcher;
+        RuntimeDirectory = "dsh";
+        RuntimeDirectoryMode = "0750";
         Restart = "on-failure";
         RestartSec = "5s";
       };
