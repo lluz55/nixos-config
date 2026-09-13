@@ -5,11 +5,14 @@
   git,
   ripgrep,
 }:
-
 # Hermes Agent (Nous Research) é distribuído no PyPI como wheel puro. As deps
 # do projeto vêm pinadas com `==`; aqui elas são relaxadas para as versões do
 # nixpkgs (pythonRelaxDeps). Extras "cli", "mcp" e "web" são incluídos porque
 # são o que o uso interativo no terminal realmente exercita.
+#
+# Extras adicionais (anthropic, mistral, bedrock, google, voice, ...) não são
+# instaláveis em runtime via pip: para habilitar um, acrescente a dep
+# correspondente em `dependencies` e reconstrua o sistema.
 python313Packages.buildPythonApplication rec {
   pname = "hermes-agent";
   version = "0.19.0";
@@ -25,7 +28,7 @@ python313Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = [ python313Packages.pythonRelaxDepsHook ];
+  nativeBuildInputs = [python313Packages.pythonRelaxDepsHook];
 
   dependencies = with python313Packages; [
     openai
@@ -61,14 +64,23 @@ python313Packages.buildPythonApplication rec {
     mcp
     starlette
     aiohttp
+    # extra "anthropic": provider Claude (sem ele o init do provider aborta)
+    anthropic
   ];
 
-  makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ git ripgrep ]}" ];
+  makeWrapperArgs = [
+    "--suffix PATH : ${lib.makeBinPath [git ripgrep]}"
+    # Subprocessos do hermes (ex.: `hermes dashboard` re-exec via
+    # `sys.executable -m hermes_cli.main`) não passam pelo wrapper que usa
+    # site.addsitedir(). Exportar PYTHONPATH garante que o Python bare do Nix
+    # encontre hermes_cli e todas as dependências (incl. transitivas).
+    "--suffix PYTHONPATH : ${placeholder "out"}/lib/python3.13/site-packages:${lib.makeSearchPath "lib/python3.13/site-packages" (lib.closePropagation dependencies)}"
+  ];
 
   # O pacote não embarca suíte de testes utilizável fora do repo.
   doCheck = false;
 
-  pythonImportsCheck = [ "hermes_cli" ];
+  pythonImportsCheck = ["hermes_cli"];
 
   meta = {
     description = "Hermes Agent — assistente/agente de IA em CLI da Nous Research";
