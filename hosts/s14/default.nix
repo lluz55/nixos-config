@@ -16,6 +16,7 @@
   dsh-pkg = pkgs.callPackage ../../pkgs/dsh/package.nix {};
   donsetch-pkg = pkgs.callPackage ../../pkgs/donsetch/package.nix {};
   codegraph-pkg = pkgs.callPackage ../../pkgs/codegraph/package.nix {};
+  hermes-agent-pkg = pkgs.callPackage ../../pkgs/hermes-agent/package.nix {};
 in
   with lib; {
     imports = [
@@ -192,6 +193,7 @@ in
         dsh-pkg
         donsetch-pkg
         codegraph-pkg
+        hermes-agent-pkg
         config.services.pi-web.package
         inputs.searxng-mpc.packages.${pkgs.system}.searxng-instance
         inputs.searxng-mpc.packages.${pkgs.system}.all-in-one

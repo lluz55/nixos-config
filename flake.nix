@@ -217,6 +217,7 @@
         packages.hound-mcp = pkgs.callPackage ./pkgs/hound-mcp/package.nix { };
         packages.donsetch = pkgs.callPackage ./pkgs/donsetch/package.nix { };
         packages.dsh = pkgs.callPackage ./pkgs/dsh/package.nix { };
+        packages.hermes-agent = pkgs.callPackage ./pkgs/hermes-agent/package.nix { };
         packages.default = pkgs.callPackage ./pkgs/waydroidsu/package.nix { };
       };
     };
