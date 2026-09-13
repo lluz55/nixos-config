@@ -209,7 +209,7 @@
         templates = import ./templates;
         nixosConfigurations = lib.mapAttrs mkSystem hosts;
       };
-      perSystem = { pkgs, ... }: {
+      perSystem = { pkgs, config, ... }: {
         packages.waydroidsu = pkgs.callPackage ./pkgs/waydroidsu/package.nix { };
         packages.battery-up = pkgs.callPackage ./pkgs/battery-up/package.nix { };
         packages.bestfin = pkgs.callPackage ./pkgs/bestfin/package.nix { };
@@ -221,6 +221,10 @@
         packages.hound-mcp = pkgs.callPackage ./pkgs/hound-mcp/package.nix { };
         packages.donsetch = pkgs.callPackage ./pkgs/donsetch/package.nix { };
         packages.dsh = pkgs.callPackage ./pkgs/dsh/package.nix { };
+        packages.hermes-agent = pkgs.callPackage ./pkgs/hermes-agent/package.nix { };
+        packages.hermes-9router = pkgs.callPackage ./pkgs/hermes-9router/package.nix {
+          hermes-agent = config.packages.hermes-agent;
+        };
         packages.default = pkgs.callPackage ./pkgs/waydroidsu/package.nix { };
       };
     };
