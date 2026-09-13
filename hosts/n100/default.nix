@@ -275,18 +275,31 @@ with lib;{
 
       # Provider nomeado e descoberto dinamicamente pelo GET /v1/models do
       # 9router. Assim os modelos locais e remotos agregados pelo gateway
-      # aparecem no seletor do dashboard e no `/model`, sem duplicar uma
-      # lista estática no Nix. O 9router local não exige chave.
+      # aparecem no seletor do dashboard e no `/model custom:9router:<id>`,
+      # sem duplicar uma lista estática no Nix. O 9router local não exige
+      # chave.
       providers."9router" = {
         name = "9Router local";
         api = "http://127.0.0.1:20128/v1";
         transport = "openai_chat";
         discover_models = true;
       };
+
+      # model.provider/base_url/default é o que hermes_cli/config.py lê de
+      # verdade pro modelo ATIVO (hermes_cli/banner.py:
+      # model.get("default") vazio => "no model configured", exatamente o
+      # sintoma do dashboard pedindo setup). A versão anterior usava
+      # `api_mode` (chave só válida dentro de custom_providers legado, não
+      # de `model`) e nunca setava `default` — hermes nunca sabia qual
+      # modelo pedir. `provider: custom` + `base_url` inline é o formato
+      # que o próprio config.py recomenda no erro
+      # "Add a model section: model: provider: custom ...". O id abaixo é
+      # um dos ~70 que o 9router expõe em GET /v1/models; troque à vontade
+      # (ou pelo `/model custom:9router:<outro-id>` dentro de uma sessão).
       model = {
-        provider = "9router";
+        provider = "custom";
         base_url = "http://127.0.0.1:20128/v1";
-        api_mode = "chat_completions";
+        default = "cc/claude-sonnet-5";
       };
     };
     extraPackages = with pkgs; [ bash coreutils git ripgrep nodejs_22 ];
