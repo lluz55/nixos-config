@@ -13,6 +13,32 @@ let
     kernel = config.boot.kernelPackages.kernel;
   };
   codegraph-pkg = pkgs.callPackage ../../pkgs/codegraph/package.nix { };
+  # Hardening extra para os units systemd do módulo services.hermes-agent
+  # (gateway + dashboard) — ver comentário junto de services.hermes-agent
+  # mais abaixo. mkForce em tudo evita "conflicting definitions" tanto nos
+  # campos que o módulo upstream já define (ex.: ProtectHome) quanto nos
+  # novos, sem precisar rastrear qual é qual.
+  hermesHardeningOverrides = lib.mapAttrs (_: lib.mkForce) {
+    ProtectHome = true;
+    PrivateDevices = true;
+    PrivateUsers = true;
+    ProtectKernelTunables = true;
+    ProtectKernelModules = true;
+    ProtectKernelLogs = true;
+    ProtectClock = true;
+    ProtectProc = "invisible";
+    ProcSubset = "pid";
+    ProtectControlGroups = true;
+    ProtectHostname = true;
+    RestrictNamespaces = true;
+    LockPersonality = true;
+    RestrictSUIDSGID = true;
+    RemoveIPC = true;
+    RestrictRealtime = true;
+    CapabilityBoundingSet = "";
+    SystemCallFilter = [ "@system-service" ];
+    SystemCallArchitectures = "native";
+  };
   hound-mcp-pkg = pkgs.callPackage ../../pkgs/hound-mcp/package.nix { };
   dlConnConfigSeed = ./dl-conn-config.yaml;
   syncDlConnServices = pkgs.writeScript "sync-dl-conn-services" ''
@@ -255,6 +281,30 @@ with lib;{
     };
     extraPackages = with pkgs; [ bash coreutils git ripgrep nodejs_22 ];
   };
+
+  # Hardening extra em cima do módulo oficial (que já roda sob usuário
+  # dedicado `hermes` com ProtectSystem=strict e ReadWritePaths restrito ao
+  # próprio stateDir). Este é o único host onde o Hermes fica atrás de uma
+  # superfície de rede real (dl-conn expõe o dashboard, inclusive um
+  # terminal com backend "local"), então o mesmo padrão do
+  # modules/servers/nostr-sync-relay.nix se aplica: derrubar o que não é
+  # usado (capabilities, kernel tunables, namespaces) sem tocar no que o
+  # Node precisa pra rodar.
+  #
+  # MemoryDenyWriteExecute fica de fora de propósito: o hermes roda em
+  # Node.js/V8, que precisa de páginas RWX pro JIT — essa diretiva
+  # derrubaria o serviço na inicialização.
+  #
+  # ProtectHome=true substitui o default do módulo (false): o
+  # workingDirectory do hermes vive em ${cfg.stateDir}, nunca em /home, e
+  # ele não tem por que enxergar /home/lluz.
+  #
+  # Ainda não testado neste host: o terminal "local" do dashboard spawna
+  # PTYs, o que pode exigir syscalls fora de @system-service. Se o terminal
+  # falhar depois do rebuild, comece afrouxando SystemCallFilter antes de
+  # PrivateUsers/RestrictNamespaces.
+  systemd.services.hermes-agent.serviceConfig = hermesHardeningOverrides;
+  systemd.services.hermes-backend.serviceConfig = hermesHardeningOverrides;
 
   services.prometheus = {
     exporters = {
