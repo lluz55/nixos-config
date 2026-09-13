@@ -34,6 +34,12 @@ in
             # então 0.0.0.0:8584 não expõe pra fora nem pros guests.
             iifname { "br-lan", "br-cams", "vl-mgmt", "vl-home" } tcp dport 8584 accept comment "PI WEB (coding agent UI)"
 
+            # llama.cpp — API OpenAI-compatible para as mesmas VLANs
+            # confiáveis. WAN e vl-guests não alcançam esta regra e seguem no
+            # policy drop. O conector Twingate usa --network=host, então pode
+            # alcançar 0.0.0.0:8081 quando o Resource for criado no painel.
+            iifname { "br-lan", "br-cams", "vl-mgmt", "vl-home" } tcp dport 8081 accept comment "llama.cpp API"
+
             # Guests and Home networks
             iifname {"vl-guests", "vl-home"} udp dport 67-68 accept
             iifname {"vl-guests", "vl-home"} meta l4proto { udp, tcp} th dport { 4244, 5222, 5223, 5228, 50318, 59234, 5242 } accept

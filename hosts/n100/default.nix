@@ -14,6 +14,45 @@ let
   };
   codegraph-pkg = pkgs.callPackage ../../pkgs/codegraph/package.nix { };
   hound-mcp-pkg = pkgs.callPackage ../../pkgs/hound-mcp/package.nix { };
+  dlConnConfigSeed = ./dl-conn-config.yaml;
+  syncDlConnServices = pkgs.writeScript "sync-dl-conn-services" ''
+    #!${pkgs.python3.withPackages (ps: [ ps.pyyaml ])}/bin/python3
+    import pathlib
+    import sys
+    import yaml
+
+    seed_path = pathlib.Path(sys.argv[1])
+    live_path = pathlib.Path(sys.argv[2])
+    seed = yaml.safe_load(seed_path.read_text()) or {}
+    live = yaml.safe_load(live_path.read_text()) or {}
+
+    # Só as rotas marcadas abaixo são gerenciadas pelo Nix. Estado mutável do
+    # dl_conn, especialmente nostr.authorizedNpubs, permanece intocado.
+    managed_ids = {"hermes"}
+    desired = {
+        service["id"]: service
+        for service in seed.get("services", [])
+        if service.get("id") in managed_ids
+    }
+    services = live.setdefault("services", [])
+    merged = []
+    seen = set()
+    for service in services:
+        service_id = service.get("id")
+        if service_id in desired:
+            merged.append(desired[service_id])
+            seen.add(service_id)
+        else:
+            merged.append(service)
+    merged.extend(desired[service_id] for service_id in desired if service_id not in seen)
+
+    if merged != services:
+        live["services"] = merged
+        temporary = live_path.with_suffix(".yaml.tmp")
+        temporary.write_text(yaml.safe_dump(live, sort_keys=False, allow_unicode=True))
+        temporary.chmod(0o640)
+        temporary.replace(live_path)
+  '';
 in
 with lib;{
   imports = [
@@ -21,6 +60,7 @@ with lib;{
     ./router
     inputs.vscode-server.nixosModules.default
     inputs.dl-conn.nixosModules.default
+    inputs.hermes-agent.nixosModules.default
     inputs.dl-home-control.nixosModules.default
     ../../pkgs/9router/module.nix
     ../../pkgs/dsh/module.nix
@@ -50,6 +90,85 @@ with lib;{
   services.netbird.enable = true;
   programs.mosh.enable = true;
 
+  # llama.cpp — API OpenAI-compatible nas redes confiáveis e pelo conector
+  # Twingate local. O firewall libera a porta somente nas VLANs confiáveis;
+  # WAN e vl-guests continuam bloqueadas. O router mode descobre todos os
+  # GGUF em /home/lluz/.models e os anuncia em GET /v1/models. Para um
+  # modelo com visão, o GGUF e o projetor ficam LADO A LADO no diretório
+  # plano — o loader do models-dir NÃO desce em subdiretórios, então um par
+  # em `~/.models/LFM2-VL-450M/` seria invisível. O --mmproj-auto (default:
+  # enabled) só pareia o projetor em auto-scan quando o GGUF está no nível
+  # raiz de --models-dir (em modo -hf a flag é no-op):
+  #
+  #   ~/.models/
+  #     LFM2-VL-450M-Q4_0.gguf
+  #     mmproj-LFM2-VL-450M-Q8_0.gguf
+  #
+  # Com o par no lugar, `GET /v1/models` expõe
+  # `architecture.input_modalities = ["text","image"]` na entrada do
+  # modelo — esse é o sinal real de multimodal (não existe
+  # `capabilities.multimodal` no payload do llama-server). Atenção ao elo
+  # seguinte: o 9router 0.5.69 NÃO lê `architecture.*` do upstream, só herda
+  # `capabilities` explícito e, fora isso, decide visão por
+  # getCapabilitiesForModel (patterns/catálogo/regex de nome). GGUFs locais
+  # vindos do llama.cpp ficam sem vision no 9router enquanto o projetor não
+  # aparece no /v1/models do llama — verificado em 2026-09-12 (llama-cpp
+  # 0.3.0): as 4 entradas anunciam input_modalities=["text"].
+  # Modelos não entram no Nix store; após adicionar/remover arquivos, reinicie
+  # o unit para atualizar o catálogo.
+  #
+  # Com 16 GB de RAM, models-max = 1 impede que os dois modelos permaneçam
+  # residentes juntos. O llama-server carrega automaticamente o modelo pedido
+  # no campo `model` da requisição e troca o modelo carregado quando preciso.
+  # O serviço usa o usuário lluz para poder ler os arquivos privados do
+  # diretório de modelos; ProtectHome permanece somente-leitura.
+  services.llama-cpp = {
+    enable = true;
+    openFirewall = false;
+    settings = {
+      host = "0.0.0.0";
+      port = 8081;
+      models-dir = "/home/lluz/.models";
+      models-max = 1;
+      # --mmproj-auto é default-enabled no llama-server; declarado aqui para
+      # documentar a dependência do pareamento: sem o mmproj ao lado do GGUF,
+      # update_caps() zera multimodal e input_modalities fica ["text"].
+      mmproj-auto = true;
+      # Parâmetros de execução aplicados a cada modelo carregado pelo router.
+      ctx-size = 4096;
+      threads = 8;
+      threads-batch = 8;
+      batch-size = 512;
+      ubatch-size = 512;
+      mlock = true;
+      cache-type-k = "q8_0";
+      cache-type-v = "q8_0";
+      jinja = true;
+      parallel = 1;
+    };
+  };
+
+  systemd.services.llama-cpp = {
+    # Uma configuração pode ser aplicada antes do diretório de modelos existir.
+    # Nesse caso o unit fica inativo, em vez de reiniciar continuamente.
+    unitConfig.ConditionPathIsDirectory = "/home/lluz/.models";
+    serviceConfig = {
+      # DynamicUser vira false aqui para o unit ler GGUFs privados em
+      # /home/lluz/.models — mas isso DESTROI TAMBÉM os outros mkForce
+      # abaixo se listado junto; portanto cada override é seletivo, campo a
+      # campo, com comentário próprio. NUNCA colapse estes três em um bloco
+      # genérico "endurecer sandbox": DynamicUser = false anula este bloco
+      # inteiro e flags novas em services.llama-cpp.settings (ex.:
+      # mmproj-auto) somem silenciosamente do ExecStart.
+      DynamicUser = lib.mkForce false;
+      User = "lluz";
+      Group = "users";
+      # ProtectHome precisa ser só read-only (não `true`, que esconde
+      # /home): o router lê os GGUF sob /home/lluz/.models.
+      ProtectHome = lib.mkForce "read-only";
+    };
+  };
+
   # 9Router — gateway AI local, ouvindo na LAN (porta 20128 default do
   # próprio 9router; sem --host explícito o CLI já usa 0.0.0.0).
   services."9router" = {
@@ -59,11 +178,31 @@ with lib;{
   # DeepSeek Harness (dsh) — web profile. Bind só em 127.0.0.1 (upstream
   # recusa --host 0.0.0.0 de propósito); acesse via SSH -L, Tailscale ou
   # Netbird já configurados neste host.
+  users.groups.dsh-access = { };
+  systemd.services.dl-conn.serviceConfig.SupplementaryGroups = [ "dsh-access" ];
+
   services.dsh = {
     enable = true;
+    group = "dsh-access";
+
+    # O 9router é rota hand-declared do adapter pi-ai: `models` precisa estar
+    # listado na mão em ~/.dsh/settings.yaml e envelhece sozinho. O timer
+    # re-lê GET /v1/models e reescreve só essa lista.
+    modelSync = {
+      enable = true;
+      baseURL = "http://localhost:20128/v1";
+      interval = "daily";
+    };
+    providers = {
+      "9router" = {
+        name = "9router";
+        baseURL = "http://localhost:20128/v1";
+        apiKey = null;
+        models = [ ];
+      };
+    };
   };
 
-  # PI WEB — UI web do Pi Coding Agent (módulo pkgs/pi-web/module.nix).
   # Reusa pi-web-server/pi-web-sessiond como systemd system services (user
   # lluz, data dir ~/.pi-web). Bind 0.0.0.0:8584; o firewall
   # (router/firewall.nix) abre a porta só pras VLANs confiáveis (WAN drop,
@@ -71,7 +210,50 @@ with lib;{
   services.pi-web = {
     enable = true;
     host = "0.0.0.0";
+
+    # Mesmo raciocínio do dsh: 9router é provider custom em models.json, sem
+    # catálogo embutido, então `models` precisa ser re-sincronizado.
+    modelSync = {
+      enable = true;
+      baseURL = "http://localhost:20128/v1";
+      interval = "daily";
+    };
     port = 8584;
+  };
+
+  # Hermes Agent — gateway e dashboard declarativos pelo módulo NixOS
+  # oficial. O dashboard fica somente no loopback: o dl_conn é a única
+  # entrada remota e já aplica autenticação/autorização Nostr antes do proxy.
+  # Hermes suporta prefixos de reverse proxy, portanto /hermes funciona sem
+  # bind público e sem abrir a porta 9119 no firewall.
+  services.hermes-agent = {
+    enable = true;
+    addToSystemPackages = true;
+    backend = {
+      mode = "dashboard";
+      host = "127.0.0.1";
+      port = 9119;
+    };
+    settings = {
+      terminal.backend = "local";
+
+      # Provider nomeado e descoberto dinamicamente pelo GET /v1/models do
+      # 9router. Assim os modelos locais e remotos agregados pelo gateway
+      # aparecem no seletor do dashboard e no `/model`, sem duplicar uma
+      # lista estática no Nix. O 9router local não exige chave.
+      providers."9router" = {
+        name = "9Router local";
+        api = "http://127.0.0.1:20128/v1";
+        transport = "openai_chat";
+        discover_models = true;
+      };
+      model = {
+        provider = "9router";
+        base_url = "http://127.0.0.1:20128/v1";
+        api_mode = "chat_completions";
+      };
+    };
+    extraPackages = with pkgs; [ bash coreutils git ripgrep nodejs_22 ];
   };
 
   services.prometheus = {
@@ -180,8 +362,15 @@ with lib;{
   };
 
   systemd.tmpfiles.rules = [
-    "C /var/lib/dl-conn/config.yaml 0640 dl-conn dl-conn - ${./dl-conn-config.yaml}"
+    "C /var/lib/dl-conn/config.yaml 0640 dl-conn dl-conn - ${dlConnConfigSeed}"
   ];
+
+  # O arquivo gravável já existe no n100, portanto a regra "C" acima não
+  # acrescentaria novas rotas. Antes de iniciar, mescla somente os serviços
+  # explicitamente gerenciados pelo script (Hermes), preservando npubs e
+  # quaisquer outras alterações feitas em runtime.
+  systemd.services.dl-conn.serviceConfig.ExecStartPre =
+    "${syncDlConnServices} ${dlConnConfigSeed} /var/lib/dl-conn/config.yaml";
 
   # dl_home_control — daemon ponte MQTT/Frigate <-> Nostr (mesma stack
   # zigbee2mqtt/mosquitto/Frigate já provisionada acima para o dl-conn).

@@ -101,6 +101,18 @@ services:
     target: "http://127.0.0.1:20128"
     stripPrefix: true
     websocket: true
+  - id: "hermes"
+    name: "Hermes Agent"
+    icon: "bot"
+    description: "Dashboard e chat do Hermes Agent"
+    prefix: "/hermes"
+    target: "http://127.0.0.1:9119"
+    stripPrefix: true
+    websocket: true
+    # O dashboard está ligado ao loopback e valida Host/Origin contra esse
+    # bind. Apresente o proxy como loopback; o dl_conn continua cuidando da
+    # autenticação externa e do prefixo público /hermes.
+    originHost: "127.0.0.1:9119"
   - id: "dsh"
     name: "DeepSeek Harness"
     icon: "terminal"

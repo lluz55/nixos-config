@@ -52,6 +52,10 @@
       url = "github:lluz55/dl_conn";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hermes-agent = {
+      url = "github:NousResearch/hermes-agent";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # Repositório local para dl-home-control (desenvolvimento no host local).
     # Para outros hosts sem o path local, configure ~/.netrc com GitHub token
     # ou use `inputs-local.nix` para sobrescrever este input.

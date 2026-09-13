@@ -1,6 +1,13 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.services.pi-web;
+
+  # Sincroniza o catálogo de modelos do 9router para dentro de
+  # ~/.pi/agent/models.json (o Pi Coding Agent trata o 9router como provider
+  # OpenAI-compatible custom: nada nele vem de um catálogo embutido, então
+  # `models` fica obsoleto sempre que o upstream muda). O script reescreve
+  # só providers."9router".models e preserva nomes já ajustados à mão.
+  modelSyncScript = ../../scripts/sync-pi-9router-models.sh;
 in
 {
   options.services.pi-web = {
@@ -37,6 +44,36 @@ in
       defaultText = lib.literalExpression ''"/home/''${cfg.user}/.pi-web"'';
       description = "PI WEB managed data directory (PI_WEB_DATA_DIR), shared between sessiond and web/API.";
     };
+
+    houndPackage = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.callPackage ../hound-mcp/package.nix { };
+      defaultText = lib.literalExpression "pkgs.callPackage ../hound-mcp/package.nix { }";
+      description = "Hound MCP wrapper exposed to Pi Coding Agent sessions.";
+    };
+
+    modelSync = {
+      enable = lib.mkEnableOption ''
+        timer periódico que sincroniza o catálogo de modelos do 9router
+        para dentro de ~/.pi/agent/models.json
+      '';
+
+      baseURL = lib.mkOption {
+        type = lib.types.str;
+        default = "http://localhost:20128/v1";
+        description = "Endpoint OpenAI-compatible consultado em GET /v1/models.";
+      };
+
+      interval = lib.mkOption {
+        type = lib.types.str;
+        default = "daily";
+        example = "*-*-* 04:00:00";
+        description = ''
+          `OnCalendar` do timer. O pi recarrega `models.json` sozinho ao
+          abrir `/model`, então o sync nunca reinicia nada.
+        '';
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -46,7 +83,10 @@ in
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
 
-      path = with pkgs; [ nodejs git ripgrep bash coreutils ];
+      # Coding-agent sessions inherit the daemon environment. The Hound Pi
+      # extension locates the executable by running `which hound`, so both the
+      # wrapper and `which` itself must be available in this isolated PATH.
+      path = with pkgs; [ nodejs git ripgrep bash coreutils which cfg.houndPackage ];
 
       environment = {
         HOME = "/home/${cfg.user}";
@@ -87,6 +127,38 @@ in
         ExecStart = "${cfg.package}/bin/pi-web-server";
         Restart = "always";
         RestartSec = "5s";
+      };
+    };
+
+    # O sync roda como o próprio usuário (dono de ~/.pi) e não reinicia nada:
+    # o pi recarrega models.json sozinho ao abrir /model.
+    systemd.services.pi-model-sync = lib.mkIf cfg.modelSync.enable {
+      description = "Sync 9router model catalog into Pi Coding Agent's models.json";
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
+
+      path = with pkgs; [ nodejs bash coreutils ];
+
+      environment = {
+        HOME = "/home/${cfg.user}";
+        NINEROUTER_BASE_URL = cfg.modelSync.baseURL;
+      };
+
+      serviceConfig = {
+        Type = "oneshot";
+        User = cfg.user;
+        WorkingDirectory = "/home/${cfg.user}";
+        ExecStart = "${pkgs.bash}/bin/bash ${modelSyncScript} --quiet";
+      };
+    };
+
+    systemd.timers.pi-model-sync = lib.mkIf cfg.modelSync.enable {
+      description = "Periodic 9router model catalog sync for Pi Coding Agent";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = cfg.modelSync.interval;
+        Persistent = true;
+        RandomizedDelaySec = "5m";
       };
     };
   };
