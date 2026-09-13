@@ -292,6 +292,13 @@ with lib;{
     extraPackages = with pkgs; [ bash coreutils git ripgrep nodejs_22 ];
   };
 
+  # addToSystemPackages instala o CLI `hermes` no PATH do lluz, mas
+  # $HERMES_HOME (/var/lib/hermes/.hermes) é 2770 hermes:hermes — sem
+  # este extraGroups, `hermes setup`/`hermes setup model` rodado como
+  # lluz não enxerga o diretório (Permissão negada) e o setup nunca
+  # persiste, reaparecendo a cada execução.
+  users.users.lluz.extraGroups = [ "hermes" ];
+
   # Hardening extra em cima do módulo oficial (que já roda sob usuário
   # dedicado `hermes` com ProtectSystem=strict e ReadWritePaths restrito ao
   # próprio stateDir). Este é o único host onde o Hermes fica atrás de uma
