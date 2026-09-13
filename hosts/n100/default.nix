@@ -98,6 +98,16 @@ with lib;{
     keyMap = "br-abnt2";
   };
 
+  # 15GB de RAM sem swap nenhum (hardware-configuration.nix declara
+  # swapDevices = []) e systemd-oomd ativo: qualquer pico de memória vira
+  # SIGKILL na hora em vez de reclaim gradual — foi o que matou o build do
+  # dl_conn durante o rebuild de hoje. 8G de arquivo em disco (261G livres
+  # em /) dá essa folga; o NixOS cria o arquivo sozinho na ativação se ele
+  # ainda não existir.
+  swapDevices = [
+    { device = "/var/lib/swapfile"; size = 8192; }
+  ];
+
   profiles.desktop.enable = false;
   gnome.enable = false;
   # profiles.rtl88x2bu.enable = true;
