@@ -70,7 +70,10 @@ in
     };
 
     # Impressora/scanner Epson L395 (CUPS + escpr, SANE + epsonscan2).
-    profiles.printing.enable = true;
+    profiles.printing = {
+      enable = true;
+      printerIp = "192.168.100.21";
+    };
 
     # render: nós de GPU/NPU; lp e scanner: impressão e digitalização.
     users.users.lluz.extraGroups = ["render" "lp" "scanner"];
