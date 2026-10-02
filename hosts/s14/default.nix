@@ -29,6 +29,7 @@ in
       ../../pkgs/bestfin/module.nix
       ../../pkgs/9router/module.nix
       ../../pkgs/pi-web/module.nix
+      ../../modules/servers/hermes-agent-gateway.nix
       inputs.searxng-mpc.nixosModules.default
     ];
 
@@ -52,6 +53,7 @@ in
       };
       "nix_tokens/github.com" = {};
       "opencode/api_key" = {owner = "lluz";};
+      "hermes_agent/nine_router_api_key" = {owner = "hermes-agent";};
     };
     twingate.enable = lib.mkForce false;
 
@@ -104,6 +106,18 @@ in
       "9router" = {
         enable = true;
         headroom.enable = true;
+      };
+
+      # Usuário isolado dedicado ao Hermes Agent (modules/servers/hermes-agent-gateway.nix).
+      # gatewayEnable = false: a unit hermes-gateway.service fica pronta mas
+      # NÃO sobe sozinha — sem plataforma de mensageria configurada ainda,
+      # não há motivo pra rodar 24/7. Ligar com gatewayEnable = true (e
+      # configurar allowlists de usuário) quando quiser um bot de mensageria.
+      hermesAgentGateway = {
+        enable = true;
+        package = hermes-9router-pkg;
+        gatewayEnable = false;
+        apiKeyFile = config.sops.secrets."hermes_agent/nine_router_api_key".path;
       };
 
       # PI WEB — UI web para sessões persistentes do Pi Coding Agent.
