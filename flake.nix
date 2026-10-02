@@ -48,12 +48,33 @@
     };
     vscode-server.url = "github:nix-community/nixos-vscode-server";
     llm-agents.url = "github:numtide/llm-agents.nix";
+    # Mantenha o Pi separado do nixpkgs para atualizá-lo isoladamente:
+    # `nix flake update pi`.
+    pi = {
+      url = "github:lukasl-dev/pi.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    # UI do Pi também fica em input independente: `nix flake update pi-web`.
+    pi-web = {
+      url = "github:pikujs/pi-web/pr/nix-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    zellij-web-wrapper = {
+      url = "github:lluz55/zellij_web_wrapper";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     dl-conn = {
       url = "github:lluz55/dl_conn";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     hermes-agent = {
       url = "github:NousResearch/hermes-agent";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    # Upstream's flake currently provides only a development shell. Keep it as
+    # the pinned source/version input; pkgs/omniroute wraps the npm release.
+    omniroute = {
+      url = "github:diegosouzapw/OmniRoute/v3.8.50";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # Repositório local para dl-home-control (desenvolvimento no host local).
@@ -140,6 +161,7 @@
             users = {
               "${masterUser.name}".imports = [
                 home-config.homeModules.${masterUser.name}
+                inputs.pi.homeModules.default
                 ./modules/home/qutebrowser.nix
                 ./modules/home/pi-coding-agent.nix
               ];
@@ -217,6 +239,7 @@
         packages.claude-code = pkgs.callPackage ./pkgs/claude-code/package.nix { };
         packages.antigravity-cli = pkgs.callPackage ./pkgs/antigravity-cli/package.nix { };
         packages."9router" = pkgs.callPackage ./pkgs/9router/package.nix { };
+        packages.omniroute = pkgs.callPackage ./pkgs/omniroute/package.nix { };
         packages.headroom = pkgs.callPackage ./pkgs/headroom/package.nix { };
         packages.hound-mcp = pkgs.callPackage ./pkgs/hound-mcp/package.nix { };
         packages.donsetch = pkgs.callPackage ./pkgs/donsetch/package.nix { };

@@ -39,7 +39,61 @@ let
     SystemCallFilter = [ "@system-service" ];
     SystemCallArchitectures = "native";
   };
+  # Chaves que o Nix apenas SEMEIA no config.yaml: entram só quando ainda
+  # não existem. Diferente de services.hermes-agent.settings, que o merge de
+  # activation do módulo reimpõe a cada rebuild — o que sobrescreveria toda
+  # escolha feita no dashboard. Tudo que precisa ser trocável em runtime mora
+  # aqui, e não em `settings`.
+  hermesConfigSeed = {
+    # Sem isto o config.yaml nasce sem `_config_version` e
+    # check_config_version() (hermes_cli/config.py) lê 0 — abaixo do
+    # SUPPORT_FLOOR_VERSION = 12 de config_migrations.py. Aí o hermes se
+    # recusa a auto-migrar o schema e /api/status reporta config_version 0
+    # contra latest_config_version 44. O valor é o `_config_version` do
+    # config_defaults.py do hermes 0.21.2; como é seed, uma migração futura
+    # que o próprio hermes rodar (agora que a escrita está destravada) pode
+    # subir esse número sem o Nix puxar de volta.
+    _config_version = 44;
+
+    # Modelo ativo. Trocável pelo seletor do dashboard e pelo `/model`, então
+    # fica fora de `settings`. É um dos ids que o 9router expõe em
+    # GET /v1/models.
+    model.default = "cc/claude-sonnet-5";
+  };
+  seedHermesConfig = pkgs.writeScript "seed-hermes-config" ''
+    #!${pkgs.python3.withPackages (ps: [ ps.pyyaml ])}/bin/python3
+    import json
+    import pathlib
+    import sys
+    import yaml
+
+    seed = json.loads(sys.argv[1])
+    live_path = pathlib.Path(sys.argv[2])
+    live = (yaml.safe_load(live_path.read_text()) if live_path.exists() else {}) or {}
+
+    def seed_missing(target, values):
+        changed = False
+        for key, value in values.items():
+            if isinstance(value, dict):
+                child = target.get(key)
+                if not isinstance(child, dict):
+                    child = {}
+                    target[key] = child
+                    changed = True
+                changed = seed_missing(child, value) or changed
+            elif key not in target:
+                target[key] = value
+                changed = True
+        return changed
+
+    if seed_missing(live, seed):
+        temporary = live_path.with_suffix(".yaml.seed-tmp")
+        temporary.write_text(yaml.safe_dump(live, sort_keys=False, allow_unicode=True))
+        temporary.chmod(0o660)
+        temporary.replace(live_path)
+  '';
   hound-mcp-pkg = pkgs.callPackage ../../pkgs/hound-mcp/package.nix { };
+  omniroute-pkg = pkgs.callPackage ../../pkgs/omniroute/package.nix { };
   dlConnConfigSeed = ./dl-conn-config.yaml;
   syncDlConnServices = pkgs.writeScript "sync-dl-conn-services" ''
     #!${pkgs.python3.withPackages (ps: [ ps.pyyaml ])}/bin/python3
@@ -54,7 +108,7 @@ let
 
     # Só as rotas marcadas abaixo são gerenciadas pelo Nix. Estado mutável do
     # dl_conn, especialmente nostr.authorizedNpubs, permanece intocado.
-    managed_ids = {"hermes"}
+    managed_ids = {"hermes", "omni", "zellij"}
     desired = {
         service["id"]: service
         for service in seed.get("services", [])
@@ -88,7 +142,9 @@ with lib;{
     inputs.dl-conn.nixosModules.default
     inputs.hermes-agent.nixosModules.default
     inputs.dl-home-control.nixosModules.default
+    inputs.zellij-web-wrapper.nixosModules.default
     ../../pkgs/9router/module.nix
+    ../../pkgs/omniroute/module.nix
     ../../pkgs/dsh/module.nix
     ../../pkgs/pi-web/module.nix
   ];
@@ -211,6 +267,23 @@ with lib;{
     enable = true;
   };
 
+  # OmniRoute — o flake upstream expõe apenas devShell, então o pacote é o
+  # wrapper reprodutível de pkgs/omniroute sobre a release npm correspondente.
+  # Fica apenas no loopback; o acesso externo passa pelo Zero-Trust do dl_conn.
+  services.omniroute = {
+    enable = true;
+    package = omniroute-pkg;
+    port = 20129;
+    host = "127.0.0.1";
+  };
+
+  # Zellij Web Wrapper — terminal web xterm.js + PTY para sessões Zellij.
+  # Fica apenas no loopback; o acesso externo passa pelo Zero-Trust do dl_conn.
+  services.zellij-web = {
+    enable = true;
+    port = 3001;
+  };
+
   # DeepSeek Harness (dsh) — web profile. Bind só em 127.0.0.1 (upstream
   # recusa --host 0.0.0.0 de propósito); acesse via SSH -L, Tailscale ou
   # Netbird já configurados neste host.
@@ -262,6 +335,17 @@ with lib;{
   # entrada remota e já aplica autenticação/autorização Nostr antes do proxy.
   # Hermes suporta prefixos de reverse proxy, portanto /hermes funciona sem
   # bind público e sem abrir a porta 9119 no firewall.
+  #
+  # sops."hermes.env": a API key emitida no dashboard do 9router
+  # (http://127.0.0.1:20128 → API Keys). GET /v1/models responde sem auth,
+  # mas POST /v1/chat/completions devolve 401 sem ela — era o segundo motivo
+  # do hermes não conseguir conversar mesmo com o provider resolvido. O
+  # segredo é um arquivo .env de uma linha: OPENAI_API_KEY=<key>.
+  sops.secrets."hermes.env" = {
+    owner = "hermes";
+    group = "hermes";
+  };
+
   services.hermes-agent = {
     enable = true;
     addToSystemPackages = true;
@@ -276,33 +360,129 @@ with lib;{
       # Provider nomeado e descoberto dinamicamente pelo GET /v1/models do
       # 9router. Assim os modelos locais e remotos agregados pelo gateway
       # aparecem no seletor do dashboard e no `/model custom:9router:<id>`,
-      # sem duplicar uma lista estática no Nix. O 9router local não exige
-      # chave.
+      # sem duplicar uma lista estática no Nix. `key_env` é o que
+      # hermes_cli/providers.py lê pra achar a credencial do provider
+      # nomeado; sem ele o gateway loga "named custom provider '9Router
+      # local' has no resolvable api_key ... will 401".
       providers."9router" = {
         name = "9Router local";
         api = "http://127.0.0.1:20128/v1";
         transport = "openai_chat";
         discover_models = true;
+        key_env = "OPENAI_API_KEY";
       };
 
-      # model.provider/base_url/default é o que hermes_cli/config.py lê de
-      # verdade pro modelo ATIVO (hermes_cli/banner.py:
-      # model.get("default") vazio => "no model configured", exatamente o
-      # sintoma do dashboard pedindo setup). A versão anterior usava
-      # `api_mode` (chave só válida dentro de custom_providers legado, não
-      # de `model`) e nunca setava `default` — hermes nunca sabia qual
-      # modelo pedir. `provider: custom` + `base_url` inline é o formato
-      # que o próprio config.py recomenda no erro
-      # "Add a model section: model: provider: custom ...". O id abaixo é
-      # um dos ~70 que o 9router expõe em GET /v1/models; troque à vontade
-      # (ou pelo `/model custom:9router:<outro-id>` dentro de uma sessão).
+      # `provider: custom` NÃO serve aqui, e esse era o motivo do dashboard
+      # web abrir direto no painel "Setup Required". A TUI web chama o RPC
+      # setup.status → free_tier_bootstrap → resolve_provider("auto"), e o
+      # degrau que lê o config.yaml (_config_model_provider, hermes_cli/
+      # auth.py) só aceita o valor se ele estiver no PROVIDER_REGISTRY.
+      # "custom" não está — só vale quando pedido explicitamente por
+      # --provider na linha de comando. Resultado: AuthError
+      # no_provider_configured, provider_configured=false, painel de setup.
+      #
+      # "openai-api" está no registry e é o caminho OpenAI-compatible
+      # genérico. Ele NÃO lê `model.base_url` (isso só vale pro provider
+      # "actual"): a URL sai de OPENAI_BASE_URL, definido em `environment`
+      # abaixo. O base_url segue aqui só como documentação do destino real.
       model = {
-        provider = "custom";
+        provider = "openai-api";
         base_url = "http://127.0.0.1:20128/v1";
-        default = "cc/claude-sonnet-5";
       };
     };
+
+    # Vira $HERMES_HOME/.env na activation. OPENAI_BASE_URL é obrigatório:
+    # sem ele o provider openai-api cai no default https://api.openai.com/v1.
+    environment = {
+      OPENAI_BASE_URL = "http://127.0.0.1:20128/v1";
+    };
+
+    # Anexado ao mesmo .env, mas fora do /nix/store (que é legível por
+    # qualquer usuário).
+    environmentFiles = [ config.sops.secrets."hermes.env".path ];
+
     extraPackages = with pkgs; [ bash coreutils git ripgrep nodejs_22 ];
+  };
+
+  # ── Configuração editável em runtime ──────────────────────────────────
+  # O módulo instala $HERMES_HOME/.managed com "nixos" e passa
+  # HERMES_MANAGED=true pros units. Isso liga o write-lock de
+  # hermes_cli/config.py: save_config(), set_config_value() e
+  # edit_config() recusam QUALQUER gravação — o seletor de modelo do
+  # dashboard, o `/model` da TUI e o `hermes config set` todos falham. Com
+  # isso desligado, o config.yaml volta a ser gravável e o merge do Nix
+  # continua reimpondo, a cada rebuild, só as chaves de `settings` acima.
+  #
+  # HERMES_HOME_MODE existe porque fora do modo managed o hermes chama
+  # _secure_dir() e faz chmod 0700 no $HERMES_HOME — o que tiraria o acesso
+  # do grupo `hermes` (e portanto do lluz, ver extraGroups abaixo). 2770
+  # mantém setgid + grupo.
+  systemd.services.hermes-agent.environment = {
+    HERMES_MANAGED = lib.mkForce "false";
+    HERMES_HOME_MODE = "2770";
+  };
+  systemd.services.hermes-backend.environment = {
+    HERMES_MANAGED = lib.mkForce "false";
+    HERMES_HOME_MODE = "2770";
+  };
+
+  system.activationScripts.hermes-local-overrides = {
+    # Roda depois do snippet do módulo, que é quem escreve config.yaml e
+    # .managed. Inverter a ordem faria o módulo desfazer tudo isto.
+    deps = [ "hermes-agent-setup" ];
+    text = ''
+      ${seedHermesConfig} ${lib.escapeShellArg (builtins.toJSON hermesConfigSeed)} \
+        /var/lib/hermes/.hermes/config.yaml
+      chown hermes:hermes /var/lib/hermes/.hermes/config.yaml
+      chmod 0660 /var/lib/hermes/.hermes/config.yaml
+
+      # O CLI interativo não enxerga o HERMES_MANAGED dos units, então ele
+      # lê este marcador. "false" está em _MANAGED_FALSE_VALUES, logo
+      # get_managed_system() devolve None e is_managed() é falso também no
+      # shell. Efeito colateral aceito: `hermes update` deixa de ser
+      # recusado — não rode, a atualização é pelo flake input.
+      printf 'false\n' > /var/lib/hermes/.hermes/.managed
+      chown hermes:hermes /var/lib/hermes/.hermes/.managed
+      chmod 0644 /var/lib/hermes/.hermes/.managed
+    '';
+  };
+
+  # Duas rotinas do hermes apertam permissões depois de cada gravação e
+  # nenhuma das duas tem escape:
+  #
+  #  - _secure_file() (hermes_cli/config.py) faz chmod 0600 no config.yaml e
+  #    no .env. Diferente de _secure_dir(), não olha HERMES_HOME_MODE.
+  #  - _save_auth_store() → _write_private_file_atomic() →
+  #    secure_parent_dir() (hermes_constants.py) faz chmod 0700 no PAI do
+  #    auth.json, que é o próprio $HERMES_HOME. Sem checagem de is_managed()
+  #    e sem HERMES_HOME_MODE. Isso não aparecia antes só porque o provider
+  #    nunca resolvia e o auth store nunca era escrito; agora que resolve, o
+  #    home vira 0700 alguns segundos depois do start e o grupo `hermes`
+  #    (logo o lluz, ver extraGroups abaixo) perde o acesso.
+  #
+  # secure_parent_dir() roda ANTES do rename atômico do auth.json, então o
+  # inotify do PathChanged dispara depois dela e o chmod daqui é o último a
+  # valer. A alternativa seria abrir mão do home compartilhado por grupo e
+  # rodar o CLI com `sudo -u hermes`.
+  systemd.paths.hermes-config-perms = {
+    wantedBy = [ "multi-user.target" ];
+    pathConfig.PathChanged = [
+      "/var/lib/hermes/.hermes/config.yaml"
+      "/var/lib/hermes/.hermes/.env"
+      "/var/lib/hermes/.hermes/auth.json"
+    ];
+  };
+  systemd.services.hermes-config-perms = {
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = pkgs.writeShellScript "hermes-config-perms" ''
+        chmod 2770 /var/lib/hermes/.hermes || true
+        for file in /var/lib/hermes/.hermes/config.yaml /var/lib/hermes/.hermes/.env; do
+          [ -e "$file" ] && chmod 0660 "$file"
+        done
+        exit 0
+      '';
+    };
   };
 
   # addToSystemPackages instala o CLI `hermes` no PATH do lluz, mas
@@ -380,8 +560,9 @@ with lib;{
     netbird
     sops
     opencode
-    pi-coding-agent
+    config.home-manager.users.lluz.programs.pi.coding-agent.finalPackage
     config.services.pi-web.package
+    omniroute-pkg
 
     config.services.dl-conn.package
   ] ++ [ codegraph-pkg hound-mcp-pkg ];
@@ -447,7 +628,7 @@ with lib;{
 
   # O arquivo gravável já existe no n100, portanto a regra "C" acima não
   # acrescentaria novas rotas. Antes de iniciar, mescla somente os serviços
-  # explicitamente gerenciados pelo script (Hermes), preservando npubs e
+  # explicitamente gerenciados pelo script (Hermes e Omni), preservando npubs e
   # quaisquer outras alterações feitas em runtime.
   systemd.services.dl-conn.serviceConfig.ExecStartPre =
     "${syncDlConnServices} ${dlConnConfigSeed} /var/lib/dl-conn/config.yaml";
