@@ -1,4 +1,4 @@
-{ pkgs, config, lib, unstable, modulesPath, ... }:
+{ pkgs, config, lib, unstable, modulesPath, inputs, ... }:
 with lib;{
   imports = [
     ./disk-config.nix
@@ -23,7 +23,7 @@ with lib;{
 
     helix
     neovim
-    pi-coding-agent
+    inputs.pi.packages.${pkgs.system}.coding-agent
 
     fastfetch
   ];

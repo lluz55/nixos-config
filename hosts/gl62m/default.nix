@@ -1,6 +1,8 @@
 { unstable
 , lib
 , config
+, pkgs
+, inputs
 , ...
 }:
 with lib; {
@@ -62,6 +64,6 @@ with lib; {
     '')
     nvidia-vaapi-driver
     wineWow64Packages.stableFull
-    pi-coding-agent
+    inputs.pi.packages.${pkgs.system}.coding-agent
   ];
 }

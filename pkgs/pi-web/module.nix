@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 let
   cfg = config.services.pi-web;
 
@@ -15,8 +15,8 @@ in
 
     package = lib.mkOption {
       type = lib.types.package;
-      default = pkgs.callPackage ./package.nix { };
-      defaultText = lib.literalExpression "pkgs.callPackage ./package.nix { }";
+      default = inputs.pi-web.packages.${pkgs.system}.default;
+      defaultText = lib.literalExpression "inputs.pi-web.packages.${pkgs.system}.default";
       description = "pi-web package providing pi-web, pi-web-server and pi-web-sessiond.";
     };
 
