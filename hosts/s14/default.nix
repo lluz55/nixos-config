@@ -4,6 +4,7 @@
   config,
   pkgs,
   inputs,
+  minimax-code-pkg,
   ...
 }: let
   battery-up-pkg = pkgs.callPackage ../../pkgs/battery-up/package.nix {};
@@ -15,12 +16,12 @@
   hound-mcp-pkg = pkgs.callPackage ../../pkgs/hound-mcp/package.nix {};
   dsh-pkg = pkgs.callPackage ../../pkgs/dsh/package.nix {};
   donsetch-pkg = pkgs.callPackage ../../pkgs/donsetch/package.nix {};
-  codegraph-pkg = pkgs.callPackage ../../pkgs/codegraph/package.nix {};
   hermes-agent-pkg = pkgs.callPackage ../../pkgs/hermes-agent/package.nix {};
   # Wrapper do Hermes que roteia pelo 9router local (services."9router" abaixo).
   hermes-9router-pkg = pkgs.callPackage ../../pkgs/hermes-9router/package.nix {
     hermes-agent = hermes-agent-pkg;
   };
+  opencode-pkg = pkgs.callPackage ../../pkgs/opencode/package.nix {opencode = unstable.opencode;};
 in
   with lib; {
     imports = [
@@ -204,7 +205,7 @@ in
         wineWowPackages.stableFull
         battery-up-pkg
         intel-npu-driver
-        opencode
+        opencode-pkg
         inputs.pi.packages.${pkgs.system}.coding-agent
         codex-openrouter-pkg
         kon-pkg
@@ -213,12 +214,12 @@ in
         hound-mcp-pkg
         dsh-pkg
         donsetch-pkg
-        codegraph-pkg
         hermes-agent-pkg
         hermes-9router-pkg
         config.services.pi-web.package
         inputs.searxng-mpc.packages.${pkgs.system}.searxng-instance
         inputs.searxng-mpc.packages.${pkgs.system}.all-in-one
+        minimax-code-pkg
       ];
     };
   }

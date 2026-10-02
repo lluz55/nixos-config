@@ -5,7 +5,7 @@
 , ...
 }:
 let
-  codegraph-pkg = pkgs.callPackage ../../pkgs/codegraph/package.nix { };
+  opencode-pkg = pkgs.callPackage ../../pkgs/opencode/package.nix {opencode = unstable.opencode;};
 in
 {
   imports = [
@@ -177,11 +177,11 @@ in
         # AI
         lmstudio
         nvitop
-        opencode
+        opencode-pkg
         inputs.pi.packages.${pkgs.system}.coding-agent
         appimage-run
 
         davinci-resolve
-      ] ++ [ codegraph-pkg ];
+      ];
     };
 }

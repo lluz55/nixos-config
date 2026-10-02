@@ -144,6 +144,19 @@
       donsetch = pkgs.callPackage ./pkgs/donsetch/package.nix { };
       claude-code = pkgs.callPackage ./pkgs/claude-code/package.nix { };
       antigravity-cli = pkgs.callPackage ./pkgs/antigravity-cli/package.nix { };
+      minimax-code-pkg = let
+        raw = ((pkgs.extend (final: prev: {
+          buildNpmPackage = prev.buildNpmPackage.override { nodejs = prev.nodejs_22; };
+        })).extend inputs.llm-agents.overlays.shared-nixpkgs).llm-agents.minimax-code;
+      in pkgs.symlinkJoin {
+        name = "minimax-code-${raw.version}";
+        paths = [
+          (pkgs.writeShellScriptBin "minimax-code" ''
+            exec ${raw}/bin/mcode "$@"
+          '')
+          raw
+        ];
+      };
 
       desktopProfile = [
         ./modules
@@ -157,7 +170,7 @@
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs llm-agents openai-codex waydroidsu bestfin kilocode donsetch claude-code antigravity-cli; };
+            extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs llm-agents openai-codex waydroidsu bestfin kilocode donsetch claude-code antigravity-cli minimax-code-pkg; };
             users = {
               "${masterUser.name}".imports = [
                 home-config.homeModules.${masterUser.name}
@@ -192,7 +205,7 @@
             inherit system;
             specialArgs =
               {
-                inherit inputs unstable masterUser nix-direnv llm-agents openai-codex waydroidsu bestfin kilocode donsetch claude-code antigravity-cli;
+                inherit inputs unstable masterUser nix-direnv llm-agents openai-codex waydroidsu bestfin kilocode donsetch claude-code antigravity-cli minimax-code-pkg;
               }
               // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
             modules = [ ./hosts/${name} ]

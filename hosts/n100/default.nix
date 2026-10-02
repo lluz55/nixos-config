@@ -1,4 +1,4 @@
-{ pkgs, config, lib, unstable, inputs, ... }:
+{ pkgs, config, lib, unstable, inputs, minimax-code-pkg, ... }:
 let
   gasketRev = "09385d485812088e04a98a6e1227bf92663e0b59";
   gasketPkg = (pkgs.gasket.overrideAttrs (final: prev: {
@@ -12,7 +12,6 @@ let
   })).override {
     kernel = config.boot.kernelPackages.kernel;
   };
-  codegraph-pkg = pkgs.callPackage ../../pkgs/codegraph/package.nix { };
   # Hardening extra para os units systemd do módulo services.hermes-agent
   # (gateway + dashboard) — ver comentário junto de services.hermes-agent
   # mais abaixo. mkForce em tudo evita "conflicting definitions" tanto nos
@@ -133,6 +132,7 @@ let
         temporary.chmod(0o640)
         temporary.replace(live_path)
   '';
+  opencode-pkg = pkgs.callPackage ../../pkgs/opencode/package.nix {opencode = unstable.opencode;};
 in
 with lib;{
   imports = [
@@ -559,13 +559,14 @@ with lib;{
 
     netbird
     sops
-    opencode
+    opencode-pkg
     config.home-manager.users.lluz.programs.pi.coding-agent.finalPackage
     config.services.pi-web.package
     omniroute-pkg
 
     config.services.dl-conn.package
-  ] ++ [ codegraph-pkg hound-mcp-pkg ];
+    minimax-code-pkg
+  ] ++ [ hound-mcp-pkg ];
 
   services.twingate.enable = lib.mkForce false;
 
