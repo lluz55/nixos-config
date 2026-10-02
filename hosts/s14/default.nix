@@ -205,7 +205,7 @@ in
         battery-up-pkg
         intel-npu-driver
         opencode
-        pi-coding-agent
+        inputs.pi.packages.${pkgs.system}.coding-agent
         codex-openrouter-pkg
         kon-pkg
         kon-openrouter-pkg

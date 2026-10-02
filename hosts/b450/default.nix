@@ -1,6 +1,7 @@
 { unstable
 , config
 , pkgs
+, inputs
 , ...
 }:
 let
@@ -10,6 +11,8 @@ in
   imports = [
     ./hardware-configuration.nix
   ];
+
+
   # Twingate Server 2 connector
   virtualisation.oci-containers.containers."twingate-server" = {
     image = "twingate/connector:1.78";
@@ -175,7 +178,7 @@ in
         lmstudio
         nvitop
         opencode
-        pi-coding-agent
+        inputs.pi.packages.${pkgs.system}.coding-agent
         appimage-run
 
         davinci-resolve

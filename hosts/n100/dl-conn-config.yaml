@@ -101,6 +101,26 @@ services:
     target: "http://127.0.0.1:20128"
     stripPrefix: true
     websocket: true
+  - id: "omni"
+    name: "Omni"
+    icon: "terminal"
+    description: "Omni"
+    prefix: "/omni"
+    target: "http://127.0.0.1:20129"
+    stripPrefix: true
+    websocket: true
+  - id: "hermes"
+    name: "Hermes Agent"
+    icon: "bot"
+    description: "Dashboard e chat do Hermes Agent"
+    prefix: "/hermes"
+    target: "http://127.0.0.1:9119"
+    stripPrefix: true
+    websocket: true
+    # O dashboard está ligado ao loopback e valida Host/Origin contra esse
+    # bind. Apresente o proxy como loopback; o dl_conn continua cuidando da
+    # autenticação externa e do prefixo público /hermes.
+    originHost: "127.0.0.1:9119"
   - id: "dsh"
     name: "DeepSeek Harness"
     icon: "terminal"
@@ -121,6 +141,17 @@ services:
     # funcionar sem fixar o túnel em lugar nenhum e sem reiniciar o dsh a
     # cada rotação (reinício trocaria o token de lançamento).
     originHost: "127.0.0.1:3080"
+    # O serviço dsh publica sua URL local de lançamento aqui. O dl_conn
+    # resgata o token no loopback e entrega ao navegador apenas o cookie.
+    launchTokenFile: "/run/dsh/web-url"
+  - id: "zellij"
+    name: "Zellij Web"
+    icon: "terminal"
+    description: "Terminal web e gerenciador de sessões Zellij"
+    prefix: "/zellij"
+    target: "http://127.0.0.1:3001"
+    stripPrefix: true
+    websocket: true
 telemetry:
   enabled: true
   intervalSeconds: 10

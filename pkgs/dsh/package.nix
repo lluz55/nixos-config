@@ -4,7 +4,6 @@
   nodejs_22,
   python3,
   makeWrapper,
-  autoPatchelfHook,
   stdenv,
   git,
   ripgrep,
@@ -25,15 +24,50 @@ buildNpmPackage (finalAttrs: {
 
   nodejs = nodejs_22;
 
-  # node-pty e koffi trazem .node pre-compilados que precisam ser religados
-  # contra as libs do nixpkgs.
-  nativeBuildInputs = [ makeWrapper python3 ]
-    ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+  # Os .node pre-compilados (node-pty, koffi, sharp) carregam bem SEM religar:
+  # todas as NEEDED de sistema (libstdc++/libc/...) já vêm carregadas pelo
+  # próprio node, e o sharp.node acha o libvips vendored pelo RPATH $ORIGIN
+  # pristine. Já o autoPatchelfHook QUEBRA o build aqui: o
+  # libvips-cpp.so.8.18.6 do @img/sharp-libvips-linux-x64 usa um layout ELF
+  # empacotado (código DT_INIT dentro da área de headers) que o patchelf não
+  # entende — antes corrompia os bytes do DT_INIT (SIGSEGV com SEGV_ACCERR em
+  # base+0x25c no dlopen: crash-loop do `dsh web`, que importa sharp via
+  # dsh-attachment-local); no patchelf atual, falha com erro e reprova o
+  # build. Por isso o hook fica desligado; o smoke test no postFixup reprova
+  # o build em qualquer regressão de módulo nativo.
+  nativeBuildInputs = [ makeWrapper python3 ];
 
   buildInputs = [ stdenv.cc.cc.lib ];
-  autoPatchelfIgnoreMissingDeps = true;
+  dontAutoPatchelf = true;
 
   dontNpmBuild = true;
+
+  # Com dontAutoPatchelf, nada encosta nos binários: só o smoke test abaixo.
+  postFixup = ''
+
+    # Smoke test anti-regressão: .node de linux precisa carregar (OK);
+    # prebuilds de outra plataforma (win32/darwin/musl/arm64) podem SKIP com
+    # erro JS; crash com signal ou falha inesperada reprova o build.
+    echo "dsh: smoke-testing native modules..."
+    smokeFail=0
+    while IFS= read -r mod; do
+      if modOut=$(${lib.getExe nodejs_22} --expose-internals -e "try { process.dlopen(module, \"$mod\"); console.log('OK'); } catch (e) { console.log('ERR:' + e.code); }"); then
+        case "$modOut" in
+          OK) echo "OK   $mod" ;;
+          *)
+            if printf '%s' "$mod" | grep -qiE 'musl|darwin|win32|arm64|aarch64'; then
+              echo "SKIP $mod ($modOut)"
+            else
+              echo "FAIL $mod ($modOut)" >&2; smokeFail=1
+            fi
+            ;;
+        esac
+      else
+        echo "CRASH $mod" >&2; smokeFail=1
+      fi
+    done < <(find "$out/lib/dsh/node_modules" -name '*.node')
+    if [ "$smokeFail" -ne 0 ]; then echo "dsh: native module smoke test FAILED" >&2; exit 1; fi
+  '';
 
   installPhase = ''
     runHook preInstall

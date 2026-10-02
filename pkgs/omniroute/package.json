@@ -1,0 +1,8 @@
+{
+  "name": "omniroute-nix-wrapper",
+  "version": "3.8.50",
+  "private": true,
+  "dependencies": {
+    "omniroute": "3.8.50"
+  }
+}

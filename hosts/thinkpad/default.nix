@@ -1,6 +1,8 @@
 { unstable
 , lib
 , config
+, pkgs
+, inputs
 , ...
 }:
 with lib; {
@@ -59,6 +61,6 @@ with lib; {
   };
 
   environment.systemPackages = with unstable; [
-    pi-coding-agent
+    inputs.pi.packages.${pkgs.system}.coding-agent
   ];
 }

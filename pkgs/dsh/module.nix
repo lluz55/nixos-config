@@ -19,6 +19,33 @@ let
   # Caminho do arquivo de configuração no home do usuário
   configDir = "/home/${cfg.user}/.dsh";
   configFile = "${configDir}/providers.json";
+
+  # Sincroniza o catálogo de modelos do 9router para dentro do
+  # $DSH_HOME/settings.yaml. 9router é uma rota "hand-declared" do adapter
+  # pi-ai: o catálogo instalado não a descreve, então `models` precisa estar
+  # listado explicitamente e fica obsoleto sempre que o upstream muda.
+  # O script reescreve só llm-pi-ai.providers.<rota>.models e é idempotente.
+  modelSyncScript = ../../scripts/sync-dsh-9router-models.sh;
+
+  # Capture the one-time launch URL without putting it on the public side of
+  # the tunnel. The daemon remains the main process; the output filter mirrors
+  # every line to journald and atomically publishes only the local URL.
+  launcher = pkgs.writeShellScript "dsh-web-launcher" ''
+    set -euo pipefail
+    umask 027
+    exec ${lib.getExe cfg.package} web --port ${toString cfg.port} --no-open > >(
+      while IFS= read -r line; do
+        printf '%s\n' "$line"
+        case "$line" in
+          "dsh web: http://127.0.0.1:${toString cfg.port}/?token="*)
+            tmp="$RUNTIME_DIRECTORY/web-url.tmp"
+            printf '%s\n' "''${line#dsh web: }" > "$tmp"
+            mv -f "$tmp" "$RUNTIME_DIRECTORY/web-url"
+            ;;
+        esac
+      done
+    ) 2>&1
+  '';
 in
 {
   options.services.dsh = {
@@ -57,6 +84,38 @@ in
         próprio usuário; fixar um nome aqui só é necessário quando o
         usuário não é declarado neste sistema.
       '';
+    };
+
+    modelSync = {
+      enable = lib.mkEnableOption ''
+        timer periódico que sincroniza o catálogo de modelos do 9router
+        para dentro de $DSH_HOME/settings.yaml
+      '';
+
+      baseURL = lib.mkOption {
+        type = lib.types.str;
+        default = "http://localhost:20128/v1";
+        description = "Endpoint OpenAI-compatible consultado em GET /v1/models.";
+      };
+
+      route = lib.mkOption {
+        type = lib.types.str;
+        default = "9router";
+        description = ''
+          Chave da rota sob `llm-pi-ai.providers` no settings.yaml que terá a
+          lista `models` reescrita.
+        '';
+      };
+
+      interval = lib.mkOption {
+        type = lib.types.str;
+        default = "daily";
+        example = "*-*-* 04:00:00";
+        description = ''
+          `OnCalendar` do timer. O sync é barato (um GET + diff) e só escreve
+          quando há drift de verdade.
+        '';
+      };
     };
 
     providers = lib.mkOption {
@@ -120,10 +179,50 @@ in
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
+        Group = cfg.group;
         WorkingDirectory = "/home/${cfg.user}";
-        ExecStart = "${lib.getExe cfg.package} web --port ${toString cfg.port} --no-open";
+        ExecStart = launcher;
+        RuntimeDirectory = "dsh";
+        RuntimeDirectoryMode = "0750";
         Restart = "on-failure";
         RestartSec = "5s";
+      };
+    };
+
+    # O sync roda como o próprio usuário (dono de ~/.dsh) e NÃO reinicia o
+    # dsh: o plugin settings-file faz watch do documento e recarrega sozinho,
+    # então um restart aqui só derrubaria sessões abertas à toa.
+    systemd.services.dsh-model-sync = lib.mkIf cfg.modelSync.enable {
+      description = "Sync 9router model catalog into the dsh settings document";
+      after = [ "network-online.target" "dsh.service" ];
+      wants = [ "network-online.target" ];
+
+      path = with pkgs; [ nodejs_22 bash coreutils systemd ];
+
+      environment = {
+        HOME = "/home/${cfg.user}";
+        NINEROUTER_BASE_URL = cfg.modelSync.baseURL;
+        DSH_9ROUTER_ROUTE = cfg.modelSync.route;
+      };
+
+      serviceConfig = {
+        Type = "oneshot";
+        User = cfg.user;
+        Group = cfg.group;
+        WorkingDirectory = "/home/${cfg.user}";
+        ExecStart = "${pkgs.bash}/bin/bash ${modelSyncScript} --no-restart --quiet";
+      };
+    };
+
+    systemd.timers.dsh-model-sync = lib.mkIf cfg.modelSync.enable {
+      description = "Periodic 9router model catalog sync for dsh";
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = cfg.modelSync.interval;
+        # Pega o drift acumulado enquanto a máquina esteve desligada.
+        Persistent = true;
+        # Evita que o timer e o boot do 9router disputem a mesma janela.
+        RandomizedDelaySec = "5m";
       };
     };
   };

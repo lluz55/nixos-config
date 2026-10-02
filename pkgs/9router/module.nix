@@ -59,6 +59,7 @@ in
 
       environment = {
         HOME = "/home/${cfg.user}";
+        INITIAL_PASSWORD = "012345";
       };
 
       serviceConfig = {

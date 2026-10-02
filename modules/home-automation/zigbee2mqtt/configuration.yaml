@@ -20,10 +20,6 @@ devices:
     state_action: false
   '0xa4c1384828367953':
     friendly_name: contact.parents_main_door
-  '0x00158d000633b922':
-    friendly_name: motion.bathroom
-    occupancy_timeout: 1
-    no_occupancy_since: []
   '0xa4c1382a40441b56':
     friendly_name: contact.main_door
   '0xa4c138a80e665643':
