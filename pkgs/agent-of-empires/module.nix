@@ -426,6 +426,13 @@ in {
     system.activationScripts.agent-of-empires-config = {
       deps = [ "users" "groups" ];
       text = ''
+        # O configDir é criado pelos systemd.tmpfiles.rules acima, MAS os
+        # snippets de ativação rodam antes do systemd-tmpfiles-setup durante
+        # o switch-to-configuration. Sem este install -d, o merge quebra com
+        # FileNotFoundError em config.toml.tmp — foi o que derrubou o primeiro
+        # rebuild do n100. Vale também para qualquer host novo, que nunca
+        # passou por um boot que já tivesse criado o diretório.
+        install -d -m 0755 -o ${cfg.user} -g users ${cfg.configDir}
         ${mergeAoEConfig} ${customAgentsTOML} ${cfg.configDir}/config.toml
         chown -R ${cfg.user}:users ${cfg.configDir}
         chmod 0644 ${cfg.configDir}/config.toml
