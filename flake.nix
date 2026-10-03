@@ -59,6 +59,35 @@
       url = "github:pikujs/pi-web/pr/nix-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Backend do AionUi (AionCore). O upstream é um projeto Rust puro e não
+    # publica flake.nix, então vai pinned como fonte pura (`flake = false`) na
+    # tag de release — o módulo lê a versão direto do Cargo.toml desse pin, e
+    # o asset binário sai da mesma tag. Fica fora do ciclo do nixpkgs:
+    #   nix flake update aioncore
+    #
+    # A tag NÃO é a mais nova de propósito. O WebUI disponível (aionui-web
+    # 2.1.0) e o backend são casados: 2.1.0 foi empacotado em 2026-05-23 com o
+    # aioncore v0.1.9 (release de 2026-05-22), e é isso que o bundled dele usa.
+    # Com o 0.2.2 a UI quebra: rotas que o renderer chama viram 404 —
+    # /api/agents, /api/conversations/<id>/model, /api/conversations/<id>/mode
+    # e /api/conversations/<id>/warmup — o que mata justamente o seletor de
+    # modelo e o de modo. Não suba esta tag sem subir também o WebUI.
+    aioncore = {
+      url = "github:iOfficeAI/AionCore/v0.1.9";
+      flake = false;
+    };
+    # Agent of Empires — session manager TUI/web para os agentes CLI.
+    # O upstream TEM flake.nix nativo (crane + buildNpmPackage) e expõe
+    # `packages.aoe-with-web` com o React frontend embedded via feature
+    # `serve`. Isso elimina a derivation local de binário pré-compilado
+    # que escrevi antes: build é reproduzível, source-based, e roda em
+    # CI upstream com cache Nix. `nix flake update agent-of-empires`
+    # sobe a tag.
+    agent-of-empires = {
+      url = "github:agent-of-empires/agent-of-empires";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+    };
     zellij-web-wrapper = {
       url = "github:lluz55/zellij_web_wrapper";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -83,65 +112,80 @@
     };
   };
 
-  outputs =
-    inputs @ { nixpkgs
-    , nixpkgs-unstable
-    , home-manager
-    , home-config
-    , flake-parts
-    , nix-direnv
-    , rust-overlay
-    , disko
-    , sops-nix
-    , llm-agents
-    , ...
-    }:
-    let
-      inherit (users) masterUser;
-      inherit (users) karolayne;
-      users = import ./users.nix;
-      system = "x86_64-linux";
+  outputs = inputs @ {
+    nixpkgs,
+    nixpkgs-unstable,
+    home-manager,
+    home-config,
+    flake-parts,
+    nix-direnv,
+    rust-overlay,
+    disko,
+    sops-nix,
+    llm-agents,
+    ...
+  }: let
+    inherit (users) masterUser;
+    inherit (users) karolayne;
+    users = import ./users.nix;
+    system = "x86_64-linux";
 
-      unstable = import nixpkgs-unstable {
-        inherit system;
-        config.allowUnfree = true;
-      };
-      inherit (nixpkgs) lib;
-      overlays = [
-        rust-overlay.overlays.default
-        (final: prev: {
-          linuxKernel = prev.linuxKernel // {
-            packages = prev.lib.mapAttrs (_: kpkgs:
-              if (kpkgs ? gasket) then
-                kpkgs.extend (kfinal: kprev: {
-                  gasket = kprev.gasket.overrideAttrs (old: {
-                    patches = (old.patches or [ ]) ++ [
-                      ./pkgs/gasket/linux-7.1-compat.patch
-                    ];
-                  });
-                })
-              else
-                kpkgs
-            ) prev.linuxKernel.packages;
+    unstable = import nixpkgs-unstable {
+      inherit system;
+      config.allowUnfree = true;
+    };
+    inherit (nixpkgs) lib;
+    overlays = [
+      rust-overlay.overlays.default
+      (final: prev: {
+        linuxKernel =
+          prev.linuxKernel
+          // {
+            packages =
+              prev.lib.mapAttrs (
+                _: kpkgs:
+                  if (kpkgs ? gasket)
+                  then
+                    kpkgs.extend (kfinal: kprev: {
+                      gasket = kprev.gasket.overrideAttrs (old: {
+                        patches =
+                          (old.patches or [])
+                          ++ [
+                            ./pkgs/gasket/linux-7.1-compat.patch
+                          ];
+                      });
+                    })
+                  else kpkgs
+              )
+              prev.linuxKernel.packages;
           };
-        })
-      ];
-      pkgs = import nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-      };
-      openai-codex = pkgs.callPackage ./pkgs/openai-codex/package.nix { inherit (pkgs) nodejs; };
-      waydroidsu = pkgs.callPackage ./pkgs/waydroidsu/package.nix { };
-      bestfin = pkgs.callPackage ./pkgs/bestfin/package.nix { };
-      kilocode = pkgs.callPackage ./pkgs/kilocode/package.nix { };
-      donsetch = pkgs.callPackage ./pkgs/donsetch/package.nix { };
-      claude-code = pkgs.callPackage ./pkgs/claude-code/package.nix { };
-      antigravity-cli = pkgs.callPackage ./pkgs/antigravity-cli/package.nix { };
-      minimax-code-pkg = let
-        raw = ((pkgs.extend (final: prev: {
-          buildNpmPackage = prev.buildNpmPackage.override { nodejs = prev.nodejs_22; };
-        })).extend inputs.llm-agents.overlays.shared-nixpkgs).llm-agents.minimax-code;
-      in pkgs.symlinkJoin {
+      })
+    ];
+    pkgs = import nixpkgs {
+      inherit system;
+      config.allowUnfree = true;
+    };
+    # O empacotamento local (pkgs/openai-codex) foi removido: ele copiava só
+    # o wrapper JS do npm e nunca trazia o binário nativo da plataforma, então
+    # `codex` morria com "Missing optional dependency @openai/codex-linux-x64".
+    # O nixpkgs já traz o binário completo, e o código-fonte usa unstable.codex
+    # para o codex-openrouter — manter os dois no mesmo pacote evita drift de
+    # versão entre o codex "normal" e o de OpenRouter.
+    openai-codex = unstable.codex;
+    waydroidsu = pkgs.callPackage ./pkgs/waydroidsu/package.nix {};
+    bestfin = pkgs.callPackage ./pkgs/bestfin/package.nix {};
+    kilocode = pkgs.callPackage ./pkgs/kilocode/package.nix {};
+    donsetch = pkgs.callPackage ./pkgs/donsetch/package.nix {};
+    claude-code = pkgs.callPackage ./pkgs/claude-code/package.nix {};
+    antigravity-cli = pkgs.callPackage ./pkgs/antigravity-cli/package.nix {};
+    minimax-code-pkg = let
+      raw =
+        ((pkgs.extend (final: prev: {
+            buildNpmPackage = prev.buildNpmPackage.override {nodejs = prev.nodejs_22;};
+          })).extend
+          inputs.llm-agents.overlays.shared-nixpkgs).llm-agents.minimax-code;
+    in
+      pkgs.symlinkJoin {
         name = "minimax-code-${raw.version}";
         paths = [
           (pkgs.writeShellScriptBin "minimax-code" ''
@@ -151,110 +195,114 @@
         ];
       };
 
-      desktopProfile = [
-        ./modules
-        ./hosts/configuration.nix
-        masterUser.user
-        home-manager.nixosModules.home-manager
-        {
-          nixpkgs.overlays = overlays;
-        }
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            extraSpecialArgs = { inherit pkgs unstable masterUser nix-direnv inputs llm-agents openai-codex waydroidsu bestfin kilocode donsetch claude-code antigravity-cli minimax-code-pkg; };
-            users = {
-              "${masterUser.name}".imports = [
-                home-config.homeModules.${masterUser.name}
-                inputs.pi.homeModules.default
-                ./modules/home/qutebrowser.nix
-                ./modules/home/pi-coding-agent.nix
-              ];
-            };
+    desktopProfile = [
+      ./modules
+      ./hosts/configuration.nix
+      masterUser.user
+      home-manager.nixosModules.home-manager
+      {
+        nixpkgs.overlays = overlays;
+      }
+      {
+        home-manager = {
+          useGlobalPkgs = true;
+          useUserPackages = true;
+          extraSpecialArgs = {inherit pkgs unstable masterUser nix-direnv inputs llm-agents openai-codex waydroidsu bestfin kilocode donsetch claude-code antigravity-cli minimax-code-pkg;};
+          users = {
+            "${masterUser.name}".imports = [
+              home-config.homeModules.${masterUser.name}
+              inputs.pi.homeModules.default
+              ./modules/home/qutebrowser.nix
+              ./modules/home/pi-coding-agent.nix
+            ];
           };
-        }
-      ];
+        };
+      }
+    ];
 
-      # Secrets management (sops-nix + age key) applies to every host,
-      # regardless of whether it also pulls in desktopProfile — a headless
-      # server like n100 still needs it.
-      sopsBase = [
-        sops-nix.nixosModules.sops
-        {
-          sops.defaultSopsFile = ./secrets/secrets.yaml;
-          sops.defaultSopsFormat = "yaml";
-          sops.age.keyFile = "/home/${masterUser.name}/.config/sops/age/keys.txt";
-        }
-      ];
+    # Secrets management (sops-nix + age key) applies to every host,
+    # regardless of whether it also pulls in desktopProfile — a headless
+    # server like n100 still needs it.
+    sopsBase = [
+      sops-nix.nixosModules.sops
+      {
+        sops.defaultSopsFile = ./secrets/secrets.yaml;
+        sops.defaultSopsFormat = "yaml";
+        sops.age.keyFile = "/home/${masterUser.name}/.config/sops/age/keys.txt";
+      }
+    ];
 
-      mkSystem = name: cfg:
-        let
-          additionalUserExists = (cfg.additionalUser or null) != null;
-        in
-        with lib;
-        nixosSystem
-          {
-            inherit system;
-            specialArgs =
-              {
-                inherit inputs unstable masterUser nix-direnv llm-agents openai-codex waydroidsu bestfin kilocode donsetch claude-code antigravity-cli minimax-code-pkg;
-              }
-              // attrsets.optionalAttrs additionalUserExists { inherit (cfg) additionalUser; };
-            modules = [ ./hosts/${name} ]
-              ++ sopsBase
-              ++ (cfg.modules or [ ])
-              ++ lib.optional additionalUserExists {
-              home-manager.users."${cfg.additionalUser.name}".imports = [ home-config.homeModules.${cfg.additionalUser.name} ];
-              imports = [ cfg.additionalUser.user ];
-            };
-          };
-      hosts = {
-        n100 = {
-          modules = desktopProfile;
-        };
-        b450 = {
-          modules = desktopProfile;
-        };
-        s14 = {
-          modules = desktopProfile;
-        };
-        gl62m = {
-          modules = desktopProfile;
-          additionalUser = karolayne;
-        };
-        thinkpad = {
-          modules = desktopProfile;
-        };
-        vps-server = {
-          modules = [ disko.nixosModules.disko ];
-        };
-      };
+    mkSystem = name: cfg: let
+      additionalUserExists = (cfg.additionalUser or null) != null;
     in
-    flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [ "x86_64-linux" ];
+      with lib;
+        nixosSystem
+        {
+          inherit system;
+          specialArgs =
+            {
+              inherit inputs unstable masterUser nix-direnv llm-agents openai-codex waydroidsu bestfin kilocode donsetch claude-code antigravity-cli minimax-code-pkg;
+            }
+            // attrsets.optionalAttrs additionalUserExists {inherit (cfg) additionalUser;};
+          modules =
+            [./hosts/${name}]
+            ++ sopsBase
+            ++ (cfg.modules or [])
+            ++ lib.optional additionalUserExists {
+              home-manager.users."${cfg.additionalUser.name}".imports = [home-config.homeModules.${cfg.additionalUser.name}];
+              imports = [cfg.additionalUser.user];
+            };
+        };
+    hosts = {
+      n100 = {
+        modules = desktopProfile;
+      };
+      b450 = {
+        modules = desktopProfile;
+      };
+      s14 = {
+        modules = desktopProfile;
+      };
+      gl62m = {
+        modules = desktopProfile;
+        additionalUser = karolayne;
+      };
+      thinkpad = {
+        modules = desktopProfile;
+      };
+      vps-server = {
+        modules = [disko.nixosModules.disko];
+      };
+    };
+  in
+    flake-parts.lib.mkFlake {inherit inputs;} {
+      systems = ["x86_64-linux"];
       flake = {
         templates = import ./templates;
         nixosConfigurations = lib.mapAttrs mkSystem hosts;
       };
-      perSystem = { pkgs, config, ... }: {
-        packages.waydroidsu = pkgs.callPackage ./pkgs/waydroidsu/package.nix { };
-        packages.battery-up = pkgs.callPackage ./pkgs/battery-up/package.nix { };
-        packages.bestfin = pkgs.callPackage ./pkgs/bestfin/package.nix { };
-        packages.kilocode = pkgs.callPackage ./pkgs/kilocode/package.nix { };
-        packages.claude-code = pkgs.callPackage ./pkgs/claude-code/package.nix { };
-        packages.antigravity-cli = pkgs.callPackage ./pkgs/antigravity-cli/package.nix { };
-        packages."9router" = pkgs.callPackage ./pkgs/9router/package.nix { };
-        packages.omniroute = pkgs.callPackage ./pkgs/omniroute/package.nix { };
-        packages.headroom = pkgs.callPackage ./pkgs/headroom/package.nix { };
-        packages.hound-mcp = pkgs.callPackage ./pkgs/hound-mcp/package.nix { };
-        packages.donsetch = pkgs.callPackage ./pkgs/donsetch/package.nix { };
-        packages.dsh = pkgs.callPackage ./pkgs/dsh/package.nix { };
-        packages.hermes-agent = pkgs.callPackage ./pkgs/hermes-agent/package.nix { };
+      perSystem = {
+        pkgs,
+        config,
+        ...
+      }: {
+        packages.waydroidsu = pkgs.callPackage ./pkgs/waydroidsu/package.nix {};
+        packages.battery-up = pkgs.callPackage ./pkgs/battery-up/package.nix {};
+        packages.bestfin = pkgs.callPackage ./pkgs/bestfin/package.nix {};
+        packages.kilocode = pkgs.callPackage ./pkgs/kilocode/package.nix {};
+        packages.claude-code = pkgs.callPackage ./pkgs/claude-code/package.nix {};
+        packages.antigravity-cli = pkgs.callPackage ./pkgs/antigravity-cli/package.nix {};
+        packages."9router" = pkgs.callPackage ./pkgs/9router/package.nix {};
+        packages.omniroute = pkgs.callPackage ./pkgs/omniroute/package.nix {};
+        packages.headroom = pkgs.callPackage ./pkgs/headroom/package.nix {};
+        packages.hound-mcp = pkgs.callPackage ./pkgs/hound-mcp/package.nix {};
+        packages.donsetch = pkgs.callPackage ./pkgs/donsetch/package.nix {};
+        packages.dsh = pkgs.callPackage ./pkgs/dsh/package.nix {};
+        packages.hermes-agent = pkgs.callPackage ./pkgs/hermes-agent/package.nix {};
         packages.hermes-9router = pkgs.callPackage ./pkgs/hermes-9router/package.nix {
           hermes-agent = config.packages.hermes-agent;
         };
-        packages.default = pkgs.callPackage ./pkgs/waydroidsu/package.nix { };
+        packages.default = pkgs.callPackage ./pkgs/waydroidsu/package.nix {};
       };
     };
 }

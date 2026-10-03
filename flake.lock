@@ -1,5 +1,46 @@
 {
   "nodes": {
+    "agent-of-empires": {
+      "inputs": {
+        "crane": "crane",
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1790952978,
+        "narHash": "sha256-NrFMxcjAGWVFvj3lgEhv8fVTAm+JT/14XQpYjUmPBgM=",
+        "owner": "agent-of-empires",
+        "repo": "agent-of-empires",
+        "rev": "fe03fdfbc78a8641c723b9e9b5c88e607710c175",
+        "type": "github"
+      },
+      "original": {
+        "owner": "agent-of-empires",
+        "repo": "agent-of-empires",
+        "type": "github"
+      }
+    },
+    "aioncore": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1779459103,
+        "narHash": "sha256-N0g3F9ftSp2pwp7HWZWqt0ttxH8FSu55nBMlc/6Tlgc=",
+        "owner": "iOfficeAI",
+        "repo": "AionCore",
+        "rev": "a2d382f6b6d1dbb151da5bf5589457c8c89a004e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "iOfficeAI",
+        "ref": "v0.1.9",
+        "repo": "AionCore",
+        "type": "github"
+      }
+    },
     "bun2nix": {
       "inputs": {
         "flake-parts": [
@@ -94,6 +135,21 @@
         "type": "github"
       }
     },
+    "crane": {
+      "locked": {
+        "lastModified": 1771796463,
+        "narHash": "sha256-9bCDuUzpwJXcHMQYMS1yNuzYMmKO/CCwCexpjWOl62I=",
+        "owner": "ipetkov",
+        "repo": "crane",
+        "rev": "3d3de3313e263e04894f284ac18177bd26169bad",
+        "type": "github"
+      },
+      "original": {
+        "owner": "ipetkov",
+        "repo": "crane",
+        "type": "github"
+      }
+    },
     "disko": {
       "inputs": {
         "nixpkgs": [
@@ -122,11 +178,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791022806,
-        "narHash": "sha256-gSKo3HUccJEsTiSgNhMajzkJX0UMJW+IjeYSLiCDnUo=",
+        "lastModified": 1789587141,
+        "narHash": "sha256-GCvoYpjeb3x2sRUcIccXkfdZ3sOm/C6xHd+H/gUQhGg=",
         "owner": "lluz55",
         "repo": "dl_conn",
-        "rev": "2942c97139135744d385c45a23330431dc1cc5ae",
+        "rev": "e20776f3b42c4072c623c70eeaec3fe1097eda5e",
         "type": "github"
       },
       "original": {
@@ -715,6 +771,8 @@
     },
     "root": {
       "inputs": {
+        "agent-of-empires": "agent-of-empires",
+        "aioncore": "aioncore",
         "disko": "disko",
         "dl-conn": "dl-conn",
         "flake-parts": "flake-parts",
