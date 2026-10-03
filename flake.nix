@@ -77,13 +77,6 @@
       url = "github:diegosouzapw/OmniRoute/v3.8.50";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Repositório local para dl-home-control (desenvolvimento no host local).
-    # Para outros hosts sem o path local, configure ~/.netrc com GitHub token
-    # ou use `inputs-local.nix` para sobrescrever este input.
-    dl-home-control = {
-      url = "path:/home/lluz/dev/dl_home_control";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     searxng-mpc = {
       url = "github:lluz55/searxng-mpc";
       inputs.nixpkgs.follows = "nixpkgs";

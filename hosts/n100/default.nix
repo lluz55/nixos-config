@@ -133,6 +133,7 @@ let
         temporary.replace(live_path)
   '';
   opencode-pkg = pkgs.callPackage ../../pkgs/opencode/package.nix {opencode = unstable.opencode;};
+  dl-home-control = builtins.getFlake "/home/lluz/dev/dl_home_control";
 in
 with lib;{
   imports = [
@@ -141,7 +142,7 @@ with lib;{
     inputs.vscode-server.nixosModules.default
     inputs.dl-conn.nixosModules.default
     inputs.hermes-agent.nixosModules.default
-    inputs.dl-home-control.nixosModules.default
+    dl-home-control.nixosModules.default
     inputs.zellij-web-wrapper.nixosModules.default
     ../../pkgs/9router/module.nix
     ../../pkgs/omniroute/module.nix
