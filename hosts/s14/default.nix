@@ -30,6 +30,8 @@ in
       ../../pkgs/bestfin/module.nix
       ../../pkgs/9router/module.nix
       ../../pkgs/pi-web/module.nix
+      ../../pkgs/aionui/module.nix
+      ../../pkgs/agent-of-empires/module.nix
       ../../modules/servers/hermes-agent-gateway.nix
       inputs.searxng-mpc.nixosModules.default
     ];
@@ -134,6 +136,52 @@ in
         port = 8584;
       };
 
+      # AIONUI — control plane web (ACP) para os agentes CLI locais.
+      # Diferente do pi-web, o aioncore tem autenticação de verdade (JWT +
+      # senha), então dá para manter o bind no loopback e não abrir nada no
+      # firewall. É a escolha mais segura: o backend spawna qualquer CLI que
+      # achar no PATH com as suas credenciais, então escutar fora do loopback
+      # seria dar execução de código remoto na máquina. Para acessar de outro
+      # dispositivo, use túnel autenticado ou SSH -L, não bind em 0.0.0.0.
+      aionui = {
+        enable = true;
+        host = "127.0.0.1";
+        port = 25808;
+        identityMode = "webui";
+      };
+
+      # AGENT OF EMPIRES — session manager TUI/web alternativo ao AionUi.
+      # Mesma config do n100: porta 25809, bind loopback, --no-auth, e
+      # MiniMax Code como custom agent ACP (herda o adapter `claude` para
+      # detecção de status). Coexiste com o AionUi em 25808.
+      #
+      # IMPORTANTE: registra `mcode` (não só `minimax-code`). O AoE
+      # auto-detecta `mcode` no PATH e expõe esse nome no picker do TUI/web
+      # ANTES do custom — quando o usuário clica em "mcode", o AoE spawna
+      # `mcode` puro (que abre o TUI interativo, não fala ACP) e o
+      # handshake trava 30s. Sobrescrever `mcode` com o mesmo command +
+      # acpCommand garante que qualquer um dos dois nomes funcione no
+      # structured view. O `minimax-code` continua existindo para quem
+      # prefere o nome mais verboso.
+      agent-of-empires = {
+        enable = true;
+        host = "127.0.0.1";
+        port = 25809;
+        noAuth = true;
+        customAgents = {
+          mcode = {
+            command = "mcode";
+            acpCommand = "mcode acp";
+            detectAs = "claude";
+          };
+          minimax-code = {
+            command = "mcode";
+            acpCommand = "mcode acp";
+            detectAs = "claude";
+          };
+        };
+      };
+
       # Power and thermal management optimized for Intel Core Ultra (Arrow Lake)
       # power-profiles-daemon is required by COSMIC desktop for power management integration
       # system76-power is for System76 hardware only — not applicable here
@@ -217,6 +265,8 @@ in
         hermes-agent-pkg
         hermes-9router-pkg
         config.services.pi-web.package
+        config.services.aionui.package
+        config.services.aionui.webPackage
         inputs.searxng-mpc.packages.${pkgs.system}.searxng-instance
         inputs.searxng-mpc.packages.${pkgs.system}.all-in-one
         minimax-code-pkg
