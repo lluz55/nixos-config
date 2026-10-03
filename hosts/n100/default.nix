@@ -148,7 +148,6 @@ with lib;{
     ../../pkgs/omniroute/module.nix
     ../../pkgs/dsh/module.nix
     ../../pkgs/pi-web/module.nix
-    ../../pkgs/aionui/module.nix
     ../../pkgs/agent-of-empires/module.nix
   ];
 
@@ -333,21 +332,7 @@ with lib;{
     port = 8584;
   };
 
-  # AIONUI — control plane web (ACP) para os agentes CLI locais.
-  # Bind no loopback: diferente do pi-web, o aioncore tem JWT + senha, então
-  # não há necessidade de abrir porta no firewall. O acesso remoto sai pelo
-  # dl-conn (entrada /aionui em dl-conn-config.yaml), que já põe autenticação
-  # na frente. Manter 127.0.0.1 evita que o backend, que spawna qualquer CLI
-  # do PATH com as suas credenciais, fique escutando na LAN.
-  services.aionui = {
-    enable = true;
-    host = "127.0.0.1";
-    port = 25808;
-    identityMode = "webui";
-  };
-
-  # AGENT OF EMPIRES — session manager TUI/web alternativo ao AionUi.
-  # Coexiste em 25809 (porta nova para não conflitar com aionui em 25808).
+  # AGENT OF EMPIRES — session manager TUI/web para os agentes CLI.
   # Bind no loopback (--no-auth), acesso remoto pelo dl-conn ou SSH -L.
   # Detector automático de codex, opencode, antigravity, claude e pi.
   # MiniMax Code entra como custom agent com structured view via ACP —
@@ -611,8 +596,6 @@ with lib;{
     opencode-pkg
     config.home-manager.users.lluz.programs.pi.coding-agent.finalPackage
     config.services.pi-web.package
-    config.services.aionui.package
-        config.services.aionui.webPackage
     omniroute-pkg
 
     config.services.dl-conn.package

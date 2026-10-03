@@ -24,23 +24,6 @@
         "type": "github"
       }
     },
-    "aioncore": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1779459103,
-        "narHash": "sha256-N0g3F9ftSp2pwp7HWZWqt0ttxH8FSu55nBMlc/6Tlgc=",
-        "owner": "iOfficeAI",
-        "repo": "AionCore",
-        "rev": "a2d382f6b6d1dbb151da5bf5589457c8c89a004e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "iOfficeAI",
-        "ref": "v0.1.9",
-        "repo": "AionCore",
-        "type": "github"
-      }
-    },
     "bun2nix": {
       "inputs": {
         "flake-parts": [
@@ -772,7 +755,6 @@
     "root": {
       "inputs": {
         "agent-of-empires": "agent-of-empires",
-        "aioncore": "aioncore",
         "disko": "disko",
         "dl-conn": "dl-conn",
         "flake-parts": "flake-parts",

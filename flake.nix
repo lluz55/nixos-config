@@ -59,23 +59,6 @@
       url = "github:pikujs/pi-web/pr/nix-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Backend do AionUi (AionCore). O upstream é um projeto Rust puro e não
-    # publica flake.nix, então vai pinned como fonte pura (`flake = false`) na
-    # tag de release — o módulo lê a versão direto do Cargo.toml desse pin, e
-    # o asset binário sai da mesma tag. Fica fora do ciclo do nixpkgs:
-    #   nix flake update aioncore
-    #
-    # A tag NÃO é a mais nova de propósito. O WebUI disponível (aionui-web
-    # 2.1.0) e o backend são casados: 2.1.0 foi empacotado em 2026-05-23 com o
-    # aioncore v0.1.9 (release de 2026-05-22), e é isso que o bundled dele usa.
-    # Com o 0.2.2 a UI quebra: rotas que o renderer chama viram 404 —
-    # /api/agents, /api/conversations/<id>/model, /api/conversations/<id>/mode
-    # e /api/conversations/<id>/warmup — o que mata justamente o seletor de
-    # modelo e o de modo. Não suba esta tag sem subir também o WebUI.
-    aioncore = {
-      url = "github:iOfficeAI/AionCore/v0.1.9";
-      flake = false;
-    };
     # Agent of Empires — session manager TUI/web para os agentes CLI.
     # O upstream TEM flake.nix nativo (crane + buildNpmPackage) e expõe
     # `packages.aoe-with-web` com o React frontend embedded via feature
