@@ -5,14 +5,17 @@
     extra-substituters = [
       "https://nix-community.cachix.org"
       "https://cosmic.cachix.org"
+      "https://agent-of-empires.cachix.org"
     ];
     extra-trusted-substituters = [
       "https://nix-community.cachix.org"
       "https://cosmic.cachix.org"
+      "https://agent-of-empires.cachix.org"
     ];
     extra-trusted-public-keys = [
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
+      "agent-of-empires.cachix.org-1:Z+VwTlT8GT7giWN9HhJ+Am0DPGfbFVlafcQioBqJ6wY="
     ];
   };
   inputs = {
@@ -66,9 +69,16 @@
     # que escrevi antes: build é reproduzível, source-based, e roda em
     # CI upstream com cache Nix. `nix flake update agent-of-empires`
     # sobe a tag.
+    # NÃO usar `inputs.nixpkgs.follows` aqui. O CI do upstream compila
+    # `aoe-with-web` contra o nixpkgs DELE e publica em
+    # https://agent-of-empires.cachix.org. Se este input seguir o nosso
+    # nixpkgs, o store path muda e o binário em cache não bate — o Nix
+    # ignora o substituter e compila o crate Rust inteiro localmente, que é
+    # exatamente o que mata o n100 (15 GiB de RAM + swap esgotado, rustc
+    # morre com SIGKILL). Sem o follows, o path vira o mesmo do CI e o n100
+    # só baixa o binário.
     agent-of-empires = {
       url = "github:agent-of-empires/agent-of-empires";
-      inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-parts.follows = "flake-parts";
     };
     zellij-web-wrapper = {

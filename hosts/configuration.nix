@@ -145,14 +145,17 @@
       extra-substituters = [
         "https://nix-community.cachix.org"
         "https://cosmic.cachix.org"
+        "https://agent-of-empires.cachix.org"
       ];
       extra-trusted-substituters = [
         "https://nix-community.cachix.org"
         "https://cosmic.cachix.org"
+        "https://agent-of-empires.cachix.org"
       ];
       trusted-public-keys = [
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
         "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
+        "agent-of-empires.cachix.org-1:Z+VwTlT8GT7giWN9HhJ+Am0DPGfbFVlafcQioBqJ6wY="
       ];
     };
     gc = {
