@@ -363,6 +363,94 @@ with lib;{
     enable = true;
     user = "lluz";
     port = 30141;
+    # PI_WEB_ALLOWED_HOSTS vem do arquivo gerado em runtime pelo timer
+    # abaixo (services/systemd/timers + services/update-pi-web-allowed-hosts).
+    # O dl_conn expõe `/api/host/tunnel-url` (commit dl_conn 47c9b16) e o
+    # timer curl + extrai + escreve aqui. Em restart do dl_conn ou rotação
+    # do trycloudflare URL, o arquivo muda e agegr-pi-web é reiniciado pelo
+    # mesmo script. Sem edição manual a cada rotação.
+    environmentFile = "/var/lib/dl-conn/tunnel-url.env";
+  };
+
+  # Timer + script que mantém `tunnel-url.env` em sincronia com a URL atual
+  # do tunnel do dl_conn. Curl no endpoint local, comparação idempotente
+  # com o conteúdo atual do arquivo, escrita + restart do agegr-pi-web só
+  # quando a URL muda.
+  #
+  # Por que timer e não systemd.path: o dl_conn não escreve a URL em disco
+  # (só na memória do handler Nostr); um watcher em inotify teria que
+  # apontar para um arquivo que ele mesmo não cria. O poll de 30s é barato
+  # (curl localhost + comparação de string) e a latência de rotação de
+  # 30s é aceitável.
+  systemd.timers.update-pi-web-allowed-hosts = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnBootSec = "10s";
+      OnUnitActiveSec = "30s";
+      AccuracySec = "1s";
+    };
+  };
+  systemd.services.update-pi-web-allowed-hosts = {
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = let
+        script = pkgs.writeShellScriptBin "update-pi-web-allowed-hosts" ''
+          set -euo pipefail
+
+          url_file="/var/lib/dl-conn/tunnel-url.env"
+          tmp_file="''${url_file}.tmp"
+
+          # dl_conn escuta em 127.0.0.1:9099 (HTTP local). Endpoint do
+          # commit dl_conn 47c9b16 — GET /api/host/tunnel-url responde
+          # {"url":"https://...trycloudflare.com"}. Sem auth.
+          response=$(${pkgs.curl}/bin/curl \
+            --silent --show-error --fail --max-time 5 \
+            http://127.0.0.1:9099/api/host/tunnel-url 2>/dev/null) || {
+            echo "dl_conn endpoint unreachable, skipping this tick" >&2
+            exit 0
+          }
+
+          # Extrai o campo "url" via sed (evita depender de jq).
+          url=$(printf '%s' "$response" | ${pkgs.gnused}/bin/sed -n 's/.*"url":"\([^"]*\)".*/\1/p')
+
+          # dl_conn retorna url="" antes do tunnel estar pronto — não
+          # sobrescreve arquivo válido com string vazia.
+          if [ -z "$url" ]; then
+            echo "empty tunnel url, skipping this tick" >&2
+            exit 0
+          fi
+
+          # PI_WEB_ALLOWED_HOSTS recebe só o hostname (sem scheme, sem
+          # path). trycloudflare retorna https://abc.trycloudflare.com —
+          # strip prefixo.
+          hostname=''${url#https://}
+          hostname=''${hostname#http://}
+          hostname=''${hostname%%/*}
+
+          # Idempotência: se o arquivo já tem o valor correto, não escreve
+          # (evita restart desnecessário do agegr-pi-web quando o timer
+          # dispara e o valor não mudou).
+          if [ -f "$url_file" ] && \
+             [ "$(cat "$url_file" 2>/dev/null || true)" = "PI_WEB_ALLOWED_HOSTS=$hostname" ]; then
+            exit 0
+          fi
+
+          # Escreve atomicamente (rename preserva o inode — watchers no
+          # agegr-pi-web via EnvironmentFile= recebem o valor novo sem
+          # race de leitura de meio-arquivo).
+          echo "PI_WEB_ALLOWED_HOSTS=$hostname" > "$tmp_file"
+          mv -f "$tmp_file" "$url_file"
+
+          # Reload do agegr-pi-web é necessário: EnvironmentFile é lido na
+          # inicialização do unit, não hot-raspado. try-reload-or-restart
+          # prefere reload quando suportado (não é o caso aqui) e cai
+          # para restart automaticamente.
+          ${pkgs.systemd}/bin/systemctl try-reload-or-restart agegr-pi-web.service || true
+
+          echo "Updated PI_WEB_ALLOWED_HOSTS=$hostname (tunnel URL rotated)"
+        '';
+      in "${script}/bin/update-pi-web-allowed-hosts";
+    };
   };
 
   # AGENT OF EMPIRES — session manager TUI/web para os agentes CLI.
