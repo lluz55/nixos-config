@@ -149,6 +149,11 @@ with lib;{
     ../../pkgs/dsh/module.nix
     ../../pkgs/pi-web/module.nix
     ../../pkgs/agent-of-empires/module.nix
+    # pi-web-simple no dl_conn: segunda instância do Pi Coding Agent Web UI,
+    # variante @agegr/pi-web (porta 30141, distinta da @jmfederico/pi-web
+    # em 8584). Bind loopback — só dl_conn alcança. PI_WEB_ALLOWED_HOSTS
+    # fica vazio por enquanto; ver comentário em pkgs/agegr-pi-web/module.nix.
+    ../../pkgs/agegr-pi-web/module.nix
   ];
 
   console = {
@@ -330,6 +335,34 @@ with lib;{
       interval = "daily";
     };
     port = 8584;
+  };
+
+  # Segunda instância da Pi Coding Agent Web UI — variante @agegr/pi-web
+  # (npx @agegr/pi-web, porta 30141). Roda LADO A LADO com `services.pi-web`
+  # (@jmfederico/pi-web, porta 8584):
+  #
+  #   - portas distintas (30141 vs 8584), sem colisão
+  #   - data dirs distintas: services.pi-web usa /home/lluz/.pi-web
+  #     (dataDir default do pkgs/pi-web/module.nix); services.agegr-pi-web
+  #     não tem data dir próprio — o binário grava só no .next/ interno do
+  #     pacote e nada em $HOME (verificado em node_modules/@agegr/pi-web/bin/)
+  #   - mesmo user (lluz), mesmo /home/lluz (cwd) — as duas UIs compartilham
+  #     `~/.pi/agent` (read-only viewers das sessões do pi CLI)
+  #   - systemd units independentes: falhas de uma não derrubam a outra
+  #
+  # O dl_conn expõe o agegr como `/pi-web-simple` (drop-in
+  # `~/.config/dl-conn/services.d/pi-web-simple.yaml`). Bind loopback (default
+  # 127.0.0.1) — só dl_conn alcança; firewall (router/firewall.nix) não
+  # precisa abrir 30141.
+  #
+  # PI_WEB_ALLOWED_HOSTS fica vazio: o upstream rejeita Host headers de
+  # proxies não-listados (ver comentário em pkgs/agegr-pi-web/module.nix). Para
+  # destravar o acesso via dl_conn, adicione o hostname trycloudflare em
+  # `allowedHosts` (lembrando de atualizar a cada restart do dl_conn).
+  services.agegr-pi-web = {
+    enable = true;
+    user = "lluz";
+    port = 30141;
   };
 
   # AGENT OF EMPIRES — session manager TUI/web para os agentes CLI.
@@ -642,6 +675,12 @@ with lib;{
   services.dl-conn = {
     enable = true;
     secretFile = config.sops.secrets."nostr/dl-conn-key".path;
+
+    # servicesDir sob ~/.config/dl-conn/services.d: usuário escreve drop-ins
+    # direto, daemon bind-mounta read-only (BindReadOnlyPaths no módulo) e
+    # o watcher (3s) recarrega sem reload de unit nem rotação de URL. Sem
+    # sudo, sem nixos-rebuild para adicionar/remover serviço.
+    servicesDir = "/home/lluz/.config/dl-conn/services.d";
 
     # Config gravável em vez de gerada no /nix/store (read-only): permite
     # `dl_conn npubs add <npub>` autorizar dispositivos em runtime, sem
