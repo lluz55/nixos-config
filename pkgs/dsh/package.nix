@@ -16,11 +16,11 @@
 # atualize npmDepsHash.
 buildNpmPackage (finalAttrs: {
   pname = "dsh";
-  version = "0.1.3-alpha.2";
+  version = "0.2.0-rc.2";
 
   src = lib.cleanSource ./.;
 
-  npmDepsHash = "sha256-zeU4NWY5J0Pe0Gadx6q85t0T/G3ttU5Ei1/JBjCzyXU=";
+  npmDepsHash = "sha256-Cz6dKuqOWluqAwpFaOlQAYH4/vEBQOIdSrj4JeVe2tk=";
 
   nodejs = nodejs_22;
 
@@ -74,6 +74,72 @@ buildNpmPackage (finalAttrs: {
 
     mkdir -p $out/lib/dsh
     cp -a package.json node_modules $out/lib/dsh/
+
+    # O frontend upstream desabilita a persistência de Settings sempre que a
+    # URL visível do navegador não é loopback. Aqui o acesso remoto passa pelo
+    # dl_conn autenticado, que encaminha Host/Origin como 127.0.0.1; portanto o
+    # Host já aplica sua cerca de segurança, embora o browser esteja em /dsh
+    # num hostname público. Sem este ajuste, Configurações > Modelos falha com
+    # "settings are unavailable in this browser" antes mesmo de chamar o RPC.
+    settingsClient="$out/lib/dsh/node_modules/@deepseek-ai/dsh-client-ui-settings/lib/client.js"
+    substituteInPlace "$settingsClient" \
+      --replace-fail 'const persistence = ctx.remote.$host.isLoopback ? "host" : "memory";' \
+                     'const persistence = "host";'
+
+    # Patch node-addon-require-builtin para fallback em require() nativo:
+    # No NixOS, o nodejs_22 é compilado com flags que alteram o layout de código
+    # do getter V8 x64 sysv, fazendo a probe C++ do addon nativo falhar com
+    # "Unsupported/no-getter". Como o makeWrapper roda com --expose-internals,
+    # o require() nativo do Node consegue carregar os módulos internos sem falhas.
+    if [ -f "$out/lib/dsh/node_modules/node-addon-require-builtin/lib/index.js" ]; then
+      chmod +w $out/lib/dsh/node_modules/node-addon-require-builtin/lib/index.js
+      cat << 'EOF' > $out/lib/dsh/node_modules/node-addon-require-builtin/lib/index.js
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.requireBuiltin = requireBuiltin;
+exports.isAllowedInternalId = isAllowedInternalId;
+exports.getBindingInfo = getBindingInfo;
+const node_path_1 = __importDefault(require("node:path"));
+const { createEntryApi } = require('node-addon-native-custom-loader');
+let api;
+try {
+    api = createEntryApi(node_path_1.default.resolve(__dirname, '..'));
+} catch (_) {}
+
+function requireBuiltin(moduleId) {
+    if (api) {
+        try {
+            return api.requireBuiltin(moduleId);
+        } catch (_) {}
+    }
+    return require(moduleId);
+}
+function isAllowedInternalId(moduleId) {
+    if (api) {
+        try {
+            return api.isAllowedInternalId(moduleId);
+        } catch (_) {}
+    }
+    return true;
+}
+function getBindingInfo() {
+    if (api) {
+        try {
+            return api.getBindingInfo();
+        } catch (_) {}
+    }
+    return { mode: "fallback", product: "require-builtin" };
+}
+exports.default = {
+    requireBuiltin,
+    isAllowedInternalId,
+    getBindingInfo,
+};
+EOF
+    fi
 
     # --expose-internals: o bundle @deepseek-ai/cordis-plugin-hmr (parte do
     # perfil "web") exige acesso às internals do Node para o watcher de HMR;
