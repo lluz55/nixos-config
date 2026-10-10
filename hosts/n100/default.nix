@@ -107,7 +107,7 @@ let
 
     # Só as rotas marcadas abaixo são gerenciadas pelo Nix. Estado mutável do
     # dl_conn, especialmente nostr.authorizedNpubs, permanece intocado.
-    managed_ids = {"hermes", "omni", "zellij"}
+    managed_ids = {"hermes", "omni", "zellij", "dsh"}
     desired = {
         service["id"]: service
         for service in seed.get("services", [])
@@ -174,17 +174,20 @@ with lib;{
   profiles.desktop.enable = false;
   gnome.enable = false;
   # profiles.rtl88x2bu.enable = true;
-  hass.enable = true;
+  # hass.enable = true; — módulo removido na limpeza
+  # "Remover os containers Home Assistant e Node-RED". A automação local
+  # agora passa por Frigate + Zigbee2MQTT + Mosquitto + dl_home_control
+  # (declarados em modules/home-automation/ e mais abaixo neste arquivo).
   frigate.enable = true;
+  homeAutomation.zigbee2mqtt.enable = true;
   glances.enable = true;
   twingate.enable = true;
-  cloudflaredConnectors = {
-    enable = true;
-    tunnels = {
-      ssh = { };
-      haby = { };
-    };
-  };
+  # cloudflaredConnectors removido: o módulo `modules/servers/cloudflared-connector.nix`
+  # foi deletado (ver commit 0dea1f9 e checklist "Remover os conectores Cloudflare
+  # Tunnel declarativos"). Mantê-lo aqui quebra a avaliação com
+  # `option does not exist`. O tunelamento agora é responsabilidade exclusiva
+  # do `dl-conn` (configurado mais abaixo em services.dl-conn), que é o único
+  # ponto de entrada Cloudflare para este host.
 
   services.netbird.enable = true;
   programs.mosh.enable = true;
@@ -296,6 +299,15 @@ with lib;{
   # Netbird já configurados neste host.
   users.groups.dsh-access = { };
   systemd.services.dl-conn.serviceConfig.SupplementaryGroups = [ "dsh-access" ];
+  # O módulo upstream define ProtectHome=true + ReadOnlyPaths no service do
+  # dl_conn, mas ProtectHome=true esconde /home inteiro (substitui por tmpfs
+  # vazio) e ReadOnlyPaths só monta paths dentro desse filesystem mascarado,
+  # não no real — o stat de /home/lluz/.config/dl-conn/services.d falha com
+  # "permission denied" no boot. read-only mantém /home visível em RO; o
+  # ReadOnlyPaths original continua válido e o daemon segue sem conseguir
+  # escrever sob /home/lluz. Ver bloco abaixo em services.dl-conn para o
+  # motivo de servicesDir estar sob ~/.config e não em /var/lib.
+  systemd.services.dl-conn.serviceConfig.ProtectHome = lib.mkForce "read-only";
 
   services.dsh = {
     enable = true;
@@ -363,13 +375,6 @@ with lib;{
     enable = true;
     user = "lluz";
     port = 30141;
-    # PI_WEB_ALLOWED_HOSTS vem do arquivo gerado em runtime pelo timer
-    # abaixo (services/systemd/timers + services/update-pi-web-allowed-hosts).
-    # O dl_conn expõe `/api/host/tunnel-url` (commit dl_conn 47c9b16) e o
-    # timer curl + extrai + escreve aqui. Em restart do dl_conn ou rotação
-    # do trycloudflare URL, o arquivo muda e agegr-pi-web é reiniciado pelo
-    # mesmo script. Sem edição manual a cada rotação.
-    environmentFile = "/var/lib/dl-conn/tunnel-url.env";
   };
 
   # Timer + script que mantém `tunnel-url.env` em sincronia com a URL atual
@@ -721,6 +726,9 @@ with lib;{
 
     config.services.dl-conn.package
     minimax-code-pkg
+    antigravity-cli # agy — Google Antigravity CLI, mesma versão pinada no package.nix
+                    # (1.1.21) que o binário manual em ~/.local/bin/agy. Adicionado
+                    # aqui para ficar no PATH global e reconstruível via Nix.
   ] ++ [ hound-mcp-pkg ];
 
   services.twingate.enable = lib.mkForce false;
@@ -760,6 +768,14 @@ with lib;{
     group = "dl-conn";
   };
 
+  # PSK do Wi-Fi do AP hostapd (consumido em
+  # hosts/n100/router/hostapd.nix → services.hostapd.….wpaPasswordFile).
+  # O secret existe em secrets/secrets.yaml (chave `wifi.psk`); sem
+  # esta declaração o sops não instala o arquivo em /run/secrets/ e o
+  # build quebra com `attribute 'wifi/psk' missing`. O reformat do
+  # commit 42662ce removeu esta linha acidentalmente.
+  sops.secrets."wifi/psk" = { };
+
   services.dl-conn = {
     enable = true;
     secretFile = config.sops.secrets."nostr/dl-conn-key".path;
@@ -786,6 +802,14 @@ with lib;{
 
   systemd.tmpfiles.rules = [
     "C /var/lib/dl-conn/config.yaml 0640 dl-conn dl-conn - ${dlConnConfigSeed}"
+    # Garante traversal world-execute em /home/lluz e /home/lluz/.config
+    # em todo boot. dl-conn é DynamicUser e precisa de +x nesses dois
+    # diretórios-pai para chegar a ~/.config/dl-conn/services.d — com
+    # mode 0700 o uid efêmero não atravessa e o stat falha com
+    # "permission denied" no boot. Ver comentário em
+    # users.users.lluz.homeMode abaixo.
+    "z /home/lluz 0755 lluz users - -"
+    "z /home/lluz/.config 0755 lluz users - -"
   ];
 
   # O arquivo gravável já existe no n100, portanto a regra "C" acima não
@@ -841,6 +865,16 @@ with lib;{
   users.users.lluz.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGEuQb+luFJEkBjPJxhQe27+Uo63aVFJs5sQi/N+bgmw lluz@nixos"
   ];
+
+  # /home/lluz precisa ser atravessável (mode world-execute, +x) por
+  # outros uids além de lluz. Motivo: dl-conn é um DynamicUser (uid
+  # efêmero) e lê o drop-in ~/.config/dl-conn/services.d para descobrir
+  # serviços. Com /home/lluz em 0700, o uid efêmero não atravessa o
+  # diretório — falha com "stat ... services.d: permission denied" no
+  # boot. 0755 libera traversal; listar o conteúdo continua exigindo +r,
+  # que só o dono tem. A regra tmpfiles acima garante o mode em todo
+  # boot caso algo o reverta.
+  users.users.lluz.homeMode = "0755";
 
   users.users.dl-conn = {
     isSystemUser = true;
