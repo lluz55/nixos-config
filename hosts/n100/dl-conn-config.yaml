@@ -101,14 +101,6 @@ services:
     target: "http://127.0.0.1:20128"
     stripPrefix: true
     websocket: true
-  - id: "omni"
-    name: "Omni"
-    icon: "terminal"
-    description: "Omni"
-    prefix: "/omni"
-    target: "http://127.0.0.1:20129"
-    stripPrefix: true
-    websocket: true
   - id: "hermes"
     name: "Hermes Agent"
     icon: "bot"

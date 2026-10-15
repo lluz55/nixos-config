@@ -93,12 +93,6 @@
       url = "github:NousResearch/hermes-agent";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Upstream's flake currently provides only a development shell. Keep it as
-    # the pinned source/version input; pkgs/omniroute wraps the npm release.
-    omniroute = {
-      url = "github:diegosouzapw/OmniRoute/v3.8.50";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     searxng-mpc = {
       url = "github:lluz55/searxng-mpc";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -286,7 +280,6 @@
         packages.claude-code = pkgs.callPackage ./pkgs/claude-code/package.nix {};
         packages.antigravity-cli = pkgs.callPackage ./pkgs/antigravity-cli/package.nix {};
         packages."9router" = pkgs.callPackage ./pkgs/9router/package.nix {};
-        packages.omniroute = pkgs.callPackage ./pkgs/omniroute/package.nix {};
         packages.headroom = pkgs.callPackage ./pkgs/headroom/package.nix {};
         packages.hound-mcp = pkgs.callPackage ./pkgs/hound-mcp/package.nix {};
         packages.donsetch = pkgs.callPackage ./pkgs/donsetch/package.nix {};

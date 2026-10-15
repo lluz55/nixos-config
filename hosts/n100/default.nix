@@ -92,7 +92,6 @@ let
         temporary.replace(live_path)
   '';
   hound-mcp-pkg = pkgs.callPackage ../../pkgs/hound-mcp/package.nix { };
-  omniroute-pkg = pkgs.callPackage ../../pkgs/omniroute/package.nix { };
   dlConnConfigSeed = ./dl-conn-config.yaml;
   syncDlConnServices = pkgs.writeScript "sync-dl-conn-services" ''
     #!${pkgs.python3.withPackages (ps: [ ps.pyyaml ])}/bin/python3
@@ -107,7 +106,7 @@ let
 
     # Só as rotas marcadas abaixo são gerenciadas pelo Nix. Estado mutável do
     # dl_conn, especialmente nostr.authorizedNpubs, permanece intocado.
-    managed_ids = {"hermes", "omni", "zellij", "dsh"}
+    managed_ids = {"hermes", "zellij", "dsh"}
     desired = {
         service["id"]: service
         for service in seed.get("services", [])
@@ -145,7 +144,6 @@ with lib;{
     dl-home-control.nixosModules.default
     inputs.zellij-web-wrapper.nixosModules.default
     ../../pkgs/9router/module.nix
-    ../../pkgs/omniroute/module.nix
     ../../pkgs/dsh/module.nix
     ../../pkgs/pi-web/module.nix
     ../../pkgs/agent-of-empires/module.nix
@@ -275,16 +273,6 @@ with lib;{
   # próprio 9router; sem --host explícito o CLI já usa 0.0.0.0).
   services."9router" = {
     enable = true;
-  };
-
-  # OmniRoute — o flake upstream expõe apenas devShell, então o pacote é o
-  # wrapper reprodutível de pkgs/omniroute sobre a release npm correspondente.
-  # Fica apenas no loopback; o acesso externo passa pelo Zero-Trust do dl_conn.
-  services.omniroute = {
-    enable = true;
-    package = omniroute-pkg;
-    port = 20129;
-    host = "127.0.0.1";
   };
 
   # Zellij Web Wrapper — terminal web xterm.js + PTY para sessões Zellij.
@@ -722,7 +710,6 @@ with lib;{
     opencode-pkg
     config.home-manager.users.lluz.programs.pi.coding-agent.finalPackage
     config.services.pi-web.package
-    omniroute-pkg
 
     config.services.dl-conn.package
     minimax-code-pkg
@@ -814,8 +801,8 @@ with lib;{
 
   # O arquivo gravável já existe no n100, portanto a regra "C" acima não
   # acrescentaria novas rotas. Antes de iniciar, mescla somente os serviços
-  # explicitamente gerenciados pelo script (Hermes e Omni), preservando npubs e
-  # quaisquer outras alterações feitas em runtime.
+  # explicitamente gerenciados pelo script (Hermes, Zellij e DSH), preservando
+  # npubs e quaisquer outras alterações feitas em runtime.
   systemd.services.dl-conn.serviceConfig.ExecStartPre =
     "${syncDlConnServices} ${dlConnConfigSeed} /var/lib/dl-conn/config.yaml";
 
