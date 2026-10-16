@@ -170,7 +170,11 @@ in
       after = [ "network-online.target" "systemd-tmpfiles-setup.service" ];
       wants = [ "network-online.target" ];
 
-      path = with pkgs; [ nodejs_22 bash coreutils git ripgrep ];
+      # O gerenciador de plugins do DSH invoca `pnpm` diretamente para
+      # instalar bundles persistentes. Em NixOS o PATH do serviço é isolado,
+      # portanto o corepack do Node não basta: o executável precisa fazer
+      # parte explicitamente do ambiente da unit.
+      path = with pkgs; [ nodejs_22 pnpm bash coreutils git ripgrep ];
 
       environment = {
         HOME = "/home/${cfg.user}";
