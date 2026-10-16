@@ -85,12 +85,12 @@
       url = "github:lluz55/zellij_web_wrapper";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    dl-conn = {
-      url = "github:lluz55/dl_conn";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     hermes-agent = {
       url = "github:NousResearch/hermes-agent";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    dl-conn = {
+      url = "github:lluz55/dl_conn";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     searxng-mpc = {
@@ -165,12 +165,20 @@
     donsetch = pkgs.callPackage ./pkgs/donsetch/package.nix {};
     claude-code = pkgs.callPackage ./pkgs/claude-code/package.nix {};
     antigravity-cli = pkgs.callPackage ./pkgs/antigravity-cli/package.nix {};
+    codeaf = pkgs.callPackage ./pkgs/codeaf/package.nix {};
+    pi-bolt = pkgs.callPackage ./pkgs/pi-bolt/package.nix {};
+    ttyd = pkgs.ttyd;
     minimax-code-pkg = let
-      raw =
-        ((pkgs.extend (final: prev: {
-            buildNpmPackage = prev.buildNpmPackage.override {nodejs = prev.nodejs_22;};
-          })).extend
-          inputs.llm-agents.overlays.shared-nixpkgs).llm-agents.minimax-code;
+      # O empacotamento local assume o versionamento do `mcode` porque o
+      # upstream (llm-agents.nix) fixa a versão em hashes.json e corre atrás do
+      # npm. O `buildNpmPackage` continua sendo o do nixpkgs com nodejs_22, como
+      # antes; só a origem da definição do `minimax-code` mudou.
+      raw = pkgs.callPackage ./pkgs/minimax-code/package.nix {
+        buildNpmPackage = (pkgs.extend (final: prev: {
+          buildNpmPackage = prev.buildNpmPackage.override {nodejs = prev.nodejs_22;};
+        })).buildNpmPackage;
+        packageLock = "${inputs.llm-agents}/packages/minimax-code/package-lock.json";
+      };
     in
       pkgs.symlinkJoin {
         name = "minimax-code-${raw.version}";
@@ -194,13 +202,15 @@
         home-manager = {
           useGlobalPkgs = true;
           useUserPackages = true;
-          extraSpecialArgs = {inherit pkgs unstable masterUser nix-direnv inputs llm-agents openai-codex waydroidsu bestfin kilocode donsetch claude-code antigravity-cli minimax-code-pkg;};
+          extraSpecialArgs = {inherit pkgs unstable masterUser nix-direnv inputs llm-agents openai-codex waydroidsu bestfin kilocode donsetch claude-code antigravity-cli minimax-code-pkg codeaf ttyd pi-bolt;};
           users = {
             "${masterUser.name}".imports = [
               home-config.homeModules.${masterUser.name}
               inputs.pi.homeModules.default
+              ./modules/home/desktop-apps.nix
               ./modules/home/qutebrowser.nix
               ./modules/home/pi-coding-agent.nix
+              ./modules/home/helix.nix
             ];
           };
         };
@@ -228,7 +238,7 @@
           inherit system;
           specialArgs =
             {
-              inherit inputs unstable masterUser nix-direnv llm-agents openai-codex waydroidsu bestfin kilocode donsetch claude-code antigravity-cli minimax-code-pkg;
+              inherit inputs unstable masterUser nix-direnv llm-agents openai-codex waydroidsu bestfin kilocode donsetch claude-code antigravity-cli minimax-code-pkg codeaf ttyd pi-bolt;
             }
             // attrsets.optionalAttrs additionalUserExists {inherit (cfg) additionalUser;};
           modules =
@@ -279,6 +289,12 @@
         packages.kilocode = pkgs.callPackage ./pkgs/kilocode/package.nix {};
         packages.claude-code = pkgs.callPackage ./pkgs/claude-code/package.nix {};
         packages.antigravity-cli = pkgs.callPackage ./pkgs/antigravity-cli/package.nix {};
+        packages.codeaf = pkgs.callPackage ./pkgs/codeaf/package.nix {};
+        packages.pi-bolt = pkgs.callPackage ./pkgs/pi-bolt/package.nix {};
+        packages.opencode-bin = pkgs.callPackage ./pkgs/opencode/bin.nix {};
+        packages.opencode = pkgs.callPackage ./pkgs/opencode/package.nix {
+          opencode-bin = config.packages.opencode-bin;
+        };
         packages."9router" = pkgs.callPackage ./pkgs/9router/package.nix {};
         packages.headroom = pkgs.callPackage ./pkgs/headroom/package.nix {};
         packages.hound-mcp = pkgs.callPackage ./pkgs/hound-mcp/package.nix {};
