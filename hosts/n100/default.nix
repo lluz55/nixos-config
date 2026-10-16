@@ -1,4 +1,4 @@
-{ pkgs, config, lib, unstable, inputs, minimax-code-pkg, ... }:
+{ pkgs, config, lib, unstable, inputs, minimax-code-pkg, codeaf, pi-bolt, ... }:
 let
   gasketRev = "09385d485812088e04a98a6e1227bf92663e0b59";
   gasketPkg = (pkgs.gasket.overrideAttrs (final: prev: {
@@ -131,7 +131,7 @@ let
         temporary.chmod(0o640)
         temporary.replace(live_path)
   '';
-  opencode-pkg = pkgs.callPackage ../../pkgs/opencode/package.nix {opencode = unstable.opencode;};
+  opencode-pkg = pkgs.callPackage ../../pkgs/opencode/package.nix {};
   dl-home-control = builtins.getFlake "/home/lluz/dev/dl_home_control";
 in
 with lib;{
@@ -153,6 +153,8 @@ with lib;{
     # fica vazio por enquanto; ver comentário em pkgs/agegr-pi-web/module.nix.
     ../../pkgs/agegr-pi-web/module.nix
   ];
+
+  home-manager.users.lluz.imports = [../../modules/home/gh.nix];
 
   console = {
     font = "Lat2-Terminus16";
@@ -189,85 +191,6 @@ with lib;{
 
   services.netbird.enable = true;
   programs.mosh.enable = true;
-
-  # llama.cpp — API OpenAI-compatible nas redes confiáveis e pelo conector
-  # Twingate local. O firewall libera a porta somente nas VLANs confiáveis;
-  # WAN e vl-guests continuam bloqueadas. O router mode descobre todos os
-  # GGUF em /home/lluz/.models e os anuncia em GET /v1/models. Para um
-  # modelo com visão, o GGUF e o projetor ficam LADO A LADO no diretório
-  # plano — o loader do models-dir NÃO desce em subdiretórios, então um par
-  # em `~/.models/LFM2-VL-450M/` seria invisível. O --mmproj-auto (default:
-  # enabled) só pareia o projetor em auto-scan quando o GGUF está no nível
-  # raiz de --models-dir (em modo -hf a flag é no-op):
-  #
-  #   ~/.models/
-  #     LFM2-VL-450M-Q4_0.gguf
-  #     mmproj-LFM2-VL-450M-Q8_0.gguf
-  #
-  # Com o par no lugar, `GET /v1/models` expõe
-  # `architecture.input_modalities = ["text","image"]` na entrada do
-  # modelo — esse é o sinal real de multimodal (não existe
-  # `capabilities.multimodal` no payload do llama-server). Atenção ao elo
-  # seguinte: o 9router 0.5.69 NÃO lê `architecture.*` do upstream, só herda
-  # `capabilities` explícito e, fora isso, decide visão por
-  # getCapabilitiesForModel (patterns/catálogo/regex de nome). GGUFs locais
-  # vindos do llama.cpp ficam sem vision no 9router enquanto o projetor não
-  # aparece no /v1/models do llama — verificado em 2026-09-12 (llama-cpp
-  # 0.3.0): as 4 entradas anunciam input_modalities=["text"].
-  # Modelos não entram no Nix store; após adicionar/remover arquivos, reinicie
-  # o unit para atualizar o catálogo.
-  #
-  # Com 16 GB de RAM, models-max = 1 impede que os dois modelos permaneçam
-  # residentes juntos. O llama-server carrega automaticamente o modelo pedido
-  # no campo `model` da requisição e troca o modelo carregado quando preciso.
-  # O serviço usa o usuário lluz para poder ler os arquivos privados do
-  # diretório de modelos; ProtectHome permanece somente-leitura.
-  services.llama-cpp = {
-    enable = true;
-    openFirewall = false;
-    settings = {
-      host = "0.0.0.0";
-      port = 8081;
-      models-dir = "/home/lluz/.models";
-      models-max = 1;
-      # --mmproj-auto é default-enabled no llama-server; declarado aqui para
-      # documentar a dependência do pareamento: sem o mmproj ao lado do GGUF,
-      # update_caps() zera multimodal e input_modalities fica ["text"].
-      mmproj-auto = true;
-      # Parâmetros de execução aplicados a cada modelo carregado pelo router.
-      ctx-size = 4096;
-      threads = 8;
-      threads-batch = 8;
-      batch-size = 512;
-      ubatch-size = 512;
-      mlock = true;
-      cache-type-k = "q8_0";
-      cache-type-v = "q8_0";
-      jinja = true;
-      parallel = 1;
-    };
-  };
-
-  systemd.services.llama-cpp = {
-    # Uma configuração pode ser aplicada antes do diretório de modelos existir.
-    # Nesse caso o unit fica inativo, em vez de reiniciar continuamente.
-    unitConfig.ConditionPathIsDirectory = "/home/lluz/.models";
-    serviceConfig = {
-      # DynamicUser vira false aqui para o unit ler GGUFs privados em
-      # /home/lluz/.models — mas isso DESTROI TAMBÉM os outros mkForce
-      # abaixo se listado junto; portanto cada override é seletivo, campo a
-      # campo, com comentário próprio. NUNCA colapse estes três em um bloco
-      # genérico "endurecer sandbox": DynamicUser = false anula este bloco
-      # inteiro e flags novas em services.llama-cpp.settings (ex.:
-      # mmproj-auto) somem silenciosamente do ExecStart.
-      DynamicUser = lib.mkForce false;
-      User = "lluz";
-      Group = "users";
-      # ProtectHome precisa ser só read-only (não `true`, que esconde
-      # /home): o router lê os GGUF sob /home/lluz/.models.
-      ProtectHome = lib.mkForce "read-only";
-    };
-  };
 
   # 9Router — gateway AI local, ouvindo na LAN (porta 20128 default do
   # próprio 9router; sem --host explícito o CLI já usa 0.0.0.0).
@@ -474,6 +397,11 @@ with lib;{
         command = "mcode";
         acpCommand = "mcode acp";
         detectAs = "claude";
+      };
+      pi-bolt = {
+        command = "pi-bolt";
+        acpCommand = "pi-bolt --acp";
+        detectAs = "pi";
       };
     };
   };
@@ -716,6 +644,8 @@ with lib;{
     antigravity-cli # agy — Google Antigravity CLI, mesma versão pinada no package.nix
                     # (1.1.21) que o binário manual em ~/.local/bin/agy. Adicionado
                     # aqui para ficar no PATH global e reconstruível via Nix.
+    codeaf          # CodeAF — agentic coding harness and software factory by AgentField
+    pi-bolt         # Pi-Bolt — native AOT compiled version of Pi coding agent
   ] ++ [ hound-mcp-pkg ];
 
   services.twingate.enable = lib.mkForce false;
