@@ -23,9 +23,6 @@
   sops.secrets."twingate_2.env" = { };
   sops.secrets."frigate.env" = { };
   sops.secrets."mqtt.env" = { };
-  sops.secrets."cloudflare/tunnels/ssh/token" = { };
-  sops.secrets."cloudflare/tunnels/haby/token" = { };
-  sops.secrets."cloudflare/tunnels/domain_base" = { };
   sops.secrets."opencode/api_key" = { owner = masterUser.name; };
   sops.secrets."macs/poco" = { };
   sops.secrets."macs/gl62m" = { };
@@ -87,6 +84,7 @@
     podman-compose # start group of containers for dev
     nixpkgs-fmt
     noto-fonts-color-emoji
+    gh
   ];
 
   services = {

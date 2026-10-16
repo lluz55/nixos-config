@@ -21,7 +21,7 @@
   hermes-9router-pkg = pkgs.callPackage ../../pkgs/hermes-9router/package.nix {
     hermes-agent = hermes-agent-pkg;
   };
-  opencode-pkg = pkgs.callPackage ../../pkgs/opencode/package.nix {opencode = unstable.opencode;};
+  opencode-pkg = pkgs.callPackage ../../pkgs/opencode/package.nix {};
 in
   with lib; {
     imports = [
@@ -239,7 +239,6 @@ in
         battery-up-pkg
         intel-npu-driver
         opencode-pkg
-        inputs.pi.packages.${pkgs.system}.coding-agent
         codex-openrouter-pkg
         kon-pkg
         kon-openrouter-pkg
