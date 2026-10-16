@@ -22,11 +22,11 @@
 # prebuilds/linux-x64/pty.node, mesmo padrão usado no dsh.
 buildNpmPackage (finalAttrs: {
   pname = "pi-web";
-  version = "1.202609.0";
+  version = "1.202610.1";
 
   src = lib.cleanSource ./.;
 
-  npmDepsHash = "sha256-RupP0TABHX0ymRj6dX+ObeL17T1fmc6vYyigoe4Cp+o=";
+  npmDepsHash = "sha256-jwR8kFg2awXivBpzjMeqY8pIkkQwHdgiPhPJaO0SK5o=";
 
   # v2 fetcher usa layout de cache que resolve pacotes só-aninhados
   # (ex.: @earendil-works/pi-tui) sem dar ENOTCACHED em modo offline.
