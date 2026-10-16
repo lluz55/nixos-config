@@ -1,6 +1,8 @@
 { writeShellApplication, uv, git, coreutils, bash, python313, runCommand }:
 
 let
+  version = "13.2.0";
+
   houndRunner = writeShellApplication {
     name = "hound";
     runtimeInputs = [ uv git coreutils bash python313 ];
@@ -8,7 +10,7 @@ let
       export UV_PYTHON_DOWNLOADS=never
       export UV_PYTHON="${python313}/bin/python3"
 
-      exec uvx --from "hound-mcp[all]" hound "$@"
+      exec uvx --from "hound-mcp[all]==${version}" hound "$@"
     '';
 
     meta = {
@@ -17,7 +19,8 @@ let
     };
   };
 in
-runCommand "hound-mcp" {
+runCommand "hound-mcp-${version}" {
+  inherit version;
   meta = houndRunner.meta // {
     mainProgram = "hound";
   };
