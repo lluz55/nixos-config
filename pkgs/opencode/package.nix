@@ -1,8 +1,12 @@
-{ writeShellApplication, opencode }:
+{
+  writeShellApplication,
+  callPackage,
+  opencode-bin ? callPackage ./bin.nix { },
+}:
 
 writeShellApplication {
   name = "opencode";
-  runtimeInputs = [ opencode ];
+  runtimeInputs = [ opencode-bin ];
   text = ''
     export OPENCODE_HOME="''${OPENCODE_HOME:-$HOME/.opencode}"
     mkdir -p "$OPENCODE_HOME"
