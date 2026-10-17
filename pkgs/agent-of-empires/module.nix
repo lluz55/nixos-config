@@ -252,7 +252,7 @@ in {
       default = "127.0.0.1";
       description = ''
         Endereço de bind do web dashboard (--host). Mantenha em 127.0.0.1 e
-        exponha por túnel autenticado (dl-conn, SSH -L, Tailscale/Netbird):
+        exponha por SSH port forwarding ou reverse proxy autenticado:
         o AoE spawna qualquer CLI do PATH com as suas credenciais, então
         escutar fora do loopback equivale a dar execução de código remoto
         na máquina.
@@ -318,9 +318,9 @@ in {
       default = true;
       description = ''
         Quando true passa `--no-auth` ao `aoe serve` (apenas loopback).
-        Default true porque o bind está em 127.0.0.1 e o acesso remoto
-        passa por dl-conn/SSH-L/Tailscale. Para bind público prefira
-        `--auth=token` (default upstream) e exponha pelo reverse-proxy.
+        Default true porque o bind está em 127.0.0.1. Para bind público,
+        prefira `--auth=token` (default upstream) e exponha por um
+        reverse-proxy autenticado.
       '';
     };
 
@@ -407,8 +407,8 @@ in {
         message = ''
           services.agent-of-empires: host = "${cfg.host}" expõe o
           dashboard web sem autenticação. Use 127.0.0.1/::1 e exponha por
-          túnel autenticado (dl-conn, SSH -L, Tailscale, Netbird). Para
-          LAN confiável, prefira um reverse-proxy autenticado na frente.
+          SSH port forwarding ou reverse proxy autenticado. Para LAN
+          confiável, mantenha autenticação na frente.
         '';
       }
     ];

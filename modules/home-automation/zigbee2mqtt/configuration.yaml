@@ -1,6 +1,3 @@
-homeassistant:
-  enabled: true
-  discovery_topic: homeassistant
 mqtt:
   base_topic: zigbee2mqtt
   server: mqtt://localhost:1883

@@ -1,0 +1,56 @@
+{
+  "title": "Petrolina — oásis do São Francisco",
+  "style": "executive",
+  "transition": "slide",
+  "slide_count": 8,
+  "slides": [
+    {
+      "layout": "cover",
+      "title": "Petrolina"
+    },
+    {
+      "layout": "timeline",
+      "title": "Da passagem à cidade-polo",
+      "source_url": "https://petrolina.pe.gov.br/historia/"
+    },
+    {
+      "layout": "stats",
+      "title": "Petrolina em escala",
+      "source_url": "https://www.ibge.gov.br/cidades-e-estados/pe/petrolina.html"
+    },
+    {
+      "layout": "process",
+      "title": "Como o sertão virou pomar",
+      "source_url": "https://petrolina.pe.gov.br/historia/"
+    },
+    {
+      "layout": "cards",
+      "title": "Uma identidade ribeirinha",
+      "source_url": "https://petrolina.pe.gov.br/turismo/"
+    },
+    {
+      "layout": "comparison",
+      "title": "A força da cidade dupla",
+      "source_url": "https://petrolina.pe.gov.br/historia/"
+    },
+    {
+      "layout": "callout",
+      "title": "O próximo ciclo",
+      "source_url": "https://www.ibge.gov.br/cidades-e-estados/pe/petrolina.html"
+    },
+    {
+      "layout": "closing",
+      "title": "Petrolina é encontro"
+    }
+  ],
+  "generated_at": "2026-10-10T22:43:02.608Z",
+  "single_file_size_kb": 325,
+  "vendor": [
+    "reveal.js 6.0",
+    "SVG charts: bar/line/area/pie/donut (density-aware, auto anti-overlap)",
+    "image layout with local-file inlining",
+    "image-grid (2-4 license-free photos)",
+    "section-divider / agenda / big-number / callout / matrix layouts",
+    "reveal.js notes plugin"
+  ]
+}

@@ -17,6 +17,7 @@ with lib; {
     "passwords/lluz" = {
       neededForUsers = true;
     };
+    "nix_tokens/github.com" = { };
     "opencode/api_key" = { owner = "lluz"; };
   };
   twingate.enable = lib.mkForce false;
@@ -60,7 +61,4 @@ with lib; {
     };
   };
 
-  environment.systemPackages = with unstable; [
-    inputs.pi.packages.${pkgs.system}.coding-agent
-  ];
 }

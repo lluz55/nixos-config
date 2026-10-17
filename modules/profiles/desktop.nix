@@ -37,22 +37,12 @@ with lib;
 
     hardware.acpilight.enable = mkDefault true;
 
+    # Browsers, editors, development tools and other personal applications are
+    # managed by Home Manager. Keep only desktop integration packages here.
     environment.systemPackages = with unstable; [
-      vscode
-      brave
-      (vivaldi.override {
-        proprietaryCodecs = true;
-      })
-      vivaldi-ffmpeg-codecs
-      qutebrowser
       wl-clipboard
       cosmic-applets
-      rustup
       font-awesome_4
-      remmina
-      x2goclient
-      turbovnc
-      twingate
     ];
   };
 }

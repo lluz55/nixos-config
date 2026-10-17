@@ -1,7 +1,8 @@
 # NixOS system configuration Flake
 
 ## Modules
-- [Cloudflared Connectors (Multi-Tunnel)](./modules/servers/README-cloudflared-connectors.md)
+
+- [Nostr Sync Relay](./modules/servers/README-nostr-sync-relay.md)
 
 ## Templates
 
@@ -44,7 +45,7 @@ nix-shell -p ssh-to-age --run "ssh-to-age -private-key -i ~/.ssh/id_ed25519 > ~/
 
 ### GitHub access token for private flake inputs
 
-Some flake inputs (`dl-conn`, `dl-home-control`, `searxng-mpc`, `home-config`, …) live in
+Some flake inputs (`dl-home-control`, `searxng-mpc`, `home-config`, …) live in
 private `lluz55/*` repos. Fetching them requires a GitHub token with `repo` scope, which
 is passed to Nix via the `access-tokens` setting.
 

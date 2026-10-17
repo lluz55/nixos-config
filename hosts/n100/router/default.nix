@@ -1,10 +1,12 @@
 { lib, ... }:
-with lib; {
+with lib;
+{
   imports = [
     ./options.nix
     ./networking.nix
     ./firewall.nix
     ./dnsmasq.nix
+    ./hostapd.nix
   ];
 
   boot = {

@@ -1,4 +1,4 @@
-{ pkgs, config, lib, unstable, inputs, minimax-code-pkg, ... }:
+{ pkgs, config, lib, unstable, inputs, minimax-code-pkg, codeaf, pi-bolt, ... }:
 let
   gasketRev = "09385d485812088e04a98a6e1227bf92663e0b59";
   gasketPkg = (pkgs.gasket.overrideAttrs (final: prev: {
@@ -92,7 +92,6 @@ let
         temporary.replace(live_path)
   '';
   hound-mcp-pkg = pkgs.callPackage ../../pkgs/hound-mcp/package.nix { };
-  omniroute-pkg = pkgs.callPackage ../../pkgs/omniroute/package.nix { };
   dlConnConfigSeed = ./dl-conn-config.yaml;
   syncDlConnServices = pkgs.writeScript "sync-dl-conn-services" ''
     #!${pkgs.python3.withPackages (ps: [ ps.pyyaml ])}/bin/python3
@@ -107,7 +106,7 @@ let
 
     # Só as rotas marcadas abaixo são gerenciadas pelo Nix. Estado mutável do
     # dl_conn, especialmente nostr.authorizedNpubs, permanece intocado.
-    managed_ids = {"hermes", "omni", "zellij"}
+    managed_ids = {"hermes", "zellij", "dsh"}
     desired = {
         service["id"]: service
         for service in seed.get("services", [])
@@ -132,7 +131,7 @@ let
         temporary.chmod(0o640)
         temporary.replace(live_path)
   '';
-  opencode-pkg = pkgs.callPackage ../../pkgs/opencode/package.nix { opencode = unstable.opencode; };
+  opencode-pkg = pkgs.callPackage ../../pkgs/opencode/package.nix {};
   dl-home-control = builtins.getFlake "/home/lluz/dev/dl_home_control";
 in
 with lib;{
@@ -145,11 +144,17 @@ with lib;{
     dl-home-control.nixosModules.default
     inputs.zellij-web-wrapper.nixosModules.default
     ../../pkgs/9router/module.nix
-    ../../pkgs/omniroute/module.nix
     ../../pkgs/dsh/module.nix
     ../../pkgs/pi-web/module.nix
     ../../pkgs/agent-of-empires/module.nix
+    # pi-web-simple no dl_conn: segunda instância do Pi Coding Agent Web UI,
+    # variante @agegr/pi-web (porta 30141, distinta da @jmfederico/pi-web
+    # em 8584). Bind loopback — só dl_conn alcança. PI_WEB_ALLOWED_HOSTS
+    # fica vazio por enquanto; ver comentário em pkgs/agegr-pi-web/module.nix.
+    ../../pkgs/agegr-pi-web/module.nix
   ];
+
+  home-manager.users.lluz.imports = [../../modules/home/gh.nix];
 
   console = {
     font = "Lat2-Terminus16";
@@ -169,114 +174,28 @@ with lib;{
   profiles.desktop.enable = false;
   gnome.enable = false;
   # profiles.rtl88x2bu.enable = true;
-  hass.enable = true;
+  # hass.enable = true; — módulo removido na limpeza
+  # "Remover os containers Home Assistant e Node-RED". A automação local
+  # agora passa por Frigate + Zigbee2MQTT + Mosquitto + dl_home_control
+  # (declarados em modules/home-automation/ e mais abaixo neste arquivo).
   frigate.enable = true;
+  homeAutomation.zigbee2mqtt.enable = true;
   glances.enable = true;
   twingate.enable = true;
-  cloudflaredConnectors = {
-    enable = true;
-    tunnels = {
-      ssh = { };
-      haby = { };
-    };
-  };
+  # cloudflaredConnectors removido: o módulo `modules/servers/cloudflared-connector.nix`
+  # foi deletado (ver commit 0dea1f9 e checklist "Remover os conectores Cloudflare
+  # Tunnel declarativos"). Mantê-lo aqui quebra a avaliação com
+  # `option does not exist`. O tunelamento agora é responsabilidade exclusiva
+  # do `dl-conn` (configurado mais abaixo em services.dl-conn), que é o único
+  # ponto de entrada Cloudflare para este host.
 
   services.netbird.enable = true;
   programs.mosh.enable = true;
-
-  # llama.cpp — API OpenAI-compatible nas redes confiáveis e pelo conector
-  # Twingate local. O firewall libera a porta somente nas VLANs confiáveis;
-  # WAN e vl-guests continuam bloqueadas. O router mode descobre todos os
-  # GGUF em /home/lluz/.models e os anuncia em GET /v1/models. Para um
-  # modelo com visão, o GGUF e o projetor ficam LADO A LADO no diretório
-  # plano — o loader do models-dir NÃO desce em subdiretórios, então um par
-  # em `~/.models/LFM2-VL-450M/` seria invisível. O --mmproj-auto (default:
-  # enabled) só pareia o projetor em auto-scan quando o GGUF está no nível
-  # raiz de --models-dir (em modo -hf a flag é no-op):
-  #
-  #   ~/.models/
-  #     LFM2-VL-450M-Q4_0.gguf
-  #     mmproj-LFM2-VL-450M-Q8_0.gguf
-  #
-  # Com o par no lugar, `GET /v1/models` expõe
-  # `architecture.input_modalities = ["text","image"]` na entrada do
-  # modelo — esse é o sinal real de multimodal (não existe
-  # `capabilities.multimodal` no payload do llama-server). Atenção ao elo
-  # seguinte: o 9router 0.5.69 NÃO lê `architecture.*` do upstream, só herda
-  # `capabilities` explícito e, fora isso, decide visão por
-  # getCapabilitiesForModel (patterns/catálogo/regex de nome). GGUFs locais
-  # vindos do llama.cpp ficam sem vision no 9router enquanto o projetor não
-  # aparece no /v1/models do llama — verificado em 2026-09-12 (llama-cpp
-  # 0.3.0): as 4 entradas anunciam input_modalities=["text"].
-  # Modelos não entram no Nix store; após adicionar/remover arquivos, reinicie
-  # o unit para atualizar o catálogo.
-  #
-  # Com 16 GB de RAM, models-max = 1 impede que os dois modelos permaneçam
-  # residentes juntos. O llama-server carrega automaticamente o modelo pedido
-  # no campo `model` da requisição e troca o modelo carregado quando preciso.
-  # O serviço usa o usuário lluz para poder ler os arquivos privados do
-  # diretório de modelos; ProtectHome permanece somente-leitura.
-  services.llama-cpp = {
-    enable = true;
-    openFirewall = false;
-    settings = {
-      host = "0.0.0.0";
-      port = 8081;
-      models-dir = "/home/lluz/.models";
-      models-max = 1;
-      # --mmproj-auto é default-enabled no llama-server; declarado aqui para
-      # documentar a dependência do pareamento: sem o mmproj ao lado do GGUF,
-      # update_caps() zera multimodal e input_modalities fica ["text"].
-      mmproj-auto = true;
-      # Parâmetros de execução aplicados a cada modelo carregado pelo router.
-      ctx-size = 4096;
-      threads = 8;
-      threads-batch = 8;
-      batch-size = 512;
-      ubatch-size = 512;
-      mlock = true;
-      cache-type-k = "q8_0";
-      cache-type-v = "q8_0";
-      jinja = true;
-      parallel = 1;
-    };
-  };
-
-  systemd.services.llama-cpp = {
-    # Uma configuração pode ser aplicada antes do diretório de modelos existir.
-    # Nesse caso o unit fica inativo, em vez de reiniciar continuamente.
-    unitConfig.ConditionPathIsDirectory = "/home/lluz/.models";
-    serviceConfig = {
-      # DynamicUser vira false aqui para o unit ler GGUFs privados em
-      # /home/lluz/.models — mas isso DESTROI TAMBÉM os outros mkForce
-      # abaixo se listado junto; portanto cada override é seletivo, campo a
-      # campo, com comentário próprio. NUNCA colapse estes três em um bloco
-      # genérico "endurecer sandbox": DynamicUser = false anula este bloco
-      # inteiro e flags novas em services.llama-cpp.settings (ex.:
-      # mmproj-auto) somem silenciosamente do ExecStart.
-      DynamicUser = lib.mkForce false;
-      User = "lluz";
-      Group = "users";
-      # ProtectHome precisa ser só read-only (não `true`, que esconde
-      # /home): o router lê os GGUF sob /home/lluz/.models.
-      ProtectHome = lib.mkForce "read-only";
-    };
-  };
 
   # 9Router — gateway AI local, ouvindo na LAN (porta 20128 default do
   # próprio 9router; sem --host explícito o CLI já usa 0.0.0.0).
   services."9router" = {
     enable = true;
-  };
-
-  # OmniRoute — o flake upstream expõe apenas devShell, então o pacote é o
-  # wrapper reprodutível de pkgs/omniroute sobre a release npm correspondente.
-  # Fica apenas no loopback; o acesso externo passa pelo Zero-Trust do dl_conn.
-  services.omniroute = {
-    enable = true;
-    package = omniroute-pkg;
-    port = 20129;
-    host = "127.0.0.1";
   };
 
   # Zellij Web Wrapper — terminal web xterm.js + PTY para sessões Zellij.
@@ -291,6 +210,15 @@ with lib;{
   # Netbird já configurados neste host.
   users.groups.dsh-access = { };
   systemd.services.dl-conn.serviceConfig.SupplementaryGroups = [ "dsh-access" ];
+  # O módulo upstream define ProtectHome=true + ReadOnlyPaths no service do
+  # dl_conn, mas ProtectHome=true esconde /home inteiro (substitui por tmpfs
+  # vazio) e ReadOnlyPaths só monta paths dentro desse filesystem mascarado,
+  # não no real — o stat de /home/lluz/.config/dl-conn/services.d falha com
+  # "permission denied" no boot. read-only mantém /home visível em RO; o
+  # ReadOnlyPaths original continua válido e o daemon segue sem conseguir
+  # escrever sob /home/lluz. Ver bloco abaixo em services.dl-conn para o
+  # motivo de servicesDir estar sob ~/.config e não em /var/lib.
+  systemd.services.dl-conn.serviceConfig.ProtectHome = lib.mkForce "read-only";
 
   services.dsh = {
     enable = true;
@@ -332,6 +260,115 @@ with lib;{
     port = 8584;
   };
 
+  # Segunda instância da Pi Coding Agent Web UI — variante @agegr/pi-web
+  # (npx @agegr/pi-web, porta 30141). Roda LADO A LADO com `services.pi-web`
+  # (@jmfederico/pi-web, porta 8584):
+  #
+  #   - portas distintas (30141 vs 8584), sem colisão
+  #   - data dirs distintas: services.pi-web usa /home/lluz/.pi-web
+  #     (dataDir default do pkgs/pi-web/module.nix); services.agegr-pi-web
+  #     não tem data dir próprio — o binário grava só no .next/ interno do
+  #     pacote e nada em $HOME (verificado em node_modules/@agegr/pi-web/bin/)
+  #   - mesmo user (lluz), mesmo /home/lluz (cwd) — as duas UIs compartilham
+  #     `~/.pi/agent` (read-only viewers das sessões do pi CLI)
+  #   - systemd units independentes: falhas de uma não derrubam a outra
+  #
+  # O dl_conn expõe o agegr como `/pi-web-simple` (drop-in
+  # `~/.config/dl-conn/services.d/pi-web-simple.yaml`). Bind loopback (default
+  # 127.0.0.1) — só dl_conn alcança; firewall (router/firewall.nix) não
+  # precisa abrir 30141.
+  #
+  # PI_WEB_ALLOWED_HOSTS fica vazio: o upstream rejeita Host headers de
+  # proxies não-listados (ver comentário em pkgs/agegr-pi-web/module.nix). Para
+  # destravar o acesso via dl_conn, adicione o hostname trycloudflare em
+  # `allowedHosts` (lembrando de atualizar a cada restart do dl_conn).
+  services.agegr-pi-web = {
+    enable = true;
+    user = "lluz";
+    port = 30141;
+  };
+
+  # Timer + script que mantém `tunnel-url.env` em sincronia com a URL atual
+  # do tunnel do dl_conn. Curl no endpoint local, comparação idempotente
+  # com o conteúdo atual do arquivo, escrita + restart do agegr-pi-web só
+  # quando a URL muda.
+  #
+  # Por que timer e não systemd.path: o dl_conn não escreve a URL em disco
+  # (só na memória do handler Nostr); um watcher em inotify teria que
+  # apontar para um arquivo que ele mesmo não cria. O poll de 30s é barato
+  # (curl localhost + comparação de string) e a latência de rotação de
+  # 30s é aceitável.
+  systemd.timers.update-pi-web-allowed-hosts = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnBootSec = "10s";
+      OnUnitActiveSec = "30s";
+      AccuracySec = "1s";
+    };
+  };
+  systemd.services.update-pi-web-allowed-hosts = {
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = let
+        script = pkgs.writeShellScriptBin "update-pi-web-allowed-hosts" ''
+          set -euo pipefail
+
+          url_file="/var/lib/dl-conn/tunnel-url.env"
+          tmp_file="''${url_file}.tmp"
+
+          # dl_conn escuta em 127.0.0.1:9099 (HTTP local). Endpoint do
+          # commit dl_conn 47c9b16 — GET /api/host/tunnel-url responde
+          # {"url":"https://...trycloudflare.com"}. Sem auth.
+          response=$(${pkgs.curl}/bin/curl \
+            --silent --show-error --fail --max-time 5 \
+            http://127.0.0.1:9099/api/host/tunnel-url 2>/dev/null) || {
+            echo "dl_conn endpoint unreachable, skipping this tick" >&2
+            exit 0
+          }
+
+          # Extrai o campo "url" via sed (evita depender de jq).
+          url=$(printf '%s' "$response" | ${pkgs.gnused}/bin/sed -n 's/.*"url":"\([^"]*\)".*/\1/p')
+
+          # dl_conn retorna url="" antes do tunnel estar pronto — não
+          # sobrescreve arquivo válido com string vazia.
+          if [ -z "$url" ]; then
+            echo "empty tunnel url, skipping this tick" >&2
+            exit 0
+          fi
+
+          # PI_WEB_ALLOWED_HOSTS recebe só o hostname (sem scheme, sem
+          # path). trycloudflare retorna https://abc.trycloudflare.com —
+          # strip prefixo.
+          hostname=''${url#https://}
+          hostname=''${hostname#http://}
+          hostname=''${hostname%%/*}
+
+          # Idempotência: se o arquivo já tem o valor correto, não escreve
+          # (evita restart desnecessário do agegr-pi-web quando o timer
+          # dispara e o valor não mudou).
+          if [ -f "$url_file" ] && \
+             [ "$(cat "$url_file" 2>/dev/null || true)" = "PI_WEB_ALLOWED_HOSTS=$hostname" ]; then
+            exit 0
+          fi
+
+          # Escreve atomicamente (rename preserva o inode — watchers no
+          # agegr-pi-web via EnvironmentFile= recebem o valor novo sem
+          # race de leitura de meio-arquivo).
+          echo "PI_WEB_ALLOWED_HOSTS=$hostname" > "$tmp_file"
+          mv -f "$tmp_file" "$url_file"
+
+          # Reload do agegr-pi-web é necessário: EnvironmentFile é lido na
+          # inicialização do unit, não hot-raspado. try-reload-or-restart
+          # prefere reload quando suportado (não é o caso aqui) e cai
+          # para restart automaticamente.
+          ${pkgs.systemd}/bin/systemctl try-reload-or-restart agegr-pi-web.service || true
+
+          echo "Updated PI_WEB_ALLOWED_HOSTS=$hostname (tunnel URL rotated)"
+        '';
+      in "${script}/bin/update-pi-web-allowed-hosts";
+    };
+  };
+
   # AGENT OF EMPIRES — session manager TUI/web para os agentes CLI.
   # Bind no loopback (--no-auth), acesso remoto pelo dl-conn ou SSH -L.
   # Detector automático de codex, opencode, antigravity, claude e pi.
@@ -360,6 +397,11 @@ with lib;{
         command = "mcode";
         acpCommand = "mcode acp";
         detectAs = "claude";
+      };
+      pi-bolt = {
+        command = "pi-bolt";
+        acpCommand = "pi-bolt --acp";
+        detectAs = "pi";
       };
     };
   };
@@ -566,10 +608,14 @@ with lib;{
     opencode-pkg
     config.home-manager.users.lluz.programs.pi.coding-agent.finalPackage
     config.services.pi-web.package
-    omniroute-pkg
 
     config.services.dl-conn.package
     minimax-code-pkg
+    antigravity-cli # agy — Google Antigravity CLI, mesma versão pinada no package.nix
+                    # (1.1.21) que o binário manual em ~/.local/bin/agy. Adicionado
+                    # aqui para ficar no PATH global e reconstruível via Nix.
+    codeaf          # CodeAF — agentic coding harness and software factory by AgentField
+    pi-bolt         # Pi-Bolt — native AOT compiled version of Pi coding agent
   ] ++ [ hound-mcp-pkg ];
 
   services.twingate.enable = lib.mkForce false;
@@ -609,9 +655,27 @@ with lib;{
     group = "dl-conn";
   };
 
+  # PSK do Wi-Fi do AP hostapd (consumido em
+  # hosts/n100/router/hostapd.nix → services.hostapd.….wpaPasswordFile).
+  # O secret existe em secrets/secrets.yaml (chave `wifi.psk`); sem
+  # esta declaração o sops não instala o arquivo em /run/secrets/ e o
+  # build quebra com `attribute 'wifi/psk' missing`. O reformat do
+  # commit 42662ce removeu esta linha acidentalmente.
+  sops.secrets."wifi/psk" = { };
+
   services.dl-conn = {
     enable = true;
+    # Usar o checkout local com correções para:
+    # 1. Injeção de X-Forwarded-Prefix para o Hermes montar WebSocket sob /hermes
+    # 2. Tolerância a clientes dual-stack (IPv4/IPv6) na validação de sessão
+    package = (builtins.getFlake "path:/home/lluz/dev/dl_conn").packages.${pkgs.stdenv.hostPlatform.system}.default;
     secretFile = config.sops.secrets."nostr/dl-conn-key".path;
+
+    # servicesDir sob ~/.config/dl-conn/services.d: usuário escreve drop-ins
+    # direto, daemon bind-mounta read-only (BindReadOnlyPaths no módulo) e
+    # o watcher (3s) recarrega sem reload de unit nem rotação de URL. Sem
+    # sudo, sem nixos-rebuild para adicionar/remover serviço.
+    servicesDir = "/home/lluz/.config/dl-conn/services.d";
 
     # Config gravável em vez de gerada no /nix/store (read-only): permite
     # `dl_conn npubs add <npub>` autorizar dispositivos em runtime, sem
@@ -629,12 +693,20 @@ with lib;{
 
   systemd.tmpfiles.rules = [
     "C /var/lib/dl-conn/config.yaml 0640 dl-conn dl-conn - ${dlConnConfigSeed}"
+    # Garante traversal world-execute em /home/lluz e /home/lluz/.config
+    # em todo boot. dl-conn é DynamicUser e precisa de +x nesses dois
+    # diretórios-pai para chegar a ~/.config/dl-conn/services.d — com
+    # mode 0700 o uid efêmero não atravessa e o stat falha com
+    # "permission denied" no boot. Ver comentário em
+    # users.users.lluz.homeMode abaixo.
+    "z /home/lluz 0755 lluz users - -"
+    "z /home/lluz/.config 0755 lluz users - -"
   ];
 
   # O arquivo gravável já existe no n100, portanto a regra "C" acima não
   # acrescentaria novas rotas. Antes de iniciar, mescla somente os serviços
-  # explicitamente gerenciados pelo script (Hermes e Omni), preservando npubs e
-  # quaisquer outras alterações feitas em runtime.
+  # explicitamente gerenciados pelo script (Hermes, Zellij e DSH), preservando
+  # npubs e quaisquer outras alterações feitas em runtime.
   systemd.services.dl-conn.serviceConfig.ExecStartPre =
     "${syncDlConnServices} ${dlConnConfigSeed} /var/lib/dl-conn/config.yaml";
 
@@ -684,6 +756,16 @@ with lib;{
   users.users.lluz.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGEuQb+luFJEkBjPJxhQe27+Uo63aVFJs5sQi/N+bgmw lluz@nixos"
   ];
+
+  # /home/lluz precisa ser atravessável (mode world-execute, +x) por
+  # outros uids além de lluz. Motivo: dl-conn é um DynamicUser (uid
+  # efêmero) e lê o drop-in ~/.config/dl-conn/services.d para descobrir
+  # serviços. Com /home/lluz em 0700, o uid efêmero não atravessa o
+  # diretório — falha com "stat ... services.d: permission denied" no
+  # boot. 0755 libera traversal; listar o conteúdo continua exigindo +r,
+  # que só o dono tem. A regra tmpfiles acima garante o mode em todo
+  # boot caso algo o reverta.
+  users.users.lluz.homeMode = "0755";
 
   users.users.dl-conn = {
     isSystemUser = true;

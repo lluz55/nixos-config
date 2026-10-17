@@ -1,0 +1,11 @@
+{
+  "plan_path": "/home/lluz/.nixos-config/generated/petrolina-deck/plan.json",
+  "out": "/home/lluz/.nixos-config/generated/petrolina-deck",
+  "qa_summary": {
+    "PASS": 8,
+    "FIX": 0
+  },
+  "fix_slides": [],
+  "issues_for_fix": [],
+  "hint": "Edit plan.json to address each `issues_for_fix` entry (title length, missing source_url, chart data, layout). Re-run `auto_deck iterate` with the same flags."
+}

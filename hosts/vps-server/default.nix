@@ -4,6 +4,7 @@ with lib;{
     ./disk-config.nix
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
+    ../../modules/editors
   ];
 
   console = {
@@ -21,8 +22,6 @@ with lib;{
     nmap
     nixfmt
 
-    helix
-    neovim
     inputs.pi.packages.${pkgs.system}.coding-agent
 
     fastfetch

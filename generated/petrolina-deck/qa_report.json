@@ -1,0 +1,50 @@
+{
+  "deck": "/home/lluz/.nixos-config/generated/petrolina-deck",
+  "mode": "inline",
+  "results": [
+    {
+      "slide": 0,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "slide": 1,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "slide": 2,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "slide": 3,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "slide": 4,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "slide": 5,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "slide": 6,
+      "status": "PASS",
+      "issues": []
+    },
+    {
+      "slide": 7,
+      "status": "PASS",
+      "issues": []
+    }
+  ],
+  "summary": {
+    "PASS": 8,
+    "FIX": 0
+  }
+}

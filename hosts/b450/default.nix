@@ -5,7 +5,7 @@
 , ...
 }:
 let
-  opencode-pkg = pkgs.callPackage ../../pkgs/opencode/package.nix {opencode = unstable.opencode;};
+  opencode-pkg = pkgs.callPackage ../../pkgs/opencode/package.nix {};
 in
 {
   imports = [
@@ -178,7 +178,6 @@ in
         lmstudio
         nvitop
         opencode-pkg
-        inputs.pi.packages.${pkgs.system}.coding-agent
         appimage-run
 
         davinci-resolve

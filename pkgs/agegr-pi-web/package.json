@@ -1,0 +1,8 @@
+{
+  "name": "agegr-pi-web-nix",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@agegr/pi-web": "^0.11.0"
+  }
+}

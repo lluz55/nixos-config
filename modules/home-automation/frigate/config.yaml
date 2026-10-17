@@ -2,7 +2,7 @@ mqtt:
   enabled: true
   user: lluz
   password: '{FRIGATE_MQTT_PASSWORD}'
-  host: 10.1.1.10
+  host: 10.1.1.8
   port: 1883
 
 detectors: # <---- add detectors

@@ -28,8 +28,7 @@ pubkey hex completa (toque para copiar) em **Sincronização > Identidade**.
 - Módulo: `modules/servers/nostr-sync-relay.nix`
 - Host habilitado: `hosts/n100/default.nix` (`services.nostrSyncRelay`)
 - Sem segredos (é chave pública) — `authorizedPubkeys` fica em texto puro no
-  próprio host, mesmo padrão do `authorizedNpubs` em
-  `hosts/n100/dl-conn-config.yaml`.
+  próprio host.
 
 ## Como funciona
 

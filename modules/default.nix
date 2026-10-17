@@ -1,8 +1,5 @@
-{ inputs
-, pkgs
+{ pkgs
 , unstable
-, claude-code ? pkgs.callPackage ../pkgs/claude-code/package.nix { }
-, antigravity-cli ? pkgs.callPackage ../pkgs/antigravity-cli/package.nix { }
 , ...
 }: {
   imports = [
@@ -36,52 +33,25 @@
     OPENCODE_ENABLE_EXA = "1";
   };
 
-  environment.systemPackages = with unstable;
-    [
-      claude-code
-      antigravity-cli
-      # PS2 Emulator
-      #pcsx2
-
-      neovim
-
-      # Terminal tools
-      p7zip
-      htop
-      killall
-      ripgrep
-      zoxide
-      sd
-      broot
-      dust
-
-      # Git
-      gh
-      lazygit
-
-      # Network tools
-      nmap
-
-      # Development tools
-      nil
-      lua-language-server
-      helix
-      (
-        let
-          base = pkgs.appimageTools.defaultFhsEnvArgs;
-        in
-        pkgs.buildFHSEnv (base
-        // {
-          name = "fhs";
-          targetPkgs = pkgs: (base.targetPkgs pkgs) ++ [ pkgs.pkg-config ];
-          profile = "export FHS=1";
-          runScript = "bash";
-          extraOutputsToInstall = [ "dev" ];
-        })
-      )
-    ]
-    ++ (with pkgs; [
-      # Deveolpment tools
-      #neovim-nightly
-    ]);
+  # Pacotes pessoais e interativos são geridos pelo Home Manager. Este módulo
+  # mantém apenas utilitários que ainda são dependências de serviços NixOS ou
+  # ferramentas administrativas sem equivalente no perfil do usuário.
+  environment.systemPackages = with unstable; [
+    p7zip
+    htop
+    killall
+    (
+      let
+        base = pkgs.appimageTools.defaultFhsEnvArgs;
+      in
+      pkgs.buildFHSEnv (base
+      // {
+        name = "fhs";
+        targetPkgs = pkgs: (base.targetPkgs pkgs) ++ [ pkgs.pkg-config ];
+        profile = "export FHS=1";
+        runScript = "bash";
+        extraOutputsToInstall = [ "dev" ];
+      })
+    )
+  ];
 }
