@@ -4,7 +4,7 @@
   opencode-bin ? callPackage ./bin.nix { },
 }:
 
-writeShellApplication {
+(writeShellApplication {
   name = "opencode";
   runtimeInputs = [ opencode-bin ];
   text = ''
@@ -28,4 +28,8 @@ writeShellApplication {
     description = "OpenCode CLI com chave via segredo sops";
     mainProgram = "opencode";
   };
-}
+}).overrideAttrs (old: {
+  buildCommand = old.buildCommand + ''
+    ln -s opencode $out/bin/opencode2
+  '';
+})
