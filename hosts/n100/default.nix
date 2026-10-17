@@ -695,6 +695,10 @@ with lib;{
 
   services.dl-conn = {
     enable = true;
+    # Usar o checkout local com correções para:
+    # 1. Injeção de X-Forwarded-Prefix para o Hermes montar WebSocket sob /hermes
+    # 2. Tolerância a clientes dual-stack (IPv4/IPv6) na validação de sessão
+    package = (builtins.getFlake "path:/home/lluz/dev/dl_conn").packages.${pkgs.stdenv.hostPlatform.system}.default;
     secretFile = config.sops.secrets."nostr/dl-conn-key".path;
 
     # servicesDir sob ~/.config/dl-conn/services.d: usuário escreve drop-ins
