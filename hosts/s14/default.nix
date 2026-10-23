@@ -16,7 +16,7 @@
   hound-mcp-pkg = pkgs.callPackage ../../pkgs/hound-mcp/package.nix {};
   dsh-pkg = pkgs.callPackage ../../pkgs/dsh/package.nix {};
   donsetch-pkg = pkgs.callPackage ../../pkgs/donsetch/package.nix {};
-  hermes-agent-pkg = pkgs.callPackage ../../pkgs/hermes-agent/package.nix {};
+  hermes-agent-pkg = inputs.hermes-agent.packages.${pkgs.system}.default;
   # Wrapper do Hermes que roteia pelo 9router local (services."9router" abaixo).
   hermes-9router-pkg = pkgs.callPackage ../../pkgs/hermes-9router/package.nix {
     hermes-agent = hermes-agent-pkg;

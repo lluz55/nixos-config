@@ -67,8 +67,13 @@
     # `packages.aoe-with-web` com o React frontend embedded via feature
     # `serve`. Isso elimina a derivation local de binário pré-compilado
     # que escrevi antes: build é reproduzível, source-based, e roda em
-    # CI upstream com cache Nix. `nix flake update agent-of-empires`
-    # sobe a tag.
+    # CI upstream com cache Nix.
+    # Pin por TAG (`/v1.20.0`), não pela branch main: o CI só publica
+    # binário no cachix no corte do release. Com a url sem ref, o
+    # `nix flake update` resolve o HEAD do main, que já passou de 1.20 e
+    # não tem derivation publicada — resultado: cache miss e compilação
+    # local do Rust. Para subir de versão, edite a tag aqui E rode
+    # `nix flake update agent-of-empires`.
     # NÃO usar `inputs.nixpkgs.follows` aqui. O CI do upstream compila
     # `aoe-with-web` contra o nixpkgs DELE e publica em
     # https://agent-of-empires.cachix.org. Se este input seguir o nosso
@@ -78,13 +83,15 @@
     # morre com SIGKILL). Sem o follows, o path vira o mesmo do CI e o n100
     # só baixa o binário.
     agent-of-empires = {
-      url = "github:agent-of-empires/agent-of-empires";
+      url = "github:agent-of-empires/agent-of-empires/v1.20.0";
       inputs.flake-parts.follows = "flake-parts";
     };
     zellij-web-wrapper = {
       url = "github:lluz55/zellij_web_wrapper";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Hermes Agent (Nous Research): CLI, gateway e dashboard declarativo.
+    # Atualizável diretamente via `nix flake update hermes-agent`.
     hermes-agent = {
       url = "github:NousResearch/hermes-agent";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -300,7 +307,7 @@
         packages.hound-mcp = pkgs.callPackage ./pkgs/hound-mcp/package.nix {};
         packages.donsetch = pkgs.callPackage ./pkgs/donsetch/package.nix {};
         packages.dsh = pkgs.callPackage ./pkgs/dsh/package.nix {};
-        packages.hermes-agent = pkgs.callPackage ./pkgs/hermes-agent/package.nix {};
+        packages.hermes-agent = inputs.hermes-agent.packages.${pkgs.system}.default;
         packages.hermes-9router = pkgs.callPackage ./pkgs/hermes-9router/package.nix {
           hermes-agent = config.packages.hermes-agent;
         };

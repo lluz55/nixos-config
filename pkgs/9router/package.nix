@@ -30,11 +30,11 @@
 # do flake, então o bump de versão acima é sempre manual.
 buildNpmPackage (finalAttrs: {
   pname = "9router";
-  version = "0.5.69";
+  version = "0.5.104";
 
   src = lib.cleanSource ./.;
 
-  npmDepsHash = "sha256-mgJM/Rq89lpUhhyNIbxQadIpw6o1IduNDkoWk3CJqu8=";
+  npmDepsHash = "sha256-y7YR+AsPMH9D+q/g63PHzxtScqjFgwScWVQk85l1fAc=";
 
   nodejs = nodejs_22;
 

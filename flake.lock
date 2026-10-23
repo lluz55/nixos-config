@@ -9,15 +9,16 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1791562646,
-        "narHash": "sha256-pUXx++kbJMvCh36IVb8Mt2ifMFi2+KkxqQQNx0IDlvA=",
+        "lastModified": 1792084382,
+        "narHash": "sha256-ePVHa2KettqyX4vvb9ZOtOYVeQbePTneCkFLBbh81vg=",
         "owner": "agent-of-empires",
         "repo": "agent-of-empires",
-        "rev": "a8d5ad19c9f7b313e4bb5cc88e52a543e31a3446",
+        "rev": "2a2d819e241c75806b9181eeb8839074bd8d668f",
         "type": "github"
       },
       "original": {
         "owner": "agent-of-empires",
+        "ref": "v1.20.0",
         "repo": "agent-of-empires",
         "type": "github"
       }
@@ -340,11 +341,11 @@
         "uv2nix": "uv2nix"
       },
       "locked": {
-        "lastModified": 1792186430,
-        "narHash": "sha256-y8LtUuMeOSmh3Inp86WkbnDgmPe8XMrC+oOQvvnNLqA=",
+        "lastModified": 1792747988,
+        "narHash": "sha256-+w0anVCFVrhaQ7LjA6uybPN3SKEKQQi+SxYGI5bzoTk=",
         "owner": "NousResearch",
         "repo": "hermes-agent",
-        "rev": "d710b2e346e08f231eb32ae1c64362b3b0f0ccb4",
+        "rev": "afe3cbd817b7f5655e4172b442acf6fa7c9bb55d",
         "type": "github"
       },
       "original": {
@@ -965,11 +966,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1785277507,
-        "narHash": "sha256-9Tq3UDX2hD/aveW/HvkBlAmEwJTOlY5HQXJM+L5BGmE=",
+        "lastModified": 1792151315,
+        "narHash": "sha256-PMtgvHuGijoIAtPtrBm7kJOI6fxzX4LYPAIK+QVGY+Y=",
         "owner": "pyproject-nix",
         "repo": "uv2nix",
-        "rev": "5a836d395cbf5fc22670eb98dd4aa4fc4d406977",
+        "rev": "7aba73a3d85454f1118f8cf9de97979b4d26bcac",
         "type": "github"
       },
       "original": {
