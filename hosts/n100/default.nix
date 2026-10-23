@@ -592,37 +592,7 @@ with lib;{
   systemd.services.hermes-agent.serviceConfig = hermesHardeningOverrides;
   systemd.services.hermes-backend.serviceConfig = hermesHardeningOverrides;
 
-  services.prometheus = {
-    exporters = {
-      node = {
-        enable = true;
-        # TODO test perf impact of these modules
-        enabledCollectors = [
-          "arp"
-          "hwmon"
-          "cpu"
-          "diskstats"
-          "ethtool"
-          "interrupts"
-          "ksmd"
-          "lnstat"
-          "mountstats"
-          "processes"
-          "systemd"
-          "wifi"
-          "tcpstat"
-          "netdev"
-          "netstat"
-          "network_route"
-          "netclass"
-          "sockstat"
-          "stat"
-          "conntrack"
-        ];
-        port = 9002;
-      };
-    };
-  };
+  homelabObservability.enable = true;
   environment.systemPackages = with unstable; [
     lm_sensors
     tailscale
@@ -803,5 +773,5 @@ with lib;{
     home = "/var/lib/dl-conn";
     createHome = true;
   };
-  users.groups.dl-conn = {};
+  users.groups.dl-conn = { };
 }

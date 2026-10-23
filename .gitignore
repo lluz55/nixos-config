@@ -33,3 +33,4 @@ modules/home-automation/**/*.log
 **/.env
 .agent
 secrets/nix-tokens.nix
+data/

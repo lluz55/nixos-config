@@ -7,12 +7,18 @@
 }:
 
 let
-  version = "1.1.21";
+  # URL e sha512 extraídos do manifesto oficial do auto-updater:
+  # https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests/linux_amd64.json
+  # O sha512 publicado no manifesto confere com o sha512 do tarball.
+  # O `hash` abaixo é o hash NAR do resultado do `fetchzip` — que desempacota
+  # diferente do `nix-prefetch-url --unpack` (este usa tar), então não dá pra
+  # reaproveitar o hash de `nix-prefetch-url`.
+  version = "1.2.15";
 
   sources = {
     x86_64-linux = {
-      url = "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.1.21-6424454201475072/linux-x64/cli_linux_x64.tar.gz";
-      hash = "sha256-VEa7uZw8sweQaGMFx9R4OCV33XnN81Les6mnCTKBOkk=";
+      url = "https://storage.googleapis.com/antigravity-public/antigravity-cli/1.2.15-5434575321694208/linux-x64/cli_linux_x64.tar.gz";
+      hash = "sha256-qm1/aXpYsvy/GvyLWZ4nIL8ijZ1iHWI8MINUtQSQfVE=";
     };
   };
 

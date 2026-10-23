@@ -93,6 +93,17 @@ services:
     target: "http://127.0.0.1:8584"
     stripPrefix: true
     websocket: true
+  # AionUi: backend aioncore em 127.0.0.1:25808 (services.aionui). Fica atrás
+  # do mesmo controle de acesso nostr do resto do túnel. websocket: true
+  # porque o backend transmite streaming dos agentes.
+  - id: "aionui"
+    name: "AionUi"
+    icon: "bot"
+    description: "Control plane web dos agentes CLI (codex, opencode, pi, antigravity, mcode)"
+    prefix: "/aionui"
+    target: "http://127.0.0.1:25808"
+    stripPrefix: true
+    websocket: true
   - id: "9router"
     name: "9Router"
     icon: "cpu"
