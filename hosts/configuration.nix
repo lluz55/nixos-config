@@ -2,6 +2,8 @@
 , inputs
 , masterUser
 , config
+, lib
+, pi-bolt
 , ...
 }: {
   time.timeZone = "America/Recife";
@@ -85,7 +87,7 @@
     nixpkgs-fmt
     noto-fonts-color-emoji
     gh
-  ];
+  ] ++ lib.optionals (builtins.elem config.networking.hostName [ "s14" "n100" ]) [ pi-bolt ];
 
   services = {
     fstrim.enable = true;

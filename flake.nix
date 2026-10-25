@@ -57,6 +57,16 @@
       url = "github:lukasl-dev/pi.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Binário upstream fixado no lock; atualize com `nix flake update pi-bolt`.
+    pi-bolt = {
+      url = "https://github.com/opensec-git/Pi-Bolt/releases/latest/download/pi-bolt-linux-x64.tar.gz";
+      flake = false;
+    };
+    # Binário CodeAF fixado no lock; atualize com `nix flake update codeaf`.
+    codeaf = {
+      url = "file+https://github.com/Agent-Field/CodeAF/releases/latest/download/codeaf-linux-amd64";
+      flake = false;
+    };
     # UI do Pi também fica em input independente: `nix flake update pi-web`.
     pi-web = {
       url = "github:pikujs/pi-web/pr/nix-flake";
@@ -172,8 +182,8 @@
     donsetch = pkgs.callPackage ./pkgs/donsetch/package.nix {};
     claude-code = pkgs.callPackage ./pkgs/claude-code/package.nix {};
     antigravity-cli = pkgs.callPackage ./pkgs/antigravity-cli/package.nix {};
-    codeaf = pkgs.callPackage ./pkgs/codeaf/package.nix {};
-    pi-bolt = pkgs.callPackage ./pkgs/pi-bolt/package.nix {};
+    codeaf = pkgs.callPackage ./pkgs/codeaf/package.nix { src = inputs.codeaf; };
+    pi-bolt = pkgs.callPackage ./pkgs/pi-bolt/package.nix { src = inputs.pi-bolt; };
     ttyd = pkgs.ttyd;
     minimax-code-pkg = let
       # O empacotamento local assume o versionamento do `mcode` porque o
@@ -296,8 +306,8 @@
         packages.kilocode = pkgs.callPackage ./pkgs/kilocode/package.nix {};
         packages.claude-code = pkgs.callPackage ./pkgs/claude-code/package.nix {};
         packages.antigravity-cli = pkgs.callPackage ./pkgs/antigravity-cli/package.nix {};
-        packages.codeaf = pkgs.callPackage ./pkgs/codeaf/package.nix {};
-        packages.pi-bolt = pkgs.callPackage ./pkgs/pi-bolt/package.nix {};
+        packages.codeaf = pkgs.callPackage ./pkgs/codeaf/package.nix { src = inputs.codeaf; };
+        packages.pi-bolt = pkgs.callPackage ./pkgs/pi-bolt/package.nix { src = inputs.pi-bolt; };
         packages.opencode-bin = pkgs.callPackage ./pkgs/opencode/bin.nix {};
         packages.opencode = pkgs.callPackage ./pkgs/opencode/package.nix {
           opencode-bin = config.packages.opencode-bin;

@@ -1,34 +1,16 @@
 {
   lib,
   stdenv,
-  fetchzip,
+  src,
   autoPatchelfHook,
   makeWrapper,
   libxcb,
 }:
 
-let
-  version = "0.9.1";
-
-  sources = {
-    x86_64-linux = {
-      url = "https://github.com/opensec-git/Pi-Bolt/releases/download/bolt-v${version}/pi-bolt-linux-x64.tar.gz";
-      hash = "sha256-uOwdwtCR/U7X8R7DjZe7zO3rscg2DqmBPTgmRgDPDL4=";
-    };
-  };
-
-  source =
-    sources.${stdenv.hostPlatform.system}
-      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-in
 stdenv.mkDerivation rec {
   pname = "pi-bolt";
-  inherit version;
-
-  src = fetchzip {
-    inherit (source) url;
-    hash = source.hash;
-  };
+  version = "unstable-${builtins.substring 0 12 (builtins.hashString "sha256" (toString src))}";
+  inherit src;
 
   nativeBuildInputs = [
     autoPatchelfHook

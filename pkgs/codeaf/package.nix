@@ -1,26 +1,13 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  src,
 }:
 
-let
-  version = "0.7.1";
-  sources = {
-    x86_64-linux = {
-      url = "https://github.com/Agent-Field/CodeAF/releases/download/v${version}/codeaf-linux-amd64";
-      hash = "sha256-hdiFk5qGv1NciYpjx1zU2sShF0k1f2Bm/hzpMDJLyug=";
-    };
-  };
-  source = sources.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-in
 stdenv.mkDerivation {
   pname = "codeaf";
-  inherit version;
-
-  src = fetchurl {
-    inherit (source) url hash;
-  };
+  version = "unstable-${builtins.substring 0 12 (builtins.hashString "sha256" (toString src))}";
+  inherit src;
 
   dontUnpack = true;
   dontBuild = true;

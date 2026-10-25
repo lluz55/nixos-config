@@ -1,4 +1,4 @@
-{ pkgs, config, lib, unstable, inputs, minimax-code-pkg, codeaf, pi-bolt, ... }:
+{ pkgs, config, lib, unstable, inputs, minimax-code-pkg, codeaf, ... }:
 let
   gasketRev = "09385d485812088e04a98a6e1227bf92663e0b59";
   gasketPkg = (pkgs.gasket.overrideAttrs (final: prev: {
@@ -615,7 +615,6 @@ with lib;{
                     # (1.1.21) que o binário manual em ~/.local/bin/agy. Adicionado
                     # aqui para ficar no PATH global e reconstruível via Nix.
     codeaf          # CodeAF — agentic coding harness and software factory by AgentField
-    pi-bolt         # Pi-Bolt — native AOT compiled version of Pi coding agent
   ] ++ [ hound-mcp-pkg ];
 
   services.twingate.enable = lib.mkForce false;

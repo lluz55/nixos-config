@@ -117,6 +117,18 @@
         "type": "github"
       }
     },
+    "codeaf": {
+      "flake": false,
+      "locked": {
+        "narHash": "sha256-K8IC/DCsiqBl9ez1aNa8s6E7t4GEv8qjZi68nZZKfII=",
+        "type": "file",
+        "url": "https://github.com/Agent-Field/CodeAF/releases/latest/download/codeaf-linux-amd64"
+      },
+      "original": {
+        "type": "file",
+        "url": "https://github.com/Agent-Field/CodeAF/releases/latest/download/codeaf-linux-amd64"
+      }
+    },
     "crane": {
       "locked": {
         "lastModified": 1771796463,
@@ -656,6 +668,19 @@
         "type": "github"
       }
     },
+    "pi-bolt": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1792682694,
+        "narHash": "sha256-Sjlbb14EMiiSL7b9vGAbKQIK5yDmCN/bhPkJ01U/1aU=",
+        "type": "tarball",
+        "url": "https://github.com/opensec-git/Pi-Bolt/releases/latest/download/pi-bolt-linux-x64.tar.gz"
+      },
+      "original": {
+        "type": "tarball",
+        "url": "https://github.com/opensec-git/Pi-Bolt/releases/latest/download/pi-bolt-linux-x64.tar.gz"
+      }
+    },
     "pi-web": {
       "inputs": {
         "nixpkgs": [
@@ -730,6 +755,7 @@
     "root": {
       "inputs": {
         "agent-of-empires": "agent-of-empires",
+        "codeaf": "codeaf",
         "disko": "disko",
         "dl-conn": "dl-conn",
         "flake-parts": "flake-parts",
@@ -741,6 +767,7 @@
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "pi": "pi",
+        "pi-bolt": "pi-bolt",
         "pi-web": "pi-web",
         "rust-overlay": "rust-overlay",
         "searxng-mpc": "searxng-mpc",
