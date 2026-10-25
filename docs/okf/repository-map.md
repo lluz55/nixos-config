@@ -32,6 +32,10 @@ Este conceito resume onde ficam os blocos reutilizáveis e onde uma mudança dev
 4. Segredos ficam em SOPS; não escrever tokens, senhas ou chaves em Nix/Markdown.
 5. Não atualizar `flake.lock` sem necessidade explícita.
 
+## Pacote 9Router
+
+`pkgs/9router/package.nix` fixa versão e `npmDepsHash`; `package.json` e `package-lock.json` fixam dependências npm. Versão 0.5.109 construída com sucesso; ativação no host ainda pendente de sudo. Evidências e estado: [tarefa 004](../tasks/004-update-9router.md). Não atualizar inputs do flake para esse bump.
+
 ## Erros comuns de agente
 
 - Declarar serviço genérico diretamente em `hosts/n100/default.nix` quando ele poderia ser um módulo reutilizável.

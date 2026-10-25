@@ -3,6 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "9router": "0.5.104"
+    "9router": "0.5.109"
   }
 }
