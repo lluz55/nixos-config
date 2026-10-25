@@ -103,6 +103,12 @@ in
       default = true;
       description = "Habilita SANE + epsonscan2 para o scanner do multifuncional.";
     };
+
+    gui = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Habilita interface gráfica para fila e gerenciamento de impressão (system-config-printer).";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -111,6 +117,9 @@ in
       # PPD Epson-L395_Series-epson-escpr-en.ppd vem deste pacote.
       drivers = [ pkgs.epson-escpr ];
     };
+
+    # Interface gráfica e notificações de status de impressão
+    programs.system-config-printer.enable = cfg.gui;
 
     # Configuração declarativa da impressora CUPS caso o IP esteja definido
     hardware.printers = mkIf (cfg.printerIp != null) {
@@ -122,6 +131,7 @@ in
           model = "epson-inkjet-printer-escpr/Epson-L395_Series-epson-escpr-en.ppd";
           ppdOptions = {
             PageSize = "A4";
+            printer-error-policy = "retry-job";
           };
         }
       ];
